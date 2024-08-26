@@ -1,43 +1,128 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with
-[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Halooo, Selamat datang di perwebdev-an NESCO 2025!!!
+
+---
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/en/) >= v21.1.0
+
+---
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   git clone https://github.com/WEB-NESCO-2025/nesco_2025.git
+   ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install the dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the
-file.
+   ```bash
+   yarn install
+   ```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to
-automatically optimize and load Inter, a custom Google Font.
+3. Run the development server
 
-## Learn More
+   ```bash
+   yarn dev
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the deployment
+   result.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your
-feedback and contributions are welcome!
+## How to Contribute
 
-## Deploy on Vercel
+1. Clone the repository
 
-The easiest way to deploy your Next.js app is to use the
-[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
+2. Create a new branch
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
-details.
+   ### Branch Naming Convention
+
+   Write your branch name in the following format:
+
+   ```
+    <type>/<scope or short description>.<name>
+   ```
+
+   example: `feature/hero.harun`
+
+   ### Branch Types
+
+   - `feature`: A new feature
+   - `fix`: A bug fix
+   - `docs`: Documentation only changes
+   - `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing
+     semi-colons, etc)
+   - `refactor`: A code change that neither fixes a bug nor adds a feature
+   - `perf`: A code change that improves performance
+
+3. Make your changes
+
+   Always make sure to follow the linting rules and the code style guide. You can use either
+   `javascript` or `typescript` for your code.
+
+   Watch for linting errors by running:
+
+   ```bash
+    yarn lint
+   ```
+
+   also the prettier errors by running:
+
+   ```bash
+   yarn format:fix
+   ```
+
+   or you can auto fix the prettier at saving by adding this configuration to your editor:
+
+   ```json
+   "editor.formatOnSave": true
+   ```
+
+   > **THIS IS MANDATORY UNLESS YOU WANT YOUR COMMIT TO BE REJECTED**
+
+4. Commit your changes
+
+   ### Commit Message Convention
+
+   Write your commit message in the following format:
+
+   ```
+   <type>(<scope>): <short description>
+   ```
+
+   > **THIS IS MANDATORY UNLESS YOU WANT YOUR COMMIT TO BE REJECTED**
+
+   example: `feat(hero): add hero section`
+
+   ### Commit Types
+
+   - `ci`: Changes to our CI configuration files and scripts
+   - `chore`: Changes to the build process or auxiliary tools and libraries such as documentation
+     generation
+   - `docs`: Documentation only changes
+   - `ticket`: Changes that are related to a ticket
+   - `feat`: A new feature
+   - `fix`: A bug fix
+   - `perf`: A code change that improves performance
+   - `refactor`: A code change that neither fixes a bug nor adds a feature
+   - `revert`: Reverts a previous commit
+   - `style`: Changes that do not affect the meaning of the code (white-space, formatting, missing
+     semi-colons, etc)
+
+5. Push your changes
+
+   ```bash
+   git push origin <branch-name>
+   ```
+
+6. Create a pull request
+
+   Go to the repository on GitHub and create a pull request. Make sure to add a detailed description
+   and **MENTION [@runs664](https://github.com/runs664) in the description or in the reviewers
+   section**.
+
+---
