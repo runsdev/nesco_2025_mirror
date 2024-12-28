@@ -146,7 +146,7 @@
 7. Create a pull request
 
    Go to the repository on GitHub and create a pull request. Make sure to add a detailed description
-   and **MENTION [@runs664](https://github.com/runs664) in the description or in the reviewers
-   section**.
+   and **MENTION [@runsdev](https://github.com/runsdev) or
+   [@mie-intel](https://github.com/mie-intel) in the description or in the reviewers section**.
 
 ---
