@@ -135,7 +135,15 @@
    git push origin <branch-name>
    ```
 
-6. Create a pull request
+6. **IMPORTANT** Pull any changes from the develop branch
+
+   ```bash
+   git pull origin develop
+   ```
+
+   Resolve any conflicts that might arise.
+
+7. Create a pull request
 
    Go to the repository on GitHub and create a pull request. Make sure to add a detailed description
    and **MENTION [@runs664](https://github.com/runs664) in the description or in the reviewers
