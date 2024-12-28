@@ -13,7 +13,7 @@
 1. Clone the repository
 
    ```bash
-   git clone https://github.com/WEB-NESCO-2025/nesco_2025.git
+   git clone https://github.com/WEB-NESCO-2025/nesco-2025.git
    ```
 
 2. Install the dependencies
@@ -63,6 +63,22 @@
 
    Always make sure to follow the linting rules and the code style guide. You can use either
    `javascript` or `typescript` for your code.
+
+   **IMPORTANT**:
+
+   For Frontend developers, the Frontend page is located in the `/app/(main)` folder.
+
+   ```
+   └── 📁app
+      └── 📁(admin)
+      └── 📁(api)
+      └── 📁(auth)
+      └── 📁(dashboard)
+      └── 📁(main)  <-- you will be working here
+         └── layout.tsx
+         └── page.tsx
+      └── actions.ts
+   ```
 
    Watch for linting errors by running:
 
