@@ -1,6 +1,6 @@
 import { ThemeProvider } from 'next-themes';
 import { Geist } from 'next/font/google';
-import '../globals.css';
+import '../../styles/globals.css';
 
 const geistSans = Geist({
   display: 'swap',
