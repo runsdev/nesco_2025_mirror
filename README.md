@@ -37,7 +37,7 @@
 
 1. Clone the repository
 
-2. Create a new branch
+2. Create a new branch from the `develop` branch
 
    ### Branch Naming Convention
 
