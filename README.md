@@ -2,6 +2,12 @@
 
 ---
 
+## Acknowledgements
+
+Before we begin, I would like to emphasize the importance of **using TypeScript** in conjunction with JavaScript. The nature of TypeScript lies in its ability to enforce type safety, which not only provides clarity to the developer regarding the structure and behavior of the code but also enhances the development experience by enabling the IDE to offer meaningful suggestions through IntelliSense. In cases where the type or attributes of a class are unclear, this type-safety ensures that developers can rely on accurate and contextually relevant suggestions. Best regards and good luck!
+
+---
+
 ## Prerequisites
 
 - [Node.js](https://nodejs.org/en/) >= v21.1.0
