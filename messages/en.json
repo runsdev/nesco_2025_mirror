@@ -1,0 +1,16 @@
+{
+  "auth": {
+    "signin": {
+      "title": "Login to your account",
+      "description": "Use one of these services to login",
+      "login_with_google": "Login with Google",
+      "login_with_github": "Login with GitHub",
+      "terms_and_privacy": {
+        "text": "By clicking continue, you agree to our",
+        "text_connector": "and",
+        "terms": "Terms of Service",
+        "privacy": "Privacy Policy"
+      }
+    }
+  }
+}

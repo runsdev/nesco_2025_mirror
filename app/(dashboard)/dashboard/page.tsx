@@ -9,6 +9,8 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { LocaleSwitcher } from '@/components/locale-switcher';
+import { ThemeSwitcher } from '@/components/theme-switcher';
 
 export default function Page() {
   return (
@@ -30,6 +32,11 @@ export default function Page() {
                 </BreadcrumbItem>
               </BreadcrumbList>
             </Breadcrumb>
+          </div>
+          <div className="flex-1" />
+          <div className="flex items-center gap-2 px-4">
+            <LocaleSwitcher />
+            <ThemeSwitcher />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
