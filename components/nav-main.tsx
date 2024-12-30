@@ -30,7 +30,7 @@ export function NavMain({
 }) {
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
+      <SidebarGroupLabel>Agenda</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => (
           <Collapsible
@@ -52,7 +52,9 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
+                        <a
+                          href={`/dashboard/${item.title.toLowerCase().replaceAll(' ', '-')}/${subItem.title.toLowerCase().replaceAll(' ', '-')}`}
+                        >
                           <span>{subItem.title}</span>
                         </a>
                       </SidebarMenuSubButton>

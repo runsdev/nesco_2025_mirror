@@ -11,8 +11,10 @@ import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { LocaleSwitcher } from '@/components/locale-switcher';
 import { ThemeSwitcher } from '@/components/theme-switcher';
+import * as React from 'react';
 
-export default function Page() {
+export default async function Page({ params }: { params: Promise<{ slug?: string[] }> }) {
+  const slug = (await params).slug;
   return (
     <SidebarProvider>
       <AppSidebar />
@@ -23,13 +25,35 @@ export default function Page() {
             <Separator orientation="vertical" className="mr-2 h-4" />
             <Breadcrumb>
               <BreadcrumbList>
-                <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink href="#">Building Your Application</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator className="hidden md:block" />
-                <BreadcrumbItem>
-                  <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                </BreadcrumbItem>
+                {slug?.map((segment, index) => {
+                  // Build the href by joining all segments up to the current one
+                  const href = `/dashboard/${slug.slice(0, index + 1).join('/')}`;
+
+                  return (
+                    <React.Fragment key={index}>
+                      <BreadcrumbSeparator className="hidden md:block" />
+                      <BreadcrumbItem className="hidden md:block">
+                        {index === slug.length - 1 ? (
+                          // Last item should be non-clickable
+                          <BreadcrumbPage>
+                            {segment
+                              .split('-')
+                              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                              .join(' ')}
+                          </BreadcrumbPage>
+                        ) : (
+                          // Other items are links
+                          <BreadcrumbLink href={href}>
+                            {segment
+                              .split('-')
+                              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                              .join(' ')}
+                          </BreadcrumbLink>
+                        )}
+                      </BreadcrumbItem>
+                    </React.Fragment>
+                  );
+                })}
               </BreadcrumbList>
             </Breadcrumb>
           </div>
