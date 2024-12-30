@@ -1,0 +1,16 @@
+{
+  "auth": {
+    "signin": {
+      "title": "Masuk ke akun Anda",
+      "description": "Gunakan salah satu layanan ini untuk masuk",
+      "login_with_google": "Masuk dengan Google",
+      "login_with_github": "Masuk dengan GitHub",
+      "terms_and_privacy": {
+        "text": "Dengan melanjutkan, Anda setuju dengan",
+        "text_connector": "dan",
+        "terms": "Ketentuan Layanan",
+        "privacy": "Kebijakan Privasi"
+      }
+    }
+  }
+}

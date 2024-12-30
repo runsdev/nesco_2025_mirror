@@ -1,17 +1,23 @@
 'use client';
 
 import * as React from 'react';
+import { createClient } from '@/utils/supabase/client';
 import {
   AudioWaveform,
+  Banknote,
   BookOpen,
   Bot,
   Command,
   Frame,
   GalleryVerticalEnd,
+  Image,
+  Info,
   Map,
+  Pencil,
   PieChart,
   Settings2,
   SquareTerminal,
+  User2,
 } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -26,66 +32,56 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 
-// This is sample data.
 const data = {
   user: {
     name: 'shadcn',
     email: 'm@example.com',
     avatar: '/avatars/shadcn.jpg',
   },
-  teams: [
-    {
-      name: 'Acme Inc',
-      logo: GalleryVerticalEnd,
-      plan: 'Enterprise',
-    },
-    {
-      name: 'Acme Corp.',
-      logo: AudioWaveform,
-      plan: 'Startup',
-    },
-    {
-      name: 'Evil Corp.',
-      logo: Command,
-      plan: 'Free',
-    },
-  ],
   navMain: [
     {
-      title: 'Playground',
+      title: 'Paper Competition',
       url: '#',
-      icon: SquareTerminal,
-      isActive: true,
+      icon: Pencil,
+      // isActive: true,
       items: [
         {
-          title: 'History',
+          title: 'Overview',
           url: '#',
         },
         {
-          title: 'Starred',
+          title: 'Terms and Conditions',
           url: '#',
         },
         {
-          title: 'Settings',
+          title: 'Registration',
+          url: '#',
+        },
+        {
+          title: 'Submission',
           url: '#',
         },
       ],
     },
     {
-      title: 'Models',
+      title: 'Poster Competition',
       url: '#',
-      icon: Bot,
+      icon: Image,
       items: [
         {
-          title: 'Genesis',
+          title: 'Overview',
           url: '#',
         },
         {
-          title: 'Explorer',
+          title: 'Terms and Conditions',
           url: '#',
         },
         {
-          title: 'Quantum',
+          title: 'Registration',
+          url: '#',
+        },
+        {
+          title: 'Submission',
           url: '#',
         },
       ],
@@ -96,19 +92,19 @@ const data = {
       icon: BookOpen,
       items: [
         {
-          title: 'Introduction',
+          title: 'Overview',
           url: '#',
         },
         {
-          title: 'Get Started',
+          title: 'Terms and Conditions',
           url: '#',
         },
         {
-          title: 'Tutorials',
+          title: 'Registration',
           url: '#',
         },
         {
-          title: 'Changelog',
+          title: 'Submission',
           url: '#',
         },
       ],
@@ -119,19 +115,19 @@ const data = {
       icon: Settings2,
       items: [
         {
-          title: 'General',
+          title: 'Overview',
           url: '#',
         },
         {
-          title: 'Team',
+          title: 'Terms and Conditions',
           url: '#',
         },
         {
-          title: 'Billing',
+          title: 'Registration',
           url: '#',
         },
         {
-          title: 'Limits',
+          title: 'Submission',
           url: '#',
         },
       ],
@@ -139,28 +135,49 @@ const data = {
   ],
   projects: [
     {
-      name: 'Design Engineering',
+      name: 'Profiles',
       url: '#',
-      icon: Frame,
+      icon: User2,
     },
     {
-      name: 'Sales & Marketing',
+      name: 'Payment Confirmation',
       url: '#',
-      icon: PieChart,
+      icon: Banknote,
     },
     {
-      name: 'Travel',
+      name: 'Information',
       url: '#',
-      icon: Map,
+      icon: Info,
+    },
+    {
+      name: 'Service Desk',
+      url: '#',
+      icon: Command,
     },
   ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const supabase = createClient();
+  const [user, setUser] = React.useState({});
+
+  React.useEffect(() => {
+    async function fetchUser() {
+      const { data: user } = await supabase.auth.getUser();
+      if (!user) return;
+      setUser(user);
+      data.user.avatar = user?.user?.user_metadata?.avatar_url || '';
+      data.user.email = user.user?.email || '';
+      data.user.name = user.user?.user_metadata?.full_name || '';
+    }
+    fetchUser();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <TeamSwitcher teams={data.teams} />
+        <TeamSwitcher />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
