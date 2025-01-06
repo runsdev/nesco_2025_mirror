@@ -30,7 +30,7 @@ export function TeamSwitcher() {
             <activeTeam.logo className="size-4" />
           </div> */}
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold">NESCO 2025</span>
+            <span className="truncate font-semibold font-kodeMono text-xl">NESCO 2025</span>
             {/* <span className="truncate text-xs">{activeTeam.plan}</span> */}
           </div>
         </div>
