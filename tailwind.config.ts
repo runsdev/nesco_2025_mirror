@@ -97,6 +97,18 @@ const config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      fontFamily: {
+        geist: ['Geist', 'sans-serif'],
+        kodeMono: ['Kode_Mono', 'monospace'],
+        montserrat: ['Montserrat', 'sans-serif'],
+      },
+      fontWeight: {
+        light: '300',
+        normal: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+      },
     },
   },
   plugins: [require('tailwindcss-animate')],
