@@ -30,7 +30,7 @@ import {
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from '@/components/ui/sidebar';
+} from '@/components/ui-template/sidebar';
 
 const data = {
   user: {

@@ -11,13 +11,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+} from '@/components/ui-template/dropdown-menu';
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from '@/components/ui/sidebar';
+} from '@/components/ui-template/sidebar';
 
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();
@@ -25,12 +25,12 @@ export function TeamSwitcher() {
   return (
     <SidebarMenu>
       <SidebarMenuItem>
-        <div className="py-4 px-2">
+        <div className="px-2 py-4">
           {/* <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
             <activeTeam.logo className="size-4" />
           </div> */}
           <div className="grid flex-1 text-left text-sm leading-tight">
-            <span className="truncate font-semibold font-kodeMono text-xl">NESCO 2025</span>
+            <span className="truncate font-kodeMono text-xl font-semibold">NESCO 2025</span>
             {/* <span className="truncate text-xs">{activeTeam.plan}</span> */}
           </div>
         </div>

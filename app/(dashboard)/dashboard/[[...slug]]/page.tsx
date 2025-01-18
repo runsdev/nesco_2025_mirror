@@ -6,9 +6,9 @@ import {
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb';
-import { Separator } from '@/components/ui/separator';
-import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+} from '@/components/ui-template/breadcrumb';
+import { Separator } from '@/components/ui-template/separator';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui-template/sidebar';
 import { LocaleSwitcher } from '@/components/locale-switcher';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import * as React from 'react';
