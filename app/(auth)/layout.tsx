@@ -43,8 +43,8 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-            <main className="min-h-screen flex flex-col items-center">
-              <div className="flex-1 w-full flex flex-col items-center">
+            <main className="flex min-h-screen flex-col items-center">
+              <div className="flex w-full flex-1 flex-col items-center">
                 {/* <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                   <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
                     <div className="flex gap-5 items-center font-semibold">
@@ -55,9 +55,9 @@ export default async function RootLayout({
                 </nav> */}
                 <div className="min-w-full">{children}</div>
 
-                <footer className="w-full flex items-center justify-between border-t mx-auto text-center text-xs gap-8 py-6">
+                <footer className="mx-auto flex w-full items-center justify-between gap-8 border-t py-6 text-center text-xs">
                   <p className="ml-8">Powered by NESCO 2025</p>
-                  <div className="flex gap-4 mr-8">
+                  <div className="mr-8 flex gap-4">
                     <ThemeSwitcher />
                     <LocaleSwitcher />
                   </div>
