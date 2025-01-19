@@ -7,32 +7,32 @@
   },
   "ignorePatterns": ["node_modules/"],
   "extends": [
-    "next/core-web-vitals"
+    "next/core-web-vitals",
     // "plugin:@typescript-eslint/recommended",
-    // "plugin:prettier/recommended",
-    // "prettier"
+    "plugin:prettier/recommended",
+    "prettier"
   ],
   "plugins": ["@typescript-eslint"],
   "rules": {
-    // "react/react-in-jsx-scope": "off",
-    // "prettier/prettier": [
-    //   2,
-    //   {
-    //     "error": true,
-    //     "arrowParens": "always",
-    //     "bracketSpacing": true,
-    //     "bracketSameLine": false,
-    //     "printWidth": 100,
-    //     "proseWrap": "always",
-    //     "requirePragma": false,
-    //     "semi": true,
-    //     "singleQuote": true,
-    //     "tabWidth": 2,
-    //     "trailingComma": "all",
-    //     "useTabs": false,
-    //     "endOfLine": "auto"
-    //   }
-    // ]
+    "react/react-in-jsx-scope": "off",
+    "prettier/prettier": [
+      2,
+      {
+        "error": true,
+        "arrowParens": "always",
+        "bracketSpacing": true,
+        "bracketSameLine": false,
+        "printWidth": 100,
+        "proseWrap": "always",
+        "requirePragma": false,
+        "semi": true,
+        "singleQuote": true,
+        "tabWidth": 2,
+        "trailingComma": "all",
+        "useTabs": false,
+        "endOfLine": "auto"
+      }
+    ]
   },
   "settings": {
     "react": {
