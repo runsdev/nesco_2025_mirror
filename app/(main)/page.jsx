@@ -12,8 +12,10 @@ export default async function Home() {
   return (
     <>
       <Hero />
-      <Prizepool />
-      <Register />
+      <div className="flex w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2]">
+        <Prizepool />
+        <Register />
+      </div>
       <Competition />
       <Seminar />
       <Galeri />

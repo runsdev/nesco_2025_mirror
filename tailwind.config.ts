@@ -20,6 +20,12 @@ const config = {
     },
     extend: {
       colors: {
+        darkblue: 'var(--darkblue)',
+        blue: 'var(--blue)',
+        lightblue: 'var(--lightblue)',
+        darkyellow: 'var(--darkyellow)',
+        yellow: 'var(--yellow)',
+        lightyellow: 'var(--lightyellow)',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

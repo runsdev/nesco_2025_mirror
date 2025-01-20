@@ -4,6 +4,12 @@
 
 @layer base {
   :root {
+    --darkblue: #003c43;
+    --blue: #0f776e;
+    --lightblue: #61ccc2;
+    --darkyellow: #eabb37;
+    --yellow: #ffda1f;
+    --lightyellow: #ffe08d;
     /* --background: 0 0% 100%; */
     /* --background: #eabb37; */
     --background: 44.25 81% 56.67%;
@@ -44,6 +50,14 @@
   }
 
   .dark {
+    --darkblue: #003c43;
+    --blue: #0f776e;
+    --lightblue: #61ccc2;
+    --darkyellow: #eabb37;
+    --yellow: #ffda1f;
+    --lightyellow: #ffe08d;
+    --hk: linear-gradient(90deg, #61ccc2 0%, #ffe08d 100%);
+    --kh: linear-gradient(90deg, #ffe08d 0%, #61ccc2 100%);
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
