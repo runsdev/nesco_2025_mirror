@@ -1,0 +1,38 @@
+.animate-train {
+  animation: train-move 5s linear infinite;
+}
+
+@keyframes train-move {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-120vw);
+  }
+}
+
+.animate-yellow-car {
+  animation: yellow-car-move 14s linear infinite;
+}
+
+@keyframes yellow-car-move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(120vw);
+  }
+}
+
+.animate-blue-car {
+  animation: blue-car-move 11s linear 900ms infinite;
+}
+
+@keyframes blue-car-move {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-120vw);
+  }
+}

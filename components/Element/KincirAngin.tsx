@@ -5,9 +5,9 @@ import { cn } from '@/lib/utils';
 
 type VehicleProps = {
   className?: string;
-  variant: 'yellow' | 'blue';
-  on: boolean;
-  rotateRight: boolean;
+  variant?: 'yellow' | 'blue';
+  on?: boolean;
+  rotateRight?: boolean;
 };
 
 export function KincirAngin({
