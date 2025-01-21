@@ -1,4 +1,5 @@
-import Nesco from '@/components/Element/Nesco';
+import { KincirAngin } from '@/components/Element/KincirAngin';
+import LogoNesco from '@/components/Element/LogoNesco';
 import Sun from '@/components/Element/Sun';
 import { Train, Car } from '@/components/Element/Vehicle';
 
@@ -9,9 +10,9 @@ export const Hero = () => {
       {/* <Sun plain shadow rotate horizontalfloat={3} className="absolute top-[20%] w-[10%]" />
       <Sun shadow className="absolute top-[40%] w-[10%]" updownfloat={1} rotate /> */}
       {/* <Sun /> */}
-      <Nesco shadow className="float-updown-2 rotasi absolute top-[10%] w-[20%]" />
+      <LogoNesco shadow className="float-updown-2 rotasi absolute top-[8.9%] w-[20%]" />
       {/* <Car variant="yellow" right className="w-[20%]" /> */}
-      <Train variant="yellow" right className="w-[20%]" />
+      <KincirAngin on variant="yellow" right className="w-[20%]" />
     </div>
   );
 };

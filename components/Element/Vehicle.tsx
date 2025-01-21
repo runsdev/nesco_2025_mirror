@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import RenderIf from '../UI/RenderIf';
 
 type VehicleProps = {
   className?: string;
@@ -20,12 +19,7 @@ export function Car({ right = false, variant = 'yellow', className = '' }: Vehic
             right && 'scale-x-[-1] transform',
           )}
         >
-          <RenderIf when={variant === 'blue'}>
-            <Image alt="matahari nesco" src="/elements/Vehicle/car-blue.png" fill />
-          </RenderIf>
-          <RenderIf when={variant === 'yellow'}>
-            <Image alt="matahari nesco" src="/elements/Vehicle/car-yellow.png" fill />
-          </RenderIf>
+          <Image alt="mobil nesco" src={`/elements/Vehicle/car-${variant}.png`} fill />
         </div>
       </div>
     </>
@@ -42,7 +36,7 @@ export function Train({ right = false, className = '' }: VehicleProps) {
             right && 'scale-x-[-1] transform',
           )}
         >
-          <Image alt="matahari nesco" src="/elements/Vehicle/train.png" fill />
+          <Image alt="kereta kencanku nesco" src="/elements/Vehicle/train.png" fill />
         </div>
       </div>
     </>
