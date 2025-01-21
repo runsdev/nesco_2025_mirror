@@ -8,6 +8,7 @@ const config = {
     './app/**/*.{ts,tsx,js,jsx}',
     './src/**/*.{ts,tsx,js,jsx}',
     './modules/**/*.{ts,tsx,js,jsx}',
+    './providers/**/*.{ts,tsx,js,jsx}',
   ],
   prefix: '',
   theme: {
@@ -19,6 +20,10 @@ const config = {
       },
     },
     extend: {
+      dropShadow: {
+        offset: '4px 4px 6px rgba(0, 0, 0, 0.25)',
+        'offset-lg': '8px 8px 12px rgba(0, 0, 0, 0.3)',
+      },
       colors: {
         darkblue: 'var(--darkblue)',
         blue: 'var(--blue)',
