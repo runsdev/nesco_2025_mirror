@@ -113,7 +113,7 @@ const config = {
       },
       fontFamily: {
         geist: ['Geist', 'sans-serif'],
-        kodeMono: ['Kode_Mono', 'monospace'],
+        kodeMono: ['"Kode Mono"', 'monospace'],
         montserrat: ['Montserrat', 'sans-serif'],
       },
       fontWeight: {
