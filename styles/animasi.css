@@ -15,7 +15,7 @@
 /* float up down */
 
 .float-updown-1 {
-  animation: animasi-float-updown-1 5s linear infinite;
+  animation: animasi-float-updown-1 5s ease-in-out infinite;
 }
 
 .float-updown-2 {
@@ -48,9 +48,6 @@
   77% {
     transform: translateY(10px);
   }
-  100% {
-    transform: translateY(0);
-  }
 }
 
 @keyframes animasi-float-updown-3 {
@@ -69,15 +66,15 @@
 }
 
 .float-horizontal-1 {
-  animation: animasi-float-horizontal-1 5s linear infinite;
+  animation: animasi-float-horizontal-1 5s ease-in-out infinite;
 }
 
 .float-horizontal-2 {
-  animation: animasi-float-horizontal-2 5s linear infinite;
+  animation: animasi-float-horizontal-2 5s ease-in-out infinite;
 }
 
 .float-horizontal-3 {
-  animation: animasi-float-horizontal-3 6.5s linear infinite;
+  animation: animasi-float-horizontal-3 6.5s ease-in-out infinite;
 }
 
 @keyframes animasi-float-horizontal-1 {
