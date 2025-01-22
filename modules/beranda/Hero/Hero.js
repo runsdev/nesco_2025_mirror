@@ -25,8 +25,8 @@ export const Hero = () => {
         type="button"
         className="absolute top-[30%] z-[20] h-[20%] w-[20%] bg-gradient-to-r from-[#003C43] via-[#0F776E] to-[#61CCC2] bg-[length:200%_200%] bg-[position:top_left] font-montserrat text-xl text-lightyellow transition-all duration-500 hover:bg-[position:bottom_right] hover:text-darkblue"
       >
-        <Link href="/" className="h-full w-full font-kodeMono text-[30px]">
-          Register Here
+        <Link href="/" className="h-full w-full font-kodeMono text-[100px]">
+          NESCO 2025
         </Link>
       </button>
 
