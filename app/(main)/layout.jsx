@@ -38,7 +38,7 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body className={`${kodeMono.className} ${montserrat.className}`}>
         <LocomotiveProvider>
-          <Navbar />
+          {/* <Navbar /> */}
           {children}
           <Footer />
         </LocomotiveProvider>
