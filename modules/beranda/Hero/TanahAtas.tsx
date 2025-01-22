@@ -25,7 +25,7 @@ export default function TanahAtas() {
       <ThreeKincirAngin
         left
         right
-        className="absolute bottom-[30%] left-[25%] w-[50%] lg:bottom-[30%] lg:left-[21%] lg:w-[17%]"
+        className="absolute bottom-[30%] left-[25%] z-[9] w-[50%] lg:bottom-[30%] lg:left-[21%] lg:w-[17%]"
       />
       <ThreeKincirAngin
         left
