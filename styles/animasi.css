@@ -1,0 +1,123 @@
+/* rotasi */
+.rotasi {
+  animation: animasi-rotasi 10s linear infinite;
+}
+
+@keyframes animasi-rotasi {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* float up down */
+
+.float-updown-1 {
+  animation: animasi-float-updown-1 5s ease-in-out infinite;
+}
+
+.float-updown-2 {
+  animation: animasi-float-updown-2 5s linear infinite;
+}
+
+.float-updown-3 {
+  animation: animasi-float-updown-3 6s linear infinite;
+}
+
+@keyframes animasi-float-updown-1 {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes animasi-float-updown-2 {
+  0% {
+    transform: translateY(0);
+  }
+  33% {
+    transform: translateY(-20px);
+  }
+  77% {
+    transform: translateY(10px);
+  }
+}
+
+@keyframes animasi-float-updown-3 {
+  0% {
+    transform: translateY(0);
+  }
+  33% {
+    transform: translateY(15px);
+  }
+  77% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.float-horizontal-1 {
+  animation: animasi-float-horizontal-1 5s ease-in-out infinite;
+}
+
+.float-horizontal-2 {
+  animation: animasi-float-horizontal-2 5s ease-in-out infinite;
+}
+
+.float-horizontal-3 {
+  animation: animasi-float-horizontal-3 6.5s ease-in-out infinite;
+}
+
+@keyframes animasi-float-horizontal-1 {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(20px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes animasi-float-horizontal-2 {
+  0% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(25px);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  75% {
+    transform: translateX(-25px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes animasi-float-horizontal-3 {
+  0% {
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(50px);
+  }
+  70% {
+    transform: translateX(-50px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
