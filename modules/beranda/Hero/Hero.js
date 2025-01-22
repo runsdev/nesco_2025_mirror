@@ -2,6 +2,7 @@ import Image from 'next/image';
 import TanahAtas from './TanahAtas';
 import TanahBawah from './TanahBawah';
 import LogoNesco from '@/components/Element/LogoNesco';
+import Link from 'next/link';
 
 export const Hero = () => {
   return (
@@ -20,6 +21,14 @@ export const Hero = () => {
           className="float-updown-1 absolute right-0 w-[44%] max-lg:left-0 max-lg:top-[6%] max-lg:mx-auto lg:w-[27%]"
         />
       </div>
+      <button
+        type="button"
+        className="absolute top-[30%] z-[20] h-[20%] w-[20%] bg-gradient-to-r from-[#003C43] via-[#0F776E] to-[#61CCC2] bg-[length:200%_200%] bg-[position:top_left] font-montserrat text-xl text-lightyellow transition-all duration-500 hover:bg-[position:bottom_right] hover:text-darkblue"
+      >
+        <Link href="/" className="h-full w-full font-kodeMono text-[30px]">
+          Register Here
+        </Link>
+      </button>
 
       {/* Gunung kiri */}
       <div className="absolute bottom-[8vw] left-[-14%] z-[8] aspect-[1194/1450] w-[58%] md:left-[-13%] md:w-[55%] lg:left-[-8%] lg:w-[29.5%]">
