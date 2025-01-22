@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import KumpulanAwan from './KumpulanAwan';
 import TanahAtas from './TanahAtas';
 import TanahBawah from './TanahBawah';
 import LogoNesco from '@/components/Element/LogoNesco';
@@ -8,6 +9,7 @@ import Sun from '@/components/Element/Sun';
 export const Hero = () => {
   return (
     <section className="relative flex min-h-screen w-full items-center justify-center overflow-x-clip bg-gradient-to-b from-[#61CCC1] to-[#FDDF8D] text-center text-[50px] font-[700]">
+      <KumpulanAwan />
       {/* Matahari */}
       <Sun
         plain
@@ -29,7 +31,7 @@ export const Hero = () => {
       </div>
       <button
         type="button"
-        className="absolute top-[69%] z-[20] w-[47%] overflow-clip rounded-3xl bg-gradient-to-r from-[#003C43] via-[#0F776E] to-[#61CCC2] bg-[length:200%_200%] bg-[position:top_left] text-xl text-lightyellow transition-all duration-700 hover:bg-[position:bottom_right] hover:text-white sm:w-[37%] md:top-[61%] md:w-[32%] lg:top-[59%] lg:w-[250px] lg:rounded-3xl"
+        className="absolute top-[69%] z-[20] w-[47%] overflow-clip rounded-3xl bg-gradient-to-r from-[#003C43] via-[#0F776E] to-[#61CCC2] bg-[length:200%_200%] bg-[position:top_left] text-xl text-lightyellow transition-all duration-500 hover:bg-[position:bottom_right] hover:text-white sm:w-[37%] md:top-[61%] md:w-[32%] lg:top-[59%] lg:w-[250px] lg:rounded-3xl"
       >
         <Link
           href="/"
@@ -40,7 +42,7 @@ export const Hero = () => {
       </button>
 
       {/* Gunung kiri */}
-      <div className="absolute bottom-[8vw] left-[-14%] z-[8] aspect-[1194/1450] w-[58%] md:left-[-13%] md:w-[55%] lg:left-[-8%] lg:w-[29.5%]">
+      <div className="absolute bottom-[8vw] left-[-14%] z-[8] aspect-[1194/1450] w-[58%] md:left-[-13%] md:w-[55%] lg:left-[-6%] lg:w-[29.5%]">
         <Image alt="gunung nesco kiri" src="/assets/beranda/Hero/gunung-kiri.png" fill />
       </div>
       <div className="absolute bottom-[4vw] right-[-25%] z-[8] aspect-[631/728] w-[68%] md:right-[-24%] md:w-[70%] lg:right-[-8%] lg:w-[34%]">
