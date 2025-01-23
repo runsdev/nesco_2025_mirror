@@ -6,6 +6,7 @@ import nesco from '@/public/nesco.png';
 import Image from 'next/image';
 import { IoIosArrowDown } from 'react-icons/io';
 import { motion, AnimatePresence } from 'framer-motion';
+import LogoNesco from '../Element/LogoNesco';
 
 const routes = [
   {
@@ -107,17 +108,20 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
 const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDropdown }) => (
   <div className="md:hidden">
     <div className="relative mx-auto flex items-center justify-between px-6 py-2">
-      <a href="/" className="flex flex-row items-center gap-[1vw]">
-        <Image src={nesco} alt="NESCO" width={100} height={100} className="h-auto w-[6vw]" />
-        <span className="text-[5vw] font-bold text-darkblue">NESCO</span>
+      <a href="/" className="group flex cursor-pointer items-center space-x-3">
+        <div className="h-auto w-[6vw] transition-transform duration-500 group-hover:scale-[1.05]">
+          <LogoNesco />
+        </div>
+        <span className="text-[5vw] font-bold text-darkblue transition-colors duration-500 group-hover:text-blue">
+          NESCO
+        </span>
       </a>
-      <div>
-        <button onClick={() => toggleMainDropdown(!openDropdown)}>
-          <IoIosArrowDown
-            className={`text-[4.2vw] transition-transform duration-500 ease-in-out ${openDropdown ? 'rotate-180' : ''}`}
-          />
-        </button>
-      </div>
+
+      <button onClick={() => toggleMainDropdown(!openDropdown)}>
+        <IoIosArrowDown
+          className={`text-[4.2vw] transition-transform duration-500 ease-in-out ${openDropdown ? 'rotate-180' : ''}`}
+        />
+      </button>
     </div>
 
     {/* Dropdown Menu */}
@@ -159,29 +163,27 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
                     {/* Child Dropdown */}
                     <AnimatePresence>
                       {openChild === index && (
-                        <motion.ul
+                        <motion.div
+                          className="absolute left-[-40%] top-[170%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-[1.6vw] py-[1.6vw] shadow-lg sm:top-[150%]"
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ ease: 'linear', duration: 0.4 }}
-                          className="absolute left-[-40%] top-[170%] z-10 mt-2 w-fit rounded-lg bg-lightyellow px-[1.6vw] py-[1.6vw] shadow-lg sm:top-[150%]"
                         >
-                          <div className="my-[0.5vw] h-[1.5vw] border-b-[0.5vw] border-t-[0.5vw] border-blue" />
-                          {route.child.map((child, childIndex) => (
-                            <motion.li
-                              key={childIndex}
-                              initial={{ opacity: 0, y: -5 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -5 }}
-                              transition={{ duration: 0.2, delay: childIndex * 0.1 }}
-                              className="text-nowrap pt-[0.6vw] !font-montserrat text-[2vw] text-darkblue duration-200 ease-in-out hover:text-lightblue"
-                            >
-                              <Link href={child.href} className="block">
-                                {child.name}
-                              </Link>
-                            </motion.li>
-                          ))}
-                        </motion.ul>
+                          <ul>
+                            <div className="my-[0.5vw] h-[1.5vw] border-b-[0.5vw] border-t-[0.5vw] border-blue" />
+                            {route.child.map((child, childIndex) => (
+                              <li
+                                key={childIndex}
+                                className="text-nowrap pt-[0.6vw] !font-montserrat text-[2vw] text-darkblue duration-200 ease-in-out hover:text-lightblue"
+                              >
+                                <Link href={child.href} className="block">
+                                  {child.name}
+                                </Link>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
                       )}
                     </AnimatePresence>
                   </>
@@ -218,13 +220,9 @@ export const Navbar = () => {
         {/* Logo */}
         <div className="relative mx-auto hidden items-center justify-between px-[4vw] md:flex">
           <a href="/" className="group flex cursor-pointer items-center space-x-3">
-            <Image
-              src={nesco}
-              alt="NESCO"
-              width={100}
-              height={100}
-              className="h-auto w-[4.5vw] transition-transform duration-500 group-hover:scale-125 xl:w-[3.8vw]"
-            />
+            <div className="h-auto w-[4.5vw] transition-transform duration-500 group-hover:scale-[1.1] xl:w-[3.8vw]">
+              <LogoNesco />
+            </div>
             <span className="text-[3.5vw] font-bold text-darkblue transition-colors duration-500 group-hover:text-blue xl:text-[2.5vw]">
               NESCO
             </span>
