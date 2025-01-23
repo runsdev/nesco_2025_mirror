@@ -2,8 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import nesco from '@/public/nesco.png';
-import Image from 'next/image';
 import { IoIosArrowDown } from 'react-icons/io';
 import { motion, AnimatePresence } from 'framer-motion';
 import LogoNesco from '../Element/LogoNesco';
@@ -108,14 +106,12 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
 const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDropdown }) => (
   <div className="md:hidden">
     <div className="relative mx-auto flex items-center justify-between px-6 py-2">
-      <a href="/" className="group flex cursor-pointer items-center space-x-3">
-        <div className="h-auto w-[6vw] transition-transform duration-500 group-hover:scale-[1.05]">
-          <LogoNesco />
-        </div>
+      <Link href="/" className="group flex cursor-pointer items-center space-x-2">
+        <LogoNesco className="w-[7vw] transition-transform duration-500 group-hover:scale-[1.05]" />
         <span className="text-[5vw] font-bold text-darkblue transition-colors duration-500 group-hover:text-blue">
           NESCO
         </span>
-      </a>
+      </Link>
 
       <button onClick={() => toggleMainDropdown(!openDropdown)}>
         <IoIosArrowDown
@@ -219,14 +215,15 @@ export const Navbar = () => {
       <div>
         {/* Logo */}
         <div className="relative mx-auto hidden items-center justify-between px-[4vw] md:flex">
-          <a href="/" className="group flex cursor-pointer items-center space-x-3">
-            <div className="h-auto w-[4.5vw] transition-transform duration-500 group-hover:scale-[1.1] xl:w-[3.8vw]">
-              <LogoNesco />
-            </div>
+          <Link
+            href="/"
+            className="group relative flex cursor-pointer items-center space-x-3 2xl:space-x-4"
+          >
+            <LogoNesco className="relative w-[4.5vw] transition-transform duration-500 group-hover:scale-[1.1] xl:w-[3.8vw]" />
             <span className="text-[3.5vw] font-bold text-darkblue transition-colors duration-500 group-hover:text-blue xl:text-[2.5vw]">
               NESCO
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Menu */}
           <DesktopMenu openDropdown={openDropdown} toggleMainDropdown={toggleMainDropdown} />
