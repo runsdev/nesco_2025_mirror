@@ -126,7 +126,7 @@ export const Footer = () => {
           alt="Kota"
           width={760}
           height={101}
-          className="w-full object-cover md:hidden"
+          className="w-full object-cover md:absolute md:w-[40%] md:p-[-10]"
         />
       </div>
     </footer>
