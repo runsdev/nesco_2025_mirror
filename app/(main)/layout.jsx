@@ -2,9 +2,26 @@ import HeaderAuth from '@/components/header-auth';
 import { ThemeSwitcher } from '@/components/theme-switcher';
 import { Geist } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
-import Link from 'next/link';
+
+import { Kode_Mono } from 'next/font/google';
+import { Montserrat } from 'next/font/google';
+
+const kodeMono = Kode_Mono({
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+});
+
+const montserrat = Montserrat({
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['latin'],
+});
+
+import LocomotiveProvider from '@/providers/LocomotiveProvider';
 import { Navbar, Footer } from '@/components/UI/index';
 import '../../styles/globals.css';
+import '../../styles/animasi.css';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -19,10 +36,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-        <Navbar />
-        {children}
-        <Footer />
+      <body className={`${kodeMono.className} ${montserrat.className}`}>
+        <LocomotiveProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </LocomotiveProvider>
       </body>
     </html>
   );

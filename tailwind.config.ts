@@ -8,6 +8,7 @@ const config = {
     './app/**/*.{ts,tsx,js,jsx}',
     './src/**/*.{ts,tsx,js,jsx}',
     './modules/**/*.{ts,tsx,js,jsx}',
+    './providers/**/*.{ts,tsx,js,jsx}',
   ],
   prefix: '',
   theme: {
@@ -19,7 +20,19 @@ const config = {
       },
     },
     extend: {
+      dropShadow: {
+        offset: '4px 4px 6px rgba(0, 0, 0, 0.25)',
+        'offset-lg': '8px 8px 12px rgba(0, 0, 0, 0.3)',
+        'offset-left': '-4px 4px 6px rgba(0, 0, 0, 0.25)',
+        'offset-lg-left': '-8px 8px 12px rgba(0, 0, 0, 0.3)',
+      },
       colors: {
+        darkblue: 'var(--darkblue)',
+        blue: 'var(--blue)',
+        lightblue: 'var(--lightblue)',
+        darkyellow: 'var(--darkyellow)',
+        yellow: 'var(--yellow)',
+        lightyellow: 'var(--lightyellow)',
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',
@@ -100,7 +113,7 @@ const config = {
       },
       fontFamily: {
         geist: ['Geist', 'sans-serif'],
-        kodeMono: ['Kode_Mono', 'monospace'],
+        kodeMono: ['"Kode Mono"', 'monospace'],
         montserrat: ['Montserrat', 'sans-serif'],
       },
       fontWeight: {
