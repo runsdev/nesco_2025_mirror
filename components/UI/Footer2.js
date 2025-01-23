@@ -18,6 +18,7 @@ const socialLinks = [
   { href: 'https://twitter.com/nesco', label: 'Twitter' },
   { href: 'https://linkedin.com/company/nesco', label: 'LinkedIn' },
 ];
+
 export const Footer = () => {
   return (
     <footer className="relative w-full bg-[#003C43]">
@@ -34,11 +35,11 @@ export const Footer = () => {
                 className="transition duration-500 group-hover:scale-110"
               />
             </div>
-            <div className="pl-4 pt-3 transition duration-500 group-hover:scale-110">
-              <p className="font-kodeMono text-[8vw] font-bold text-[#FEDF8D] transition duration-500 group-hover:text-white md:text-6xl">
+            <div className="pl-4 pt-[3vw] transition duration-500 group-hover:scale-110 sm:pt-[2vw] md:pt-[1.5vw] lg:pt-[1vw]">
+              <p className="font-kodeMono text-[6vw] font-bold text-[#FEDF8D] transition duration-500 group-hover:text-white sm:text-[4.5vw] md:text-[3vw] lg:text-[2vw]">
                 NESCO
               </p>
-              <p className="text-right font-kodeMono text-[3vw] font-bold text-[#FEDF8D] transition duration-500 group-hover:text-white md:text-sm">
+              <p className="text-right font-kodeMono text-[3vw] font-bold text-[#FEDF8D] transition duration-500 group-hover:text-white sm:text-[2.5vw] md:text-[2vw] lg:text-[1.2vw]">
                 2025
               </p>
             </div>
@@ -47,17 +48,17 @@ export const Footer = () => {
 
         {/* Quick Links */}
         <div className="flex-[2] px-5 py-3 text-left md:py-0">
-          <h3 className="mb-2 font-montserrat text-[3vw] font-bold text-white md:text-xl">
+          <h3 className="mb-2 font-montserrat text-[5vw] font-bold text-white sm:text-[4vw] md:text-[2.8vw] lg:text-[1.8vw]">
             Quick Links
           </h3>
-          <div className="flex flex-col space-y-2 text-[2vw] md:text-sm">
+          <div className="flex flex-col space-y-2">
             {quickLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-montserrat text-[#69C7BF] transition-colors hover:text-white"
+                className="font-montserrat text-[4vw] text-[#69C7BF] transition-colors hover:text-white sm:text-[3vw] md:text-[2.5vw] lg:text-[1.5vw]"
               >
-                <p>{link.label}</p>
+                {link.label}
               </Link>
             ))}
           </div>
@@ -65,15 +66,15 @@ export const Footer = () => {
 
         {/* Find Us */}
         <div className="flex-1 px-5 py-3 text-left md:py-0">
-          <h3 className="mb-2 font-montserrat text-[3vw] font-bold text-white md:text-xl">
+          <h3 className="mb-2 font-montserrat text-[5vw] font-bold text-white sm:text-[4vw] md:text-[2.8vw] lg:text-[1.8vw]">
             Find Us
           </h3>
-          <div className="flex flex-col space-y-2 text-[2vw] md:text-sm">
+          <div className="flex flex-col space-y-2">
             {socialLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="font-montserrat text-[#69C7BF] transition-colors hover:text-white"
+                className="font-montserrat text-[4vw] text-[#69C7BF] transition-colors hover:text-white sm:text-[3vw] md:text-[2.5vw] lg:text-[1.5vw]"
               >
                 {link.label}
               </Link>
@@ -82,13 +83,13 @@ export const Footer = () => {
         </div>
 
         {/* Contact Us */}
-        <div className="flex-1 px-5 py-3 pb-20 text-left sm:pb-24 md:py-0">
-          <h3 className="mb-2 font-montserrat text-[3vw] font-bold text-white md:text-xl">
+        <div className="flex-1 px-5 py-3 text-left md:py-0">
+          <h3 className="mb-2 font-montserrat text-[5vw] font-bold text-white sm:text-[4vw] md:text-[2.8vw] lg:text-[1.8vw]">
             Contact Us
           </h3>
           <Link
             href="mailto:nesco@mail.ugm.ac.id"
-            className="font-montserrat text-[2vw] text-[#69C7BF] transition-colors hover:text-white md:text-sm"
+            className="font-montserrat text-[4vw] text-[#69C7BF] transition-colors hover:text-white sm:text-[3vw] md:text-[2.5vw] lg:text-[1.5vw]"
           >
             nesco@mail.ugm.ac.id
           </Link>
