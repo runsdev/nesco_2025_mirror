@@ -5,10 +5,24 @@
   background-color: #EABB37;
 }
 
+
 .swiper-pagination-bullet-active {
   background-color: #0F776E;
 }
 
-.swiper-pagination {
-  bottom: 10px;
+.swiper-container {
+  margin-bottom: 20px; /* Jarak pagination ke div bg-black */
 }
+
+.swiper-pagination {
+  margin-top: 10px; /* Tambahkan margin jika perlu */
+}
+
+
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+  .swiper-container {
+    height: 50vh !important; /* Sesuaikan dengan rasio yang diinginkan */
+    width: 95% !important;
+  }
+}
+
