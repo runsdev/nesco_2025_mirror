@@ -7,7 +7,7 @@ interface GaleriDesktopProps {
 
 const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
   return (
-    <section className={`w-full space-y-8 text-center ${className}`}>
+    <section className={`w-[75%] space-y-8 text-center ${className}`}>
       <div className="grid grid-cols-3 items-center gap-[5vw]">
         {/* Kolom 1 */}
         <div className="flex flex-col gap-[14vw] md:gap-[14vw] xl:gap-y-[6vw]">
@@ -19,7 +19,7 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
               alt="Drone 6"
               className="h-auto w-full max-w-[15vw]"
             />
-            <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+            <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1521.png'}
                 width={1000}
@@ -37,7 +37,7 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
               alt="Drone 6"
               className="absolute z-10 h-auto w-full max-w-[15vw]"
             />
-            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1524.png'}
                 width={1000}
@@ -58,7 +58,7 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
             alt="Drone 6"
             className="h-auto w-full max-w-[15vw]"
           />
-          <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+          <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
             <Image
               src={'/assets/beranda/Galeri/Rectangle 1522.png'}
               width={1000}
@@ -79,7 +79,7 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
               alt="Drone 6"
               className="absolute z-10 h-auto w-full max-w-[15vw] scale-x-[-1]"
             />
-            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1524.png'}
                 width={1000}
@@ -97,7 +97,7 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
               alt="Drone 6"
               className="h-auto w-full max-w-[15vw]"
             />
-            <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+            <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1521.png'}
                 width={1000}

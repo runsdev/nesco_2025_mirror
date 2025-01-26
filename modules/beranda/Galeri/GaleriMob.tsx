@@ -19,7 +19,7 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
               alt="Drone 6"
               className="absolute z-10 h-auto w-full max-w-[15vw]"
             />
-            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1524.png'}
                 width={1000}
@@ -37,7 +37,7 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
               alt="Drone 6"
               className="absolute z-10 h-auto w-full max-w-[15vw]"
             />
-            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1521.png'}
                 width={1000}
@@ -58,7 +58,7 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
             alt="Drone 6"
             className="absolute z-10 h-auto w-full max-w-[15vw]"
           />
-          <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+          <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
             <Image
               src={'/assets/beranda/Galeri/Rectangle 1522.png'}
               width={1000}
@@ -79,7 +79,7 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
               alt="Drone 6"
               className="absolute z-10 h-auto w-full max-w-[15vw]"
             />
-            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1521.png'}
                 width={1000}
@@ -97,7 +97,7 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
               alt="Drone 6"
               className="absolute z-10 h-auto w-full max-w-[15vw] scale-x-[-1]"
             />
-            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg">
+            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1524.png'}
                 width={1000}
