@@ -10,8 +10,8 @@ type SunProps = {
   plain?: boolean;
   shadow?: boolean;
   rotate?: boolean;
-  updownfloat: number;
-  horizontalfloat: number;
+  updownfloat?: number;
+  horizontalfloat?: number;
 };
 
 export default function Sun({
