@@ -288,8 +288,8 @@ export default function ParticlesContainer({ className }) {
       number: {
         density: {
           enable: true,
-          width: 1920,
-          height: 1080,
+          width: 1000,
+          height: 1000,
         },
         limit: {
           mode: 'delete',
