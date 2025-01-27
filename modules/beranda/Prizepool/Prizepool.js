@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export const Prizepool = () => {
   return (
-    <div className="relative flex min-h-screen w-full items-start justify-center">
+    <div className="relative flex w-full items-start justify-center max-lg:min-h-[50dvh] lg:min-h-screen">
       {/* BINTANG, BULAN, METEOR */}
       <div className="flex flex-col items-center justify-center">
         <Image
