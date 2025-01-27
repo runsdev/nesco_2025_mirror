@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 type Awan = {
   className: string;
   flip?: boolean;
-  variant: 1 | 2 | 3 | 4 | 5 | 6;
+  variant: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 };
 
 const ratio = [
@@ -14,6 +14,8 @@ const ratio = [
   'aspect-[614/216]',
   'aspect-[278/126]',
   'aspect-[424/173]',
+  'aspect-[100/54]',
+  'aspect-[167/77]',
 ];
 
 export default function Awan({ className = '', flip = false, variant = 1 }: Awan) {

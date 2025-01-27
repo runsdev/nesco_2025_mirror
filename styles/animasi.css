@@ -74,7 +74,7 @@
 }
 
 .float-horizontal-3 {
-  animation: animasi-float-horizontal-3 6.5s ease-in-out infinite;
+  animation: animasi-float-horizontal-3 6.5s ease-in infinite;
 }
 
 @keyframes animasi-float-horizontal-1 {
@@ -111,11 +111,11 @@
   0% {
     transform: translateX(0);
   }
-  30% {
-    transform: translateX(50px);
+  25% {
+    transform: translateX(25px);
   }
-  70% {
-    transform: translateX(-50px);
+  75% {
+    transform: translateX(-25px);
   }
   100% {
     transform: translateX(0);
