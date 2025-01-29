@@ -14,7 +14,7 @@ type SunProps = {
   horizontalfloat?: number;
 };
 
-export default function Sun({
+export function Sun({
   plain = false,
   shadow = false,
   rotate = false,

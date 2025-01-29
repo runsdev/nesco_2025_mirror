@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import LogoNesco from '../Element/LogoNesco';
+import { LogoNesco } from '@/components/Element/index';
 
 const quickLinks = [
   { href: '/competition/debate', label: 'Debate Competition' },

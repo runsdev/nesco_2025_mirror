@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { IoIosArrowDown } from 'react-icons/io';
 import { motion, AnimatePresence } from 'framer-motion';
-import LogoNesco from '../Element/LogoNesco';
+import { LogoNesco } from '@/components/Element/index';
 
 const routes = [
   {
