@@ -8,11 +8,14 @@ import {
   Sponsor,
 } from '@/modules/beranda/index';
 
+import ParticlesContainer from '@/components/UI/ParticlesContainer';
+
 export default async function Home() {
   return (
     <>
       <Hero />
-      <div className="flex w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2]">
+      <div className="relative flex w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2]">
+        <ParticlesContainer className="absolute top-0 z-[0] min-h-screen w-full lg:min-h-[200dvh]" />
         <Prizepool />
         <Register />
       </div>
