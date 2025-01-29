@@ -31,7 +31,7 @@ const TulisanNesco = () => {
         <div className="absolute right-0 top-[-6%] my-auto mt-[4%] font-kodeMono text-[9.5vw] font-bold text-lightyellow transition duration-500 group-hover:text-white md:text-[2.82vw]">
           NESCO
         </div>
-        <div className="absolute bottom-0 bottom-[3.6%] right-0 font-kodeMono text-[2.8vw] font-bold text-lightyellow transition duration-500 group-hover:text-white md:text-[0.9vw]">
+        <div className="absolute bottom-[1%] right-0 font-kodeMono text-[2.8vw] font-bold text-lightyellow transition duration-500 group-hover:text-white md:text-[0.9vw]">
           2025
         </div>
       </div>
@@ -53,7 +53,7 @@ export const Footer = () => {
             <h3 className="mb-[3%] font-montserrat text-[5vw] font-bold text-white md:text-[1.2vw]">
               Quick Links
             </h3>
-            <div className="flex flex-col space-y-[3%] text-[4vw] md:space-y-[3%] md:text-[0.9vw]">
+            <div className="flex flex-col space-y-[3%] text-[4vw] md:text-[0.9vw]">
               {quickLinks.map((link) => (
                 <Link
                   key={link.href}
@@ -71,14 +71,14 @@ export const Footer = () => {
             <h3 className="mb-[3%] font-montserrat text-[5vw] font-bold text-white md:text-[1.2vw]">
               Find Us
             </h3>
-            <div className="flex flex-col space-y-[3%] text-[4vw] md:space-y-[3%] md:text-[0.9vw]">
+            <div className="flex flex-col space-y-[3%] text-[4vw] md:text-[0.9vw]">
               {socialLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   className="font-montserrat text-[#69C7BF] transition-colors hover:text-white"
                 >
-                  {link.label}
+                  <p>{link.label}</p>
                 </Link>
               ))}
             </div>
@@ -89,12 +89,12 @@ export const Footer = () => {
             <h3 className="mb-[3%] font-montserrat text-[5vw] font-bold text-white md:text-[1.2vw]">
               Contact Us
             </h3>
-            <div className="flex flex-col space-y-[3%] text-[4vw] md:space-y-[3%] md:text-[0.9vw]">
+            <div className="flex flex-col space-y-[3%] text-[4vw] md:text-[0.9vw]">
               <Link
                 href="mailto:nesco@mail.ugm.ac.id"
                 className="font-montserrat text-[4vw] text-[#69C7BF] transition-colors hover:text-white md:text-[0.9vw]"
               >
-                nesco@mail.ugm.ac.id
+                <p>nesco@mail.ugm.ac.id</p>
               </Link>
             </div>
           </div>
