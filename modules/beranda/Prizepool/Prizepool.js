@@ -10,21 +10,21 @@ export const Prizepool = () => {
           width={69}
           height={69}
           alt="moon"
-          className="absolute mt-[-20vw] h-auto w-[15vw] md:mt-[-50vw] md:h-auto md:w-[10vw] lg:mt-[-50vw] lg:h-auto lg:w-[9vw]"
+          className="absolute top-[20vw] h-auto w-[15vw] md:top-[15vw] md:w-[10vw] lg:top-[8vw] lg:w-[9vw]"
         />
         <Image
           src="/prize/comets.png"
           width={810}
           height={456}
           alt="comets"
-          className="absolute h-auto w-[75vw] md:h-auto md:w-[100vw] lg:h-auto lg:w-[100vw]"
+          className="absolute top-[60vw] h-auto w-[75vw] md:top-[35vw] md:w-[100vw] lg:top-[15vw] lg:w-[90vw]"
         />
         <Image
           src="/prize/prizepoolAwan.png"
           width={810}
           height={456}
           alt="prizepool"
-          className="absolute bottom-[20vw] h-auto w-[80vw] md:bottom-[42vw] md:h-auto md:w-[70vw] lg:bottom-[42vw] lg:h-auto lg:w-[70vw]"
+          className="absolute top-[80vw] h-auto w-[80vw] md:top-[55vw] md:w-[80vw] lg:top-[18vw] lg:w-[70vw]"
         />
       </div>
     </div>
