@@ -1,6 +1,6 @@
 'use client';
 
-import { Car } from '@/components/Element/Vehicle';
+import { Car } from '@/components/Element/index';
 import Image from 'next/image';
 import './vehicle.css';
 

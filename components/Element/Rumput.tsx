@@ -7,7 +7,7 @@ type RumputProps = {
   variant: 1 | 2;
 };
 
-export default function Rumput({ className = '', flip = false, variant = 1 }: RumputProps) {
+export function Rumput({ className = '', flip = false, variant = 1 }: RumputProps) {
   return (
     <div className={cn('aspect-[100.5/58] w-[50px]', className)}>
       <div

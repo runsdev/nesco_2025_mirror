@@ -2,9 +2,8 @@ import Image from 'next/image';
 import KumpulanAwan from './KumpulanAwan';
 import TanahAtas from './TanahAtas';
 import TanahBawah from './TanahBawah';
-import LogoNesco from '@/components/Element/LogoNesco';
 import Link from 'next/link';
-import Sun from '@/components/Element/Sun';
+import { LogoNesco, Sun } from '@/components/Element/index';
 
 export const Hero = () => {
   return (

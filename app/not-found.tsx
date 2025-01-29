@@ -5,11 +5,8 @@ import '../styles/animasi.css';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { DecryptedText } from '@/components/Animation/index';
-import { KincirAngin } from '@/components/Element/KincirAngin';
-import Sun from '@/components/Element/Sun';
-import Awan from '@/components/Element/Awan';
+import { Awan, KincirAngin, Rumput, Sun } from '@/components/Element/index';
 import Link from 'next/link';
-import Rumput from '@/components/Element/Rumput';
 
 export default function NotFound() {
   return (

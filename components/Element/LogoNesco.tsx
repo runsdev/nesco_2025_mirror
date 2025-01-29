@@ -8,7 +8,7 @@ type NescoProps = {
   shadow?: boolean;
 };
 
-export default function LogoNesco({ shadow = false, className = '' }: NescoProps) {
+export function LogoNesco({ shadow = false, className = '' }: NescoProps) {
   return (
     <>
       <div className={cn('relative aspect-[1/1] w-[50px]', className)}>
