@@ -4,7 +4,7 @@ import '../styles/globals.css';
 import '../styles/animasi.css';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import DecryptedText from '@/components/Animation/DecryptedText';
+import { DecryptedText } from '@/components/Animation/index';
 import { KincirAngin } from '@/components/Element/KincirAngin';
 import Sun from '@/components/Element/Sun';
 import Awan from '@/components/Element/Awan';

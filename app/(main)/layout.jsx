@@ -1,7 +1,7 @@
-import HeaderAuth from '@/components/header-auth';
-import { ThemeSwitcher } from '@/components/theme-switcher';
-import { Geist } from 'next/font/google';
-import { ThemeProvider } from 'next-themes';
+// import HeaderAuth from '@/components/header-auth';
+// import { ThemeSwitcher } from '@/components/theme-switcher';
+// import { Geist } from 'next/font/google';
+// import { ThemeProvider } from 'next-themes';
 
 import { Kode_Mono } from 'next/font/google';
 import { Montserrat } from 'next/font/google';
@@ -19,6 +19,7 @@ const montserrat = Montserrat({
 });
 
 import LocomotiveProvider from '@/providers/LocomotiveProvider';
+import GSAPProvider from '@/providers/GSAPProvider';
 import { Navbar, Footer } from '@/components/UI/index';
 import '../../styles/globals.css';
 import '../../styles/animasi.css';
@@ -38,9 +39,11 @@ export default function RootLayout({ children }) {
     <html lang="en" suppressHydrationWarning>
       <body className={`${kodeMono.className} ${montserrat.className}`}>
         <LocomotiveProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <GSAPProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </GSAPProvider>
         </LocomotiveProvider>
       </body>
     </html>

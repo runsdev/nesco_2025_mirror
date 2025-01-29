@@ -26,7 +26,7 @@ export const Hero = () => {
         </div>
         <LogoNesco
           shadow
-          className="float-updown-1 absolute right-0 w-[44%] max-lg:left-0 max-lg:top-[6%] max-lg:mx-auto lg:w-[27%]"
+          className="float-updown-1 absolute right-0 top-[12%] w-[40%] max-lg:left-0 max-lg:mx-auto md:top-[6%] lg:w-[27%]"
         />
       </div>
       <button
