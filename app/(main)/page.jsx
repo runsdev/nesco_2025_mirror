@@ -15,7 +15,7 @@ export default async function Home() {
     <>
       <Hero />
       <div className="relative flex w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2]">
-        <ParticlesContainer className="absolute top-0 z-[0] min-h-screen w-full lg:min-h-[200dvh]" />
+        <ParticlesContainer className="absolute top-0 z-[0] min-h-screen w-full lg:min-h-[160dvh]" />
         <Prizepool />
         <Register />
       </div>
