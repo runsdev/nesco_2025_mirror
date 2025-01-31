@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import GaleriDesktop from './GaleriDesktop';
 import GaleriMobile from './GaleriMob';
-import Sun from '@/components/Element/Sun';
+import { Sun } from '@/components/Element/index';
 
 export const Galeri = () => {
   return (

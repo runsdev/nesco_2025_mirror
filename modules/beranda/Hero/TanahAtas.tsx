@@ -1,9 +1,8 @@
 'use client';
 
-import { Train } from '@/components/Element/Vehicle';
 import Image from 'next/image';
 import './vehicle.css';
-import { ThreeKincirAngin } from '@/components/Element/ThreeKincirAngin';
+import { Train, ThreeKincirAngin } from '@/components/Element/index';
 
 export default function TanahAtas() {
   return (
