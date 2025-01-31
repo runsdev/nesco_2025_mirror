@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 const GunungAwanPohon = () => {
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <Image
         src="/seminar/trees kiri.png"
         alt="Tress kiri"
@@ -23,14 +23,14 @@ const GunungAwanPohon = () => {
         alt="Gunung"
         width={2250}
         height={430}
-        className="relative z-[99]"
+        className="relative z-[99] w-full"
       />
       <Image
         src="/seminar/Awan.png"
         alt="Awan"
         width={2034}
         height={115}
-        className="relative z-[99] mt-[-8%]"
+        className="relative z-[99] mt-[-8%] w-full"
       />
     </div>
   );
