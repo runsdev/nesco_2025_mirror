@@ -2,9 +2,9 @@ import Image from 'next/image';
 
 export const Prizepool = () => {
   return (
-    <div className="relative flex w-full items-start justify-center max-lg:min-h-[50dvh] lg:min-h-screen">
+    <div className="relative flex w-full items-start justify-center max-lg:min-h-[60dvh] lg:min-h-screen">
       {/* BINTANG, BULAN, COMET */}
-      <div className="absolute flex h-full w-full flex-col items-center justify-center">
+      <div className="absolute flex min-h-screen w-full flex-col items-center justify-center">
         <Image
           src="/prize/moon.png"
           width={69}
@@ -24,7 +24,7 @@ export const Prizepool = () => {
           width={810}
           height={456}
           alt="prizepool"
-          className="absolute top-[80vw] h-auto w-[80vw] md:top-[55vw] md:w-[80vw] lg:top-[18vw] lg:w-[70vw]"
+          className="absolute top-[60vw] h-auto w-[80vw] md:top-[30vw] md:w-[80vw] lg:top-[18vw] lg:w-[70vw]"
         />
       </div>
     </div>
