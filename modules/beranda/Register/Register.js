@@ -25,38 +25,37 @@ export const Register = () => {
 
   return (
     <>
-      <div className="relative flex min-h-screen w-full items-center justify-center lg:min-h-screen">
-        <div className="flex min-h-screen w-full flex-col items-center justify-center">
-          <Image
-            src="/register/road.png"
-            width={810}
-            height={456}
-            alt="prizepool"
-            className="absolute bottom-[0vw] h-auto w-[100vw] md:w-[100vw] lg:w-[100vw]"
-          />
-          <Image
-            src="/register/gedung.png"
-            width={810}
-            height={456}
-            alt="prizepool"
-            className="absolute bottom-[0vw] h-auto w-[100vw] md:w-[100vw] lg:w-[100vw]"
-          />
-          <Image
-            src="/register/train.png"
-            width={810}
-            height={456}
-            alt="prizepool"
-            className="absolute bottom-[0vw] h-auto w-[100vw] md:w-[100vw] lg:w-[100vw]"
-          />
-          <Image
-            src="/register/registerNow.png"
-            width={810}
-            height={456}
-            alt="prizepool"
-            className="absolute bottom-[4.5vw] h-auto w-[20vw] md:w-[20vw] lg:w-[20vw]"
-          />
-        </div>
-        <div className="relatif z-10 flex flex-row items-center justify-start text-[4vw] font-bold">
+      <div className="relative flex min-h-[50dvh] w-full items-center justify-center lg:min-h-screen">
+        <Image
+          src="/register/road.png"
+          width={810}
+          height={456}
+          alt="prizepool"
+          className="absolute bottom-[0vw] z-[50] h-auto w-[100vw] md:w-[100vw] lg:w-[100vw]"
+        />
+        <Image
+          src="/register/gedung.png"
+          width={810}
+          height={456}
+          alt="prizepool"
+          className="absolute bottom-[0vw] z-[50] h-auto w-[100vw] md:w-[100vw] lg:w-[100vw]"
+        />
+        <Image
+          src="/register/train.png"
+          width={810}
+          height={456}
+          alt="prizepool"
+          className="absolute bottom-[0vw] z-[50] h-auto w-[100vw] md:w-[100vw] lg:w-[100vw]"
+        />
+        <Image
+          src="/register/registerNow.png"
+          width={810}
+          height={456}
+          alt="prizepool"
+          className="absolute bottom-[4.5vw] z-[50] h-auto w-[20vw] md:w-[20vw] lg:w-[20vw]"
+        />
+
+        <div className="relatif z-[51] flex flex-row items-center justify-start text-[4vw] font-bold">
           <h1 className="absolute bottom-[11.5vw] left-[27.5vw] md:left-[28.4vw] lg:left-[28.4vw]">
             {days < 10 ? `0${days}` : days}
           </h1>

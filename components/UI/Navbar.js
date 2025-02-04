@@ -211,7 +211,7 @@ export const Navbar = () => {
   const toggleChildDropdown = (index) => setopenChild(openChild === index ? null : index);
 
   return (
-    <nav className="fixed left-0 top-0 z-50 w-full border-b-2 border-white bg-lightyellow font-kodeMono">
+    <nav className="fixed left-0 top-0 z-[60] w-full border-b-2 border-white bg-lightyellow font-kodeMono">
       <div>
         {/* Logo */}
         <div className="relative mx-auto hidden items-center justify-between px-[4vw] md:flex">
