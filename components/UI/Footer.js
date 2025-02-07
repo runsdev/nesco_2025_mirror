@@ -113,7 +113,7 @@ export const Footer = () => {
         </div>
       </footer>
       <h5 className="w-full self-center bg-[#002327] py-3 text-center font-montserrat text-[11.5px] font-[600] text-white lg:text-[13px]">
-        Nesco 2025. All Right Reserved.
+        &#9426; Nesco 2025. All Right Reserved.
       </h5>
     </>
   );
