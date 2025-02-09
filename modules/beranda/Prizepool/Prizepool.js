@@ -10,21 +10,21 @@ export const Prizepool = () => {
           width={69}
           height={69}
           alt="moon"
-          className="absolute top-[20vw] z-[50] h-auto w-[15vw] md:top-[15vw] md:w-[10vw] lg:top-[8vw] lg:w-[9vw]"
+          className="absolute top-[20vw] z-[50] h-auto w-[15vw] sm:top-[20vw] sm:w-[15vw] md:top-[10vw] md:w-[13vw] lg:top-[5vw] lg:w-[9vw] xl:w-[9vw] 2xl:w-[9vw]"
         />
         <Image
           src="/prize/comets.png"
           width={810}
           height={456}
           alt="comets"
-          className="absolute top-[60vw] z-[50] h-auto w-[75vw] md:top-[35vw] md:w-[100vw] lg:top-[15vw] lg:w-[90vw]"
+          className="absolute top-[60vw] z-[50] h-auto w-[75vw] sm:top-[45vw] sm:w-[75vw] md:top-[20vw] md:w-[90vw] lg:top-[18vw] lg:w-[90vw] xl:top-[25vw] xl:w-[90vw] 2xl:top-[25vw] 2xl:w-[90vw]"
         />
         <Image
           src="/prize/prizepoolAwan.png"
           width={810}
           height={456}
           alt="prizepool"
-          className="absolute top-[60vw] z-[50] h-auto w-[80vw] md:top-[30vw] md:w-[80vw] lg:top-[18vw] lg:w-[70vw]"
+          className="absolute top-[50vw] z-[50] h-auto w-[80vw] sm:top-[45vw] sm:w-[75vw] md:top-[25vw] md:w-[80vw] lg:top-[18vw] lg:w-[70vw] xl:top-[18vw] xl:w-[70vw] 2xl:top-[20vw] 2xl:w-[80vw]"
         />
       </div>
     </div>
