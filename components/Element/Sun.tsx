@@ -10,11 +10,11 @@ type SunProps = {
   plain?: boolean;
   shadow?: boolean;
   rotate?: boolean;
-  updownfloat: number;
-  horizontalfloat: number;
+  updownfloat?: number;
+  horizontalfloat?: number;
 };
 
-export default function Sun({
+export function Sun({
   plain = false,
   shadow = false,
   rotate = false,
@@ -36,7 +36,7 @@ export default function Sun({
           <div className={cn('absolute bottom-0 left-0 right-0 top-0 m-auto aspect-[1/1] w-full')}>
             <Image
               alt="matahari nesco"
-              src="/elements/sun/sun-plain.png"
+              src="/elements/Sun/sun-plain.png"
               className={cn(shadow && 'drop-shadow-offset-lg')}
               fill
             />
@@ -46,7 +46,7 @@ export default function Sun({
           <div className="absolute bottom-0 left-0 right-0 top-0 z-[12] m-auto aspect-[1/1] w-[62%]">
             <Image
               alt="matahari nesco"
-              src="/elements/sun/sun-pale.png"
+              src="/elements/Sun/sun-pale.png"
               className={cn(shadow && 'drop-shadow-offset-lg')}
               fill
             />
@@ -59,7 +59,7 @@ export default function Sun({
           >
             <Image
               alt="matahari nesco"
-              src="/elements/sun/sinar-pale.png"
+              src="/elements/Sun/sinar-pale.png"
               className={cn(shadow && 'drop-shadow-offset')}
               fill
             />

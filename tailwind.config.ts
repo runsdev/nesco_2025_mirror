@@ -23,6 +23,8 @@ const config = {
       dropShadow: {
         offset: '4px 4px 6px rgba(0, 0, 0, 0.25)',
         'offset-lg': '8px 8px 12px rgba(0, 0, 0, 0.3)',
+        'offset-left': '-4px 4px 6px rgba(0, 0, 0, 0.25)',
+        'offset-lg-left': '-8px 8px 12px rgba(0, 0, 0, 0.3)',
       },
       colors: {
         darkblue: 'var(--darkblue)',
@@ -111,7 +113,7 @@ const config = {
       },
       fontFamily: {
         geist: ['Geist', 'sans-serif'],
-        kodeMono: ['Kode_Mono', 'monospace'],
+        kodeMono: ['"Kode Mono"', 'monospace'],
         montserrat: ['Montserrat', 'sans-serif'],
       },
       fontWeight: {

@@ -1,0 +1,20 @@
+@keyframes animasi-awan {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100vw);
+  }
+}
+
+.animate-awan-lambat {
+  animation: animasi-awan 47s linear infinite;
+}
+
+.animate-awan-sedang {
+  animation: animasi-awan 35s linear infinite;
+}
+
+.animate-awan-cepat {
+  animation: animasi-awan 20s linear infinite;
+}
