@@ -35,7 +35,9 @@ export const Galeri = () => {
         className="float-horizontal-1 absolute right-[-30%] top-[70%] hidden h-auto w-[40%] w-[80%] md:block"
       />
 
-      <h1 className="z-20 text-[6vw] font-bold xl:text-[5vw]">Gallery</h1>
+      <h1 data-gsap="up" className="z-20 text-[6vw] font-bold xl:text-[5vw]">
+        Gallery
+      </h1>
 
       <GaleriDesktop className="z-30 hidden md:block" />
 
