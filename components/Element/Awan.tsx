@@ -18,7 +18,7 @@ const ratio = [
   'aspect-[167/77]',
 ];
 
-export default function Awan({ className = '', flip = false, variant = 1 }: Awan) {
+export function Awan({ className = '', flip = false, variant = 1 }: Awan) {
   return (
     <div className={cn('w-[50px]', ratio[variant - 1], className)}>
       <div

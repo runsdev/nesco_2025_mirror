@@ -1,4 +1,4 @@
-import Awan from '@/components/Element/Awan';
+import { Awan } from '@/components/Element/index';
 import './awan.css';
 
 export default function KumpulanAwan() {

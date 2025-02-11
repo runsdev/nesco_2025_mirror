@@ -2,9 +2,8 @@ import Image from 'next/image';
 import KumpulanAwan from './KumpulanAwan';
 import TanahAtas from './TanahAtas';
 import TanahBawah from './TanahBawah';
-import LogoNesco from '@/components/Element/LogoNesco';
 import Link from 'next/link';
-import Sun from '@/components/Element/Sun';
+import { LogoNesco, Sun } from '@/components/Element/index';
 
 export const Hero = () => {
   return (
@@ -15,7 +14,7 @@ export const Hero = () => {
         plain
         className="absolute top-[15%] top-[44%] w-[16%] sm:top-[49%] sm:w-[12%] md:top-[42%] lg:top-[15%] lg:w-[10%] lg:w-[7.6%]"
       />
-      {/* Tulisan dan Logo NEsco */}
+      {/* Tulisan dan Logo Nesco */}
       <div className="absolute left-0 right-0 z-[10] mx-auto aspect-[354/250] w-[90%] max-lg:top-[7%] sm:w-[80%] md:w-[52%] lg:top-[30%] lg:aspect-[1380/374] lg:w-[71.8%]">
         <div className="absolute left-0 aspect-[967/185] w-full max-lg:bottom-0 lg:top-[25%] lg:w-[70%]">
           <Image
@@ -26,12 +25,12 @@ export const Hero = () => {
         </div>
         <LogoNesco
           shadow
-          className="float-updown-1 absolute right-0 w-[44%] max-lg:left-0 max-lg:top-[6%] max-lg:mx-auto lg:w-[27%]"
+          className="float-updown-1 absolute right-0 top-[12%] w-[40%] max-lg:left-0 max-lg:mx-auto md:top-[6%] lg:w-[27%]"
         />
       </div>
       <button
         type="button"
-        className="absolute top-[69%] z-[20] w-[47%] overflow-clip rounded-3xl bg-gradient-to-r from-[#003C43] via-[#0F776E] to-[#61CCC2] bg-[length:200%_200%] bg-[position:top_left] text-xl text-lightyellow transition-all duration-500 hover:bg-[position:bottom_right] hover:text-white sm:w-[37%] md:top-[61%] md:w-[32%] lg:top-[59%] lg:w-[250px] lg:rounded-3xl"
+        className="absolute top-[69%] z-[20] w-[47%] overflow-clip rounded-3xl bg-gradient-to-r from-[#003C43] via-[#0F776E] to-[#61CCC2] bg-[length:200%_200%] bg-[position:top_left] text-xl text-lightyellow transition-all duration-500 hover:bg-[position:bottom_right] hover:text-white sm:w-[37%] md:top-[61%] md:w-[32%] lg:top-[59%] lg:w-[250px] lg:rounded-3xl 2xl:top-[61%]"
       >
         <Link
           href="/"

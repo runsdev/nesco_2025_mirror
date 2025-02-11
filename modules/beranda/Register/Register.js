@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 export const Register = () => {
   const targetDate = new Date('2025-03-01 08:00:00').getTime();
@@ -88,20 +89,28 @@ export const Register = () => {
           />
         </div>
 
-        <div className="relatif z-10 flex flex-row justify-start text-[4vw] font-bold">
-          <h1 className="absolute bottom-[12.8vw] left-[24.5vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[27.6vw] lg:left-[27.3vw] xl:left-[27.5vw]">
+        <div className="relatif z-10 flex flex-row justify-start font-kodeMono text-[4vw] font-bold">
+          <h1 className="absolute bottom-[12.8vw] left-[24.5vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[27.6vw]">
             {days < 10 ? `0${days}` : days}{' '}
           </h1>
-          <h1 className="absolute bottom-[12.8vw] left-[39vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[39.5vw] lg:left-[39.3vw] xl:left-[39.5vw]">
+          <h1 className="absolute bottom-[12.8vw] left-[39vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[40vw]">
             {hours < 10 ? `0${hours}` : hours}
           </h1>
-          <h1 className="absolute bottom-[12.8vw] right-[39.4vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:right-[40.5vw] lg:right-[40.5vw] xl:right-[40vw]">
+          <h1 className="absolute bottom-[12.8vw] right-[39.4vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:right-[40.7vw]">
             {minutes < 10 ? `0${minutes}` : minutes}
           </h1>
-          <h1 className="absolute bottom-[12.8vw] right-[24.8vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:right-[28.3vw] lg:right-[28.3vw] xl:right-[28vw]">
+          <h1 className="absolute bottom-[12.8vw] right-[24.8vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:right-[28.5vw]">
             {seconds < 10 ? `0${seconds}` : seconds}
           </h1>
         </div>
+        <button
+          type="button"
+          className="absolute bottom-[4.7vw] z-[40] w-[23%] overflow-clip rounded-lg bg-darkyellow py-[0.2vw] font-kodeMono text-[2.05vw] font-[600] text-white duration-300 hover:bg-lightyellow"
+        >
+          <Link href="/register" className="h-full w-full">
+            Register Now
+          </Link>
+        </button>
       </div>
     </>
   );
