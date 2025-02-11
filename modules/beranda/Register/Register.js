@@ -33,53 +33,53 @@ export const Register = () => {
             width={810}
             height={456}
             alt="road"
-            className="absolute bottom-[0vw] block h-auto w-[100vw] md:hidden"
+            className="absolute bottom-[0vw] z-[52] block h-auto w-[100vw] md:hidden"
           />
           <Image
             src="/register/road2.png"
             width={2000}
             height={456}
             alt="road"
-            className="absolute bottom-[0vw] hidden h-auto w-[100vw] md:block"
+            className="absolute bottom-[0vw] z-[52] hidden h-auto w-[100vw] md:block"
           />
           <Image
             src="/register/gedung1.png"
             width={810}
             height={456}
             alt="gedung"
-            className="absolute bottom-[1vw] block h-auto w-[100vw] md:hidden"
+            className="absolute bottom-[1vw] z-[52] block h-auto w-[100vw] md:hidden"
           />
           <Image
             src="/register/gedung2.png"
             width={2000}
             height={456}
             alt="gedung"
-            className="absolute bottom-[0vw] hidden h-auto w-[100vw] md:block"
+            className="absolute bottom-[0vw] z-[52] hidden h-auto w-[100vw] md:block"
           />
           <Image
             src="/register/registerBefore.png"
             width={2000}
             height={456}
             alt="register before"
-            className="absolute bottom-[27vw] z-10 block h-auto w-[30vw] md:hidden"
+            className="absolute bottom-[27vw] z-[53] block h-auto w-[30vw] md:hidden"
           />
           <Image
             src="/register/train1.png"
             width={810}
             height={456}
             alt="train"
-            className="absolute bottom-[0vw] block h-auto w-[90vw] md:hidden"
+            className="absolute bottom-[0vw] z-[53] block h-auto w-[90vw] md:hidden"
           />
           <Image
             src="/register/train2.png"
             width={2000}
             height={456}
             alt="train"
-            className="absolute bottom-[0vw] hidden h-auto w-[100vw] md:block"
+            className="absolute bottom-[0vw] z-[53] hidden h-auto w-[100vw] md:block"
           />
         </div>
 
-        <div className="relatif z-10 flex flex-row justify-start font-kodeMono text-[4vw] font-bold">
+        <div className="relatif z-[55] flex flex-row justify-start font-kodeMono text-[4vw] font-bold">
           <h1 className="absolute bottom-[12.8vw] left-[24.5vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[27.6vw]">
             {days < 10 ? `0${days}` : days}{' '}
           </h1>
@@ -93,7 +93,7 @@ export const Register = () => {
             {seconds < 10 ? `0${seconds}` : seconds}
           </h1>
         </div>
-        <div className="relatif z-10 flex flex-row justify-start font-kodeMono text-[1.6vw] font-bold">
+        <div className="relatif z-[55] flex flex-row justify-start font-kodeMono text-[1.6vw] font-bold">
           <p className="absolute bottom-[5.4vw] left-[24.5vw] aspect-[1/1] w-[7vw] text-center md:bottom-[4.8vw] md:left-[27.6vw]">
             Days
           </p>
@@ -109,7 +109,7 @@ export const Register = () => {
         </div>
         <button
           type="button"
-          className="absolute bottom-[4.7vw] z-[40] w-[23%] overflow-clip rounded-sm bg-darkyellow py-[0.2vw] font-kodeMono text-[2.05vw] font-[600] text-white duration-300 hover:bg-lightyellow lg:rounded-xl"
+          className="absolute bottom-[4.7vw] z-[57] w-[23%] overflow-clip rounded-sm bg-darkyellow py-[0.2vw] font-kodeMono text-[2.05vw] font-[600] text-white duration-300 hover:bg-lightyellow lg:rounded-xl"
         >
           <Link href="/register" className="h-full w-full">
             Register Now
