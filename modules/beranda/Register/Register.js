@@ -80,18 +80,18 @@ export const Register = () => {
         </div>
 
         <div className="relatif z-[55] flex flex-row justify-start font-kodeMono text-[4vw] font-bold">
-          <h1 className="absolute bottom-[12.8vw] left-[24.5vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[27.6vw]">
+          <h4 className="absolute bottom-[12.8vw] left-[24.5vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[27.6vw]">
             {days < 10 ? `0${days}` : days}{' '}
-          </h1>
-          <h1 className="absolute bottom-[12.8vw] left-[39vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[40vw]">
+          </h4>
+          <h4 className="absolute bottom-[12.8vw] left-[39vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:left-[40vw]">
             {hours < 10 ? `0${hours}` : hours}
-          </h1>
-          <h1 className="absolute bottom-[12.8vw] right-[39.4vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:right-[40.7vw]">
+          </h4>
+          <h4 className="absolute bottom-[12.8vw] right-[39.4vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:right-[40.7vw]">
             {minutes < 10 ? `0${minutes}` : minutes}
-          </h1>
-          <h1 className="absolute bottom-[12.8vw] right-[24.8vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:right-[28.5vw]">
+          </h4>
+          <h4 className="absolute bottom-[12.8vw] right-[24.8vw] aspect-[1/1] w-[7vw] text-center md:bottom-[11vw] md:right-[28.5vw]">
             {seconds < 10 ? `0${seconds}` : seconds}
-          </h1>
+          </h4>
         </div>
         <div className="relatif z-[55] flex flex-row justify-start font-kodeMono text-[1.6vw] font-bold">
           <p className="absolute bottom-[5.4vw] left-[24.5vw] aspect-[1/1] w-[7vw] text-center md:bottom-[4.8vw] md:left-[27.6vw]">
