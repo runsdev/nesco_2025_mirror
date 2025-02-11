@@ -93,6 +93,20 @@ export const Register = () => {
             {seconds < 10 ? `0${seconds}` : seconds}
           </h1>
         </div>
+        <div className="relatif z-10 flex flex-row justify-start font-kodeMono text-[1.6vw] font-bold">
+          <p className="absolute bottom-[5.4vw] left-[24.5vw] aspect-[1/1] w-[7vw] text-center md:bottom-[4.8vw] md:left-[27.6vw]">
+            Days
+          </p>
+          <p className="absolute bottom-[5.4vw] left-[39vw] aspect-[1/1] w-[7vw] text-center md:bottom-[4.8vw] md:left-[40vw]">
+            Hours
+          </p>
+          <p className="absolute bottom-[5.4vw] right-[39.4vw] aspect-[1/1] w-[7vw] text-center md:bottom-[4.8vw] md:right-[40.7vw]">
+            Minutes
+          </p>
+          <p className="absolute bottom-[5.4vw] right-[24.8vw] aspect-[1/1] w-[7vw] text-center md:bottom-[4.8vw] md:right-[28.5vw]">
+            Seconds
+          </p>
+        </div>
         <button
           type="button"
           className="absolute bottom-[4.7vw] z-[40] w-[23%] overflow-clip rounded-sm bg-darkyellow py-[0.2vw] font-kodeMono text-[2.05vw] font-[600] text-white duration-300 hover:bg-lightyellow lg:rounded-xl"
