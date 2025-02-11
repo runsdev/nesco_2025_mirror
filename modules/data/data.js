@@ -7,7 +7,7 @@ const agendaData = [
   {
     title: 'Seminar',
     description:
-      'Seminar is a discussion or conference that is usually held to discuss a particular topic.',
+      'Seminar Nasional adalah seminar yang diadakan oleh NESCO tiap tahunnya dengan tema ketenagalistrikan untuk menjadi ruang diskusi dan upaya mengenalkan serta mendorong perkembangan sistem ketenagalistrikan di kalangan masyarakat umum.',
   },
 ];
 
