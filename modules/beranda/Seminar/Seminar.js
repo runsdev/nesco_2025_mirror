@@ -26,14 +26,14 @@ const GunungAwanPohon = () => {
         alt="Gunung"
         width={2250}
         height={430}
-        className="relative z-[99] mt-[2%] w-full md:mt-[4%]"
+        className="absolute z-[11] mt-[2%] w-full md:mt-[4%]"
       />
       <Image
         src="/seminar/Awan.png"
         alt="Awan"
         width={2034}
         height={115}
-        className="relative z-[99] mt-[-8%] w-full"
+        className="absolute z-[11] mt-[17%] w-full md:mt-[20%]"
       />
     </div>
   );
@@ -42,7 +42,7 @@ const GunungAwanPohon = () => {
 export const Seminar = () => {
   const seminarData = agendaData.find((data) => data.title === 'Seminar');
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center md:mb-[15%]">
       <div className="w-[48%]">
         <div className="pb-[5%] text-center font-kodeMono text-[6vw] font-bold md:gap-[4vw] md:text-[5vw]">
           {seminarData.title}
