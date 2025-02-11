@@ -26,7 +26,7 @@ export const Register = () => {
 
   return (
     <>
-      <div className="relative flex min-h-screen w-full items-center justify-center lg:min-h-screen">
+      <div className="relative flex h-[43dvh] w-full items-center justify-center md:h-[47dvh] lg:h-screen">
         <div className="flex min-h-screen w-full flex-col items-center justify-center">
           <Image
             src="/register/road1.png"
@@ -37,7 +37,7 @@ export const Register = () => {
           />
           <Image
             src="/register/road2.png"
-            width={810}
+            width={2000}
             height={456}
             alt="road"
             className="absolute bottom-[0vw] hidden h-auto w-[100vw] md:block"
@@ -51,14 +51,14 @@ export const Register = () => {
           />
           <Image
             src="/register/gedung2.png"
-            width={810}
+            width={2000}
             height={456}
             alt="gedung"
             className="absolute bottom-[0vw] hidden h-auto w-[100vw] md:block"
           />
           <Image
             src="/register/registerBefore.png"
-            width={810}
+            width={2000}
             height={456}
             alt="register before"
             className="absolute bottom-[27vw] z-10 block h-auto w-[30vw] md:hidden"
@@ -72,20 +72,10 @@ export const Register = () => {
           />
           <Image
             src="/register/train2.png"
-            width={810}
+            width={2000}
             height={456}
             alt="train"
             className="absolute bottom-[0vw] hidden h-auto w-[100vw] md:block"
-          />
-        </div>
-
-        <div className="absolute flex min-h-screen w-full items-center justify-center">
-          <Image
-            src="/register/button.png"
-            width={810}
-            height={456}
-            alt="button"
-            className="absolute bottom-[4.5vw] h-auto w-[23vw]"
           />
         </div>
 
@@ -105,7 +95,7 @@ export const Register = () => {
         </div>
         <button
           type="button"
-          className="absolute bottom-[4.7vw] z-[40] w-[23%] overflow-clip rounded-lg bg-darkyellow py-[0.2vw] font-kodeMono text-[2.05vw] font-[600] text-white duration-300 hover:bg-lightyellow"
+          className="absolute bottom-[4.7vw] z-[40] w-[23%] overflow-clip rounded-sm bg-darkyellow py-[0.2vw] font-kodeMono text-[2.05vw] font-[600] text-white duration-300 hover:bg-lightyellow lg:rounded-xl"
         >
           <Link href="/register" className="h-full w-full">
             Register Now

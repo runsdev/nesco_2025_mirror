@@ -5,9 +5,9 @@ import Image from 'next/image';
 
 export const Prizepool = () => {
   return (
-    <div className="relative flex w-full items-start justify-center max-lg:min-h-[50dvh] lg:min-h-[80dvh]">
+    <div className="relative flex h-[50dvh] w-full items-start justify-center lg:h-[80dvh]">
       {/* BINTANG, BULAN, COMET */}
-      <div className="absolute flex min-h-screen w-full flex-col items-center justify-center">
+      <div className="absolute flex h-full w-full flex-col items-center justify-center">
         <Image
           src="/prize/moon.png"
           width={69}
@@ -20,11 +20,11 @@ export const Prizepool = () => {
           width={810}
           height={456}
           alt="comets"
-          className="absolute top-[60vw] z-[50] h-auto w-[75vw] sm:top-[45vw] sm:w-[75vw] md:top-[20vw] md:w-[90vw] lg:top-[18vw] lg:w-[90vw] xl:top-[25vw] xl:w-[90vw] 2xl:top-[25vw] 2xl:w-[90vw]"
+          className="absolute top-[60%] z-[50] h-auto w-[75vw] sm:top-[45vw] sm:w-[75vw] md:top-[20vw] md:w-[90vw] lg:top-[18vw] lg:w-[90vw] xl:top-[25vw] xl:w-[90vw] 2xl:top-[25vw] 2xl:w-[90vw]"
         />
         <div
           data-gsap="up"
-          className="absolute top-[68%] aspect-[1304.7/384.54] w-[80%] md:top-[65%] md:w-[80%] lg:top-[64%] lg:w-[68%]"
+          className="absolute top-[68%] z-[51] aspect-[1304.7/384.54] w-[80%] md:top-[65%] md:w-[80%] lg:top-[64%] lg:w-[68%]"
         >
           <Image
             src="/prize/prizepoolAwan.png"
