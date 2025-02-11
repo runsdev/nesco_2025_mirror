@@ -1,11 +1,10 @@
-import '../styles/globals.css';
-import '../styles/animasi.css';
+// import HeaderAuth from '@/components/header-auth';
+// import { ThemeSwitcher } from '@/components/theme-switcher';
+// import { Geist } from 'next/font/google';
+// import { ThemeProvider } from 'next-themes';
+
 import { Kode_Mono } from 'next/font/google';
 import { Montserrat } from 'next/font/google';
-
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000';
 
 const kodeMono = Kode_Mono({
   display: 'swap',
@@ -19,20 +18,34 @@ const montserrat = Montserrat({
   subsets: ['latin'],
 });
 
+import LocomotiveProvider from '@/providers/LocomotiveProvider';
+import GSAPProvider from '@/providers/GSAPProvider';
+import { Navbar, Footer } from '@/components/UI/index';
+import '../styles/globals.css';
+import '../styles/animasi.css';
+
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : 'http://localhost:3000';
+
 export const metadata = {
   metadataBase: new URL(defaultUrl),
   title: 'NESCO 2025',
   description: 'National Electrical Power System Competition 2025',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${kodeMono.className} ${montserrat.className}`}>{children}</body>
+      <body className={`${kodeMono.className} ${montserrat.className}`}>
+        <LocomotiveProvider>
+          <GSAPProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </GSAPProvider>
+        </LocomotiveProvider>
+      </body>
     </html>
   );
 }

@@ -51,9 +51,9 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
         {route.child ? (
           <>
             <button
-              className={`flex w-full items-center gap-1 capitalize transition duration-200 ease-in-out focus:outline-none ${openDropdown === index ? 'text-lightblue' : 'text-normal'}`}
+              className={`flex w-full items-center gap-1 capitalize transition duration-200 ease-in-out hover:text-lightblue focus:outline-none ${openDropdown === index ? 'text-lightblue' : 'text-normal'}`}
               onClick={() => toggleMainDropdown(openDropdown === index ? null : index)}
-              onMouseEnter={() => toggleMainDropdown(index)}
+              // onMouseEnter={() => toggleMainDropdown(index)}
             >
               {route.name}
               <IoIosArrowDown
@@ -72,7 +72,7 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
                 height: openDropdown === index ? 'auto' : 0,
                 opacity: openDropdown === index ? 1 : 0,
               }}
-              transition={{ ease: 'linear', duration: 0.4 }}
+              transition={{ ease: 'linear', duration: 0.27 }}
             >
               <ul>
                 <div className="my-[0.6vw] h-[0.8vw] border-b-[0.3vw] border-t-[0.3vw] border-chart-2" />
@@ -211,7 +211,7 @@ export const Navbar = () => {
   const toggleChildDropdown = (index) => setopenChild(openChild === index ? null : index);
 
   return (
-    <nav className="fixed left-0 top-0 z-50 w-full border-b-2 border-white bg-lightyellow font-kodeMono">
+    <nav className="fixed left-0 top-0 z-[60] w-full border-b-2 border-white bg-lightyellow font-kodeMono">
       <div>
         {/* Logo */}
         <div className="relative mx-auto hidden items-center justify-between px-[4vw] md:flex">
@@ -230,7 +230,7 @@ export const Navbar = () => {
 
           <button
             type="button"
-            className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow xl:text-[1.1vw]"
+            className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
           >
             <Link href="/">
               <p>SIGN IN</p>
