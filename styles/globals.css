@@ -101,3 +101,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Custom Scrollbar for >= lg screens */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar {
+    display: block;
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: radial-gradient(#ffffff, #eeeeee);
+    border-radius: 5px;
+    fill-opacity: 20;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(#003c43, #0f776e);
+    border-radius: 10px;
+    /* border: 0.5px solid #006582; Adding border to the scrollbar thumb */
+  }
+}
