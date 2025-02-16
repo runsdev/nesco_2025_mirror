@@ -3,18 +3,33 @@ import { title } from 'process';
 const agendaData = [
   {
     title: 'Paper Competition',
+    logo: "/assets/beranda/Competition/PaperCompetition.svg",
     description:
-      'Paper Competition merupakan kompetisi bidang ketenagalistrikan berupa lomba problem solving tentang Load Flow Diagram, forecasting, sistem proteksi listrik, dan sejenisnya, yang bertujuan mendorong perkembangan dan perencanaan sistem ketenagalistrikan, khususnya di Indonesia.',
+      'Paper Competition NESCO 2025 merupakan ajang yang dirancang untuk menguji kemampuan problem-solving peserta dalam menganalisis dan memberikan solusi atas permasalahan di bidang ketenagalistrikan dan sistem tenaga listrik.',
+  },
+  {
+    title: 'Innovation Challenge',
+    logo: "/assets/beranda/Competition/InnovationCompetition.svg",
+    description:
+      'Innovation Challenge Competition NESCO 2025 adalah kompetisi di bidang ketenagalistrikan yang berfokus pada karya inovatif yang menawarkan solusi kreatif terhadap permasalahan yang diberikan.',
+  },
+  {
+    title: 'Poster',
+    logo: "/assets/beranda/Competition/PosterCompetition.svg",
+    description:
+      'Poster Competition NESCO 2025 adalah kompetisi yang dirancang untuk memberikan platform bagi siswa SMA (Junior) dan mahasiswa (Senior) untuk mengungkapkan ide dan pemikiran mereka mengenai berbagai isu dan inovasi di bidang ketenagalistrikan dan energi terbarukan melalui media visual digital.',
+  },
+  {
+    title: 'Scientific Debate',
+    logo: "/assets/beranda/Competition/DebateCompetition.svg",
+    description:
+      'Scientific Debate Competition NESCO 2025 adalah kompetisi yang dirancang untuk mengasah kemampuan berpikir kritis, analitis, dan argumentatif para peserta dalam menyikapi isu-isu terkini di bidang ketenagalistrikan dan keberlanjutan lingkungan.',
   },
   {
     title: 'Seminar',
+    logo: "/assets/beranda/Competition/Seminar.svg",
     description:
-      'Seminar is a discussion or conference that is usually held to discuss a particular topic.',
-  },
-  {
-    title: 'Workshop',
-    description:
-      'Workshop is a meeting at which a group of people engage in intensive discussion and activity on a particular subject or project.',
+      'Seminar Nasional adalah seminar yang diadakan oleh NESCO tiap tahunnya dengan tema ketenagalistrikan untuk menjadi ruang diskusi dan upaya mengenalkan serta mendorong perkembangan sistem ketenagalistrikan di kalangan masyarakat umum.',
   },
 ];
 

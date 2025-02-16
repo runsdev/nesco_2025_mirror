@@ -1,28 +1,13 @@
-.swiper-pagination-bullet {
-  width: 40px;
-  height: 40px;
-  opacity: 1 !important;
-  background-color: #EABB37;
+.fade-transition {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
-
-.swiper-pagination-bullet-active {
-  background-color: #0F776E;
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.swiper-container {
-  margin-bottom: 20px; /* Jarak pagination ke div bg-black */
+.fade-out {
+  opacity: 0;
+  transform: translateY(20px);
 }
-
-.swiper-pagination {
-  margin-top: 10px; /* Tambahkan margin jika perlu */
-}
-
-
-@media screen and (max-width: 1024px) and (orientation: portrait) {
-  .swiper-container {
-    height: 50vh !important; /* Sesuaikan dengan rasio yang diinginkan */
-    width: 95% !important;
-  }
-}
-

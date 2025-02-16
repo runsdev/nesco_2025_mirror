@@ -121,3 +121,9 @@
     /* border: 0.5px solid #006582; Adding border to the scrollbar thumb */
   }
 }
+
+[data-gsap] {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 0.3s ease;
+}
