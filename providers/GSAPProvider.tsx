@@ -3,6 +3,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import ScrollTrigger from 'gsap/ScrollTrigger';
+import { usePathname, useRouter } from 'next/navigation';
 
 type GSAPProviderProps = {
   children: React.ReactNode;
@@ -12,6 +13,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function GSAPProvider({ children }: GSAPProviderProps) {
   const main = useRef(null);
+  const path = usePathname();
   const getBaseAnimation = (selector: HTMLElement) => {
     return {
       opacity: 1,
@@ -167,7 +169,7 @@ export default function GSAPProvider({ children }: GSAPProviderProps) {
       });
     }, main);
     return () => ctx.revert();
-  }, []);
+  }, [path]);
 
   return <>{children}</>;
 }
