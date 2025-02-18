@@ -7,7 +7,7 @@ export const Sponsor = () => {
       <div className="absolute h-full w-full overflow-x-clip overflow-y-clip">
         <Image
           data-gsap="right"
-          src="/assets/beranda/Sponsor/Kiri.png"
+          src="/assets/beranda/Sponsor/Kiri.webp"
           alt="Kiri"
           width={1301}
           height={528}
@@ -16,7 +16,7 @@ export const Sponsor = () => {
 
         <Image
           data-gsap="left"
-          src="/assets/beranda/Sponsor/Kanan.png"
+          src="/assets/beranda/Sponsor/Kanan.webp"
           alt="Kanan"
           width={623}
           height={612}
@@ -24,8 +24,8 @@ export const Sponsor = () => {
         />
 
         <Image
-          data-gsap="left"
-          src="/assets/beranda/Sponsor/RumputKanan.png"
+          // data-gsap="left"
+          src="/assets/beranda/Sponsor/RumputKanan.webp"
           alt="RumputKanan"
           width={455}
           height={151}
@@ -36,7 +36,7 @@ export const Sponsor = () => {
       {/* Pohon */}
       <Image
         data-gsap="right"
-        src="/assets/beranda/Sponsor/Tree.png"
+        src="/assets/beranda/Sponsor/Tree.webp"
         alt="Tree"
         width={1420}
         height={1217}
@@ -44,8 +44,8 @@ export const Sponsor = () => {
       />
 
       <Image
-        data-gsap="right"
-        src="/assets/beranda/Sponsor/RumputKiri.png"
+        // data-gsap="right"
+        src="/assets/beranda/Sponsor/RumputKiri.webp"
         alt="RumputKiri"
         width={467}
         height={151}
