@@ -8,8 +8,8 @@ const agendaData = [
   },
   {
     title: 'Innovation Challenge',
-    slug: 'electricity',
-    href: '/competition/electricity',
+    slug: 'innovation',
+    href: '/competition/innovation',
     description:
       'Innovation Challenge Competition NESCO 2025 adalah kompetisi di bidang ketenagalistrikan yang berfokus pada karya inovatif yang menawarkan solusi kreatif terhadap permasalahan yang diberikan.',
   },
