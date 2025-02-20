@@ -42,7 +42,7 @@ const TulisanNesco = () => {
 export const Footer = () => {
   return (
     <>
-      <footer className="relative z-[70] flex w-full flex-row items-center justify-center bg-darkblue md:h-[13dvh] lg:h-[24.5dvh] xl:h-[27dvh]">
+      <footer className="relative z-[70] flex w-full flex-row items-center justify-center bg-darkblue pt-4 md:h-[13dvh] lg:h-[24.5dvh] xl:h-[27dvh]">
         <div className="mb-[20%] flex w-[90%] flex-col justify-between space-x-0 space-y-[5%] py-[1%] md:mb-[0.5%] md:flex-row md:space-x-[1%] md:space-y-0">
           {/* Logo dan Nesco*/}
           <div className="w-[50%] max-md:mt-[5%]">
