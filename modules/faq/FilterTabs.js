@@ -1,7 +1,8 @@
-import React from "react";
+import React from 'react';
+import { cn } from '@/lib/utils';
 
-const FilterTabs = ({ setFilter }) => {
-  const categories = ["Semua", "Umum", "Olahraga", "Seni"];
+const FilterTabs = ({ filter, setFilter }) => {
+  const categories = ['General', 'Paper', 'Innovation', 'Poster', 'Scientific Debate'];
 
   return (
     <div className="flex space-x-2 overflow-x-auto pb-[2vw] md:pb-[15px]">
@@ -9,7 +10,10 @@ const FilterTabs = ({ setFilter }) => {
         <button
           key={category}
           onClick={() => setFilter(category)}
-          className="rounded-full bg-white font-geist text-[2.5vw] md:text-[16px] px-4 py-[0.5vw] text-black hover:bg-lightyellow duration-300 active:bg-darkyellow focus:outline-none focus:bg-lightyellow"
+          className={cn(
+            'rounded-full bg-white px-4 py-[0.3vw] font-geist text-[2.5vw] text-black outline-none duration-300 hover:bg-lightyellow active:bg-darkyellow md:py-[0.5vw] md:text-[16px]',
+            category === filter && 'bg-lightyellow',
+          )}
         >
           {category}
         </button>

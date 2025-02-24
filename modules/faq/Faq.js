@@ -1,18 +1,19 @@
 'use client';
 import React, { useState, useRef, useEffect } from 'react';
-import SearchBar from '@/modules/faq/SearchBar';
 import FilterTabs from './FilterTabs';
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import "./Faq.css";
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import './Faq.css';
 import DataFaq from '@/modules/faq/dataFaq';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+const SearchBar = dynamic(() => import('@/modules/faq/SearchBar'), { ssr: false });
 
 export default function FAQ() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filter, setFilter] = useState("Semua");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filter, setFilter] = useState('General');
   const [isAtTop, setIsAtTop] = useState(true);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const [expanded, setExpanded] = useState(null);
@@ -21,45 +22,46 @@ export default function FAQ() {
   const filteredQuestions = DataFaq.filter(
     (question) =>
       question.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-      (filter.toLowerCase() === "semua" || question.category === filter.toLowerCase()),
+      (filter.toLowerCase() === 'general' || question.category === filter),
   );
 
-  const handleScroll = () => {
-    if (accordionRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = accordionRef.current;
-      setIsAtTop(scrollTop === 0);
-      setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 1);
-    }
-  };
-
-  const handleWheel = (e) => {
-    if (accordionRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = accordionRef.current;
-      const isScrollingUp = e.deltaY < 0;
-      const isScrollingDown = e.deltaY > 0;
-
-      if ((isAtTop && isScrollingUp) || (isAtBottom && isScrollingDown)) {
-        return;
-      }
-
-      e.preventDefault();
-      e.stopPropagation();
-
-      const scrollMultiplier = 1.2; 
-      accordionRef.current.scrollTop += e.deltaY * scrollMultiplier;
-    }
-  };
-
   useEffect(() => {
+    const handleScroll = () => {
+      if (accordionRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = accordionRef.current;
+        setIsAtTop(scrollTop === 0);
+        setIsAtBottom(scrollTop + clientHeight >= scrollHeight - 1);
+      }
+      return null;
+    };
+
+    const handleWheel = (e) => {
+      if (accordionRef.current) {
+        const isScrollingUp = e.deltaY < 0;
+        const isScrollingDown = e.deltaY > 0;
+
+        if ((isAtTop && isScrollingUp) || (isAtBottom && isScrollingDown)) {
+          return;
+        }
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const scrollMultiplier = 1.2;
+        accordionRef.current.scrollTop += e.deltaY * scrollMultiplier;
+      }
+      return null;
+    };
+
     const accordionElement = accordionRef.current;
 
     if (accordionElement) {
-      accordionElement.addEventListener("scroll", handleScroll);
-      accordionElement.addEventListener("wheel", handleWheel, { passive: false });
+      accordionElement.addEventListener('scroll', handleScroll);
+      accordionElement.addEventListener('wheel', handleWheel, { passive: false });
 
       return () => {
-        accordionElement.removeEventListener("scroll", handleScroll);
-        accordionElement.removeEventListener("wheel", handleWheel);
+        accordionElement.removeEventListener('scroll', handleScroll);
+        accordionElement.removeEventListener('wheel', handleWheel);
       };
     }
   }, [isAtTop, isAtBottom]);
@@ -71,27 +73,29 @@ export default function FAQ() {
   return (
     <section className="relative h-[120vh] min-h-screen w-full overflow-hidden bg-[linear-gradient(180deg,_#61ccc2_30%,_#ffe08d_100%)] lg:bg-[linear-gradient(180deg,_#61ccc2_40%,_#ffe08d_100%)]">
       {/* Background */}
-      <div className='w-[108%] absolute flex -left-[6vw] bottom-[3vh] sm:-bottom-[1vw] md:bottom-[0vw] lg:-bottom-[3vw] overflow-x-hidden z-0'>
+      <div className="absolute -left-[6vw] bottom-[3vh] z-0 flex w-[108%] overflow-x-hidden sm:-bottom-[1vw] md:bottom-[0vw] lg:-bottom-[3vw]">
         <Image
           src={'/assets/faq/bg-group.webp'}
-          alt='bg tanah'
+          alt="bg tanah"
           width={5000}
           height={5000}
           className=""
         />
       </div>
 
-      <div className="flex h-full w-full lg:w-[80%] px-[8vw] flex-col items-center mx-auto sm:w-full mt-[140px] sm:mt-[18vh] md:mt-[16vh] lg:mt-[20vw] xl:mt-[12vw]">
-        <h1 className="z-10 font-kodeMono text-[10vw] text-darkblue font-extrabold sm:text-[4rem]">FAQ</h1>
+      <div className="mx-auto mt-[140px] flex h-full w-full flex-col items-center px-[8vw] sm:mt-[18vh] sm:w-full md:mt-[16vh] lg:mt-[20vw] lg:w-[80%] xl:mt-[12vw]">
+        <h1 className="z-10 font-kodeMono text-[10vw] font-extrabold text-darkblue sm:text-[4rem]">
+          FAQ
+        </h1>
         <SearchBar setSearchQuery={setSearchQuery} />
-        
-        <div className='bg-slate-500 bg-opacity-40 mt-[2vw] lg:mt-[1vw] h-[50%] w-full rounded-2xl p-[2vw] z-10'>
-        <FilterTabs setFilter={setFilter} />
+
+        <div className="z-10 mt-[2vw] h-[50%] w-full rounded-2xl bg-slate-500 bg-opacity-40 p-[2vw] lg:mt-[1vw]">
+          <FilterTabs filter={filter} setFilter={setFilter} />
           <div
             id="faq"
             ref={accordionRef}
-            className="z-10 h-[93%] md:h-[90%] overflow-y-auto pr-1"
-            style={{ scrollbarGutter: "stable" }}
+            className="z-10 h-[93%] overflow-y-auto pr-1 md:h-[90%]"
+            style={{ scrollbarGutter: 'stable' }}
           >
             {filteredQuestions.map((question) => (
               <Accordion
@@ -99,36 +103,44 @@ export default function FAQ() {
                 expanded={expanded === question.id}
                 onChange={handleAccordion(question.id)}
                 sx={{
-                  borderRadius: "0.5rem !important",
-                  overflow: "hidden",
-                  marginBottom: "0.7rem",
-                  "&:before": {
-                    display: "none",
+                  borderRadius: '0.5rem !important',
+                  overflow: 'hidden',
+                  marginBottom: '0.7rem',
+                  '&:before': {
+                    display: 'none',
                   },
-                  "& .MuiAccordionSummary-root.Mui-expanded": {
+                  '& .MuiAccordionSummary-root.Mui-expanded': {
                     borderBottomLeftRadius: 0,
                     borderBottomRightRadius: 0,
+
+                    transition: 'all 1s ease',
                   },
-                  "& .MuiAccordionDetails-root": {
-                    borderBottomLeftRadius: "0.5rem",
-                    borderBottomRightRadius: "0.5rem",
+                  '& .MuiAccordionDetails-root': {
+                    borderBottomLeftRadius: '0.5rem',
+                    borderBottomRightRadius: '0.5rem',
                   },
                 }}
               >
                 <AccordionSummary
-                  expandIcon={<ExpandMoreIcon sx={{ color: "#1E1E1E" }} />}
+                  expandIcon={<ExpandMoreIcon sx={{ color: '#1E1E1E' }} />}
                   sx={{
-                    backgroundColor: "white",
+                    backgroundColor: 'white',
+                    '&.Mui-expanded': {
+                      marginBottom: 0,
+                      marginTop: 0,
+                      paddingTop: 0,
+                      paddingBottom: 0,
+                    },
                   }}
-                  className="font-geist text-blue sm:text-[1rem] text-[2.5vw] md:text-[16px] "
+                  className="font-geist text-[2.5vw] text-blue sm:text-[1rem] md:text-[16px]"
                 >
                   {question.title}
                 </AccordionSummary>
                 <AccordionDetails
                   sx={{
-                    backgroundColor: "#F5F5F5",
+                    backgroundColor: '#F5F5F5',
                   }}
-                  className="bg-[#DDFFFC] p-4 font-geist sm:p-6 sm:text-[1rem] text-[2.5vw] md:text-[16px] "
+                  className="bg-[#DDFFFC] p-4 font-geist text-[2.5vw] sm:p-6 sm:text-[1rem] md:text-[16px]"
                 >
                   {question.answer}
                 </AccordionDetails>
