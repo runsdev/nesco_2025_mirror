@@ -90,9 +90,9 @@ export const Competition = () => {
                 </p>
               </div>
 
-              {/* <div>
-                <div className="z-50 h-[10vh] w-[80vw] origin-top-left rotate-[-59.27deg] bg-[#fffdfd]/5" ></div>
-              </div> */}
+              <div>
+                <div className="z-10 h-[5vh] w-[60vw] rotate-[-59.27deg] bg-[#fffdfd]/5" ></div>
+              </div>
 
               {/* City Position */}
               <div className="absolute bottom-0 left-0 right-0 h-[40%] z-10 overflow-hidden">
