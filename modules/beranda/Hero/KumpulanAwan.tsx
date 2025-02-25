@@ -44,14 +44,14 @@ export default function KumpulanAwan() {
       />
 
       {/* 1 kelompok */}
-      <Awan
+      {/* <Awan
         variant={5}
         className="animate-awan-cepat absolute left-[81vw] top-[60%] z-[10] w-[12%] sm:top-[52%] md:top-[46%] lg:left-[86vw] lg:top-[50%] lg:w-[7%] 2xl:top-[32%]"
       />
       <Awan
         variant={5}
         className="animate-awan-cepat absolute -left-[19vw] top-[60%] z-[10] w-[12%] sm:top-[52%] md:top-[46%] lg:-left-[14vw] lg:top-[50%] lg:w-[7%] 2xl:top-[32%]"
-      />
+      /> */}
 
       {/* 1 kelompok */}
       <Awan
