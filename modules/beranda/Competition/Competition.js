@@ -90,8 +90,11 @@ export const Competition = () => {
                 </p>
               </div>
 
-              <div>
-                <div className="z-10 h-[5vh] w-[60vw] rotate-[-59.27deg] bg-[#fffdfd]/5" ></div>
+              {/* Garis Abu-Abu dari Kiri ke Kanan*/}
+              <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
+                <div className="absolute top-[30%] right-[10%] h-[5%] w-[60vw] bg-white/10  rotate-[-59.27deg]"></div>
+                <div className="absolute top-[30%] left-[10%] h-[5%] w-[60vw] bg-white/10  rotate-[-59.27deg]"></div>
+                <div className="absolute top-[35%] left-[15%] h-[5%] w-[60vw] bg-white/10  rotate-[-59.27deg]"></div>
               </div>
 
               {/* City Position */}
