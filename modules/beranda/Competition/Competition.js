@@ -11,6 +11,9 @@ export const Competition = () => {
   const [fade, setFade] = useState(true);
   const [buildingOffset, setBuildingOffset] = useState(0);
   const [transitionEnabled, setTransitionEnabled] = useState(true);
+  const [lineOffset, setLineOffset] = useState(0);
+
+  const maxOffset = 2 * (agendaData.length - 1);
 
   const handleNext = () => {
     setFade(false);
@@ -20,7 +23,6 @@ export const Competition = () => {
 
       setBuildingOffset((prevOffset) => {
         if (prevOffset === -50) {
-          // Jika sudah sampai di ujung kanan, reset ke awal dan lanjutkan ke kanan lagi
           setTimeout(() => {
             setBuildingOffset(0);
             setTimeout(() => setTransitionEnabled(true), 50);
@@ -28,6 +30,13 @@ export const Competition = () => {
           return -100;
         }
         return prevOffset - 50;
+      });
+
+      setLineOffset((prevOffset) => {
+        if (currentIndex === agendaData.length - 1) {
+          return 0; // Reset ke default jika klik next di index terakhir
+        }
+        return prevOffset + 2;
       });
     }, 300);
   };
@@ -42,7 +51,6 @@ export const Competition = () => {
 
       setBuildingOffset((prevOffset) => {
         if (prevOffset === 0) {
-          // Jika sudah sampai di ujung kiri, reset ke kanan dan lanjutkan ke kiri lagi
           setTimeout(() => {
             setBuildingOffset(-50);
             setTimeout(() => setTransitionEnabled(true), 50);
@@ -50,6 +58,13 @@ export const Competition = () => {
           return 50;
         }
         return prevOffset + 50;
+      });
+
+      setLineOffset((prevOffset) => {
+        if (currentIndex === 0) {
+          return maxOffset; // Pindah ke posisi terjauh jika klik prev di index pertama
+        }
+        return prevOffset - 2; 
       });
     }, 300);
   };
@@ -91,10 +106,16 @@ export const Competition = () => {
               </div>
 
               {/* Garis Abu-Abu dari Kiri ke Kanan*/}
-              <div className="absolute top-0 left-0 w-full h-full pointer-events-none">
-                <div className="absolute top-[30%] right-[10%] h-[5%] w-[60vw] bg-white/10  rotate-[-59.27deg]"></div>
-                <div className="absolute top-[30%] left-[10%] h-[5%] w-[60vw] bg-white/10  rotate-[-59.27deg]"></div>
-                <div className="absolute top-[35%] left-[15%] h-[5%] w-[60vw] bg-white/10  rotate-[-59.27deg]"></div>
+              <div
+                className="absolute top-0 left-0 w-full h-full pointer-events-none"
+                style={{
+                  transform: `translateX(${lineOffset}vw)`,
+                  transition: 'transform 1s ease-out',
+                }}
+              >
+                <div className="absolute top-[30%] right-[10%] h-[5%] w-[80vw] lg:w-[60vw] bg-white/10 rotate-[-59.27deg]"></div>
+                <div className="absolute top-[30%] left-[10%] h-[5%] w-[80vw] lg:w-[60vw] bg-white/10 rotate-[-59.27deg]"></div>
+                <div className="absolute top-[35%] left-[15%] h-[5%] w-[80vw] lg:w-[60vw] bg-white/10 rotate-[-59.27deg]"></div>
               </div>
 
               {/* City Position */}
@@ -106,7 +127,7 @@ export const Competition = () => {
                     className="absolute bottom-[3vh] md:bottom-[5vh] left-0 h-[80px] md:h-[100px] w-[200%] gedung-container"
                     style={{
                       transform: `translateX(${buildingOffset}%)`,
-                      transition: transitionEnabled ? 'transform 0.5s ease-in-out' : 'none',
+                      transition: transitionEnabled ? 'transform 1s ease-in-out' : 'none',
                     }}
                   >
                     <Image
