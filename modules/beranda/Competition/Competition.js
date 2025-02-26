@@ -29,7 +29,7 @@ const Gedung = ({ className, flip = false }) => {
     >
       <Image
         alt="gedung"
-        src="/assets/beranda/Competition/union.svg"
+        src="/assets/beranda/Competition/Union.svg"
         fill
         className={cn('object-contain object-bottom', flip && 'scale-x-[-1]')}
       />
