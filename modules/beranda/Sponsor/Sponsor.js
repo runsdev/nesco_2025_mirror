@@ -7,7 +7,7 @@ export const Sponsor = () => {
       <div className="absolute h-full w-full overflow-x-clip overflow-y-clip">
         <Image
           data-gsap="right"
-          src="/assets/beranda/Sponsor/Kiri.webp"
+          src="/assets/beranda/sponsor/Kiri.webp"
           alt="Kiri"
           width={1301}
           height={528}
@@ -16,7 +16,7 @@ export const Sponsor = () => {
 
         <Image
           data-gsap="left"
-          src="/assets/beranda/Sponsor/Kanan.webp"
+          src="/assets/beranda/sponsor/Kanan.webp"
           alt="Kanan"
           width={623}
           height={612}
@@ -25,7 +25,7 @@ export const Sponsor = () => {
 
         <Image
           // data-gsap="left"
-          src="/assets/beranda/Sponsor/RumputKanan.webp"
+          src="/assets/beranda/sponsor/RumputKanan.webp"
           alt="RumputKanan"
           width={455}
           height={151}
@@ -36,7 +36,7 @@ export const Sponsor = () => {
       {/* Pohon */}
       <Image
         data-gsap="right"
-        src="/assets/beranda/Sponsor/Tree.webp"
+        src="/assets/beranda/sponsor/Tree.webp"
         alt="Tree"
         width={1420}
         height={1217}
@@ -45,7 +45,7 @@ export const Sponsor = () => {
 
       <Image
         // data-gsap="right"
-        src="/assets/beranda/Sponsor/RumputKiri.webp"
+        src="/assets/beranda/sponsor/RumputKiri.webp"
         alt="RumputKiri"
         width={467}
         height={151}
@@ -67,7 +67,7 @@ export const Sponsor = () => {
         </h1>
 
         <Image
-          src="/assets/beranda/Sponsor/Kotak.png"
+          src="/assets/beranda/sponsor/Kotak.png"
           alt="Kotak"
           width={1535}
           height={275.68}
@@ -75,7 +75,7 @@ export const Sponsor = () => {
         />
 
         <Image
-          src="/assets/beranda/Sponsor/Kotak1.webp"
+          src="/assets/beranda/sponsor/Kotak1.webp"
           alt="Kotak"
           width={348}
           height={400}
