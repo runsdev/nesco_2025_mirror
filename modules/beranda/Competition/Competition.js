@@ -1,155 +1,138 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { agendaData } from '@/modules/data/data';
 import './competition.css';
 import Image from 'next/image';
 import { Car } from '@/components/Element';
+import { cn } from '@/lib/utils';
+import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
+
+const GrayLine = ({ className }) => {
+  return (
+    <div
+      className={cn(
+        'absolute top-[30%] h-[5%] w-[80vw] rotate-[-59.27deg] bg-white/10 lg:w-[60vw]',
+        className,
+      )}
+    />
+  );
+};
+
+const Gedung = ({ className, flip = false }) => {
+  return (
+    <div
+      className={cn(
+        'animasi-gedung absolute bottom-[12%] left-0 h-[80px] w-[100%] sm:bottom-[10%] md:bottom-[16%] md:h-[100px] lg:bottom-[18%]',
+        className,
+      )}
+    >
+      <Image
+        alt="gedung"
+        src="/assets/beranda/Competition/union.svg"
+        fill
+        className={cn('object-contain object-bottom', flip && 'scale-x-[-1]')}
+      />
+    </div>
+  );
+};
+
+const Jalan = ({ className }) => {
+  return (
+    <div
+      className={cn(
+        'animasi-gedung absolute bottom-[-10%] left-0 right-0 aspect-[480/35] w-full sm:bottom-[-5%]',
+        className,
+      )}
+    >
+      <Image
+        alt="jalan"
+        src="/assets/beranda/Competition/jalan.svg"
+        fill
+        className="object-cover object-bottom"
+      />
+    </div>
+  );
+};
 
 export const Competition = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(true);
-  const [buildingOffset, setBuildingOffset] = useState(0);
-  const [transitionEnabled, setTransitionEnabled] = useState(true);
-  const [lineOffset, setLineOffset] = useState(0);
+  const lombaData = agendaData.filter((item) => item.slug !== 'seminar');
 
-  const maxOffset = 2 * (agendaData.length - 1);
-
-  const handleNext = () => {
+  const handleChange = (index) => {
     setFade(false);
     setTimeout(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % agendaData.length);
+      setCurrentIndex(index);
       setFade(true);
-
-      setBuildingOffset((prevOffset) => {
-        if (prevOffset === -50) {
-          setTimeout(() => {
-            setBuildingOffset(0);
-            setTimeout(() => setTransitionEnabled(true), 50);
-          }, 10);
-          return -100;
-        }
-        return prevOffset - 50;
-      });
-
-      setLineOffset((prevOffset) => {
-        if (currentIndex === agendaData.length - 1) {
-          return 0; // Reset ke default jika klik next di index terakhir
-        }
-        return prevOffset + 2;
-      });
     }, 300);
   };
 
-  const handlePrev = () => {
-    setFade(false);
-    setTimeout(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === 0 ? agendaData.length - 1 : prevIndex - 1
-      );
-      setFade(true);
-
-      setBuildingOffset((prevOffset) => {
-        if (prevOffset === 0) {
-          setTimeout(() => {
-            setBuildingOffset(-50);
-            setTimeout(() => setTransitionEnabled(true), 50);
-          }, 10);
-          return 50;
-        }
-        return prevOffset + 50;
-      });
-
-      setLineOffset((prevOffset) => {
-        if (currentIndex === 0) {
-          return maxOffset; // Pindah ke posisi terjauh jika klik prev di index pertama
-        }
-        return prevOffset - 2; 
-      });
-    }, 300);
-  };
+  const handleNext = () => handleChange((prevIndex) => (prevIndex + 1) % lombaData.length);
+  const handlePrev = () =>
+    handleChange((prevIndex) => (prevIndex === 0 ? lombaData.length - 1 : prevIndex - 1));
+  const handleClick = (index) => handleChange(index);
 
   return (
-    <div className="flex min-h-[60vh] w-full flex-col items-center justify-center text-center z-20">
-      <h1 className="font-kodeMono text-[6vw] font-bold mb-8">Competitions</h1>
+    <section className="z-20 flex min-h-[60vh] w-full flex-col items-center justify-center text-center">
+      <h1 className="mb-8 mt-7 font-kodeMono text-[6vw] font-bold md:text-[5vw]">Competitions</h1>
       <div className="relative flex w-full flex-col items-center">
-        <div className="w-full max-w-[97vw] aspect-[3/2] h-auto max-h-[80vh] lg-portrait:h-custom lg:w-[60%] lg:max-h-[65vh] flex items-center justify-center">
-          <div className="relative flex w-full h-full items-center justify-center rounded-[40px] bg-white shadow-lg">
-
+        <div className="lg-portrait:h-custom flex aspect-[5/4] h-auto max-h-[80vh] w-full max-w-[95vw] items-center justify-center md:aspect-[3/2] lg:max-h-[65vh] lg:w-[60%]">
+          <div className="relative flex h-full w-full items-center justify-center rounded-xl bg-white py-4 shadow-lg md:rounded-2xl md:py-5 xl:rounded-[35px]">
             {/* Prev Button */}
-            <div className="bg-[#003c43] p-1 rounded-full mx-3 md:mx-4">
+            <div className="mx-3 rounded-full bg-[#003c43] p-1 max-md:hidden md:mx-4">
               <button
+                type="button"
                 onClick={handlePrev}
-                className="portrait:w-[3vh] portrait:h-[3vh] w-[3vw] h-[3vw] rounded-full bg-[#0f776e] text-[#EABB37] text-2xl font-semibold shadow-md hover:bg-[#0f776e]/90 flex items-center justify-center transition-transform duration-200 hover:scale-105"
+                className="flex h-[3vw] w-[3vw] items-center justify-center rounded-full bg-[#0f776e] text-2xl font-semibold text-[#EABB37] shadow-md transition-transform duration-300 hover:scale-105 hover:bg-[#0f776e]/90 portrait:h-[4vh] portrait:w-[4vh]"
               >
-                &#8249;
+                <GoChevronLeft className="h-3 w-3 md:h-4 md:w-4 lg:h-6 lg:w-6" />
               </button>
             </div>
 
             {/* Content */}
-            <div className="h-[99%] w-[80%] lg:w-[72%] rounded-[40px] bg-black px-5 py-5 text-white lg:py-14 overflow-hidden relative">
+            <div className="relative h-full w-[93%] overflow-hidden rounded-xl bg-black px-5 py-5 text-white md:w-[80%] md:rounded-2xl lg:w-[80%] lg:px-6 lg:py-14 xl:rounded-[35px]">
               <div className={`fade-transition ${fade ? 'fade-in' : 'fade-out'}`}>
-                <h2 className="mb-3 font-montserrat text-[4vw] font-[800] text-[#EABB37] flex items-center justify-center gap-x-2 lg:text-2xl">
+                <h2 className="mb-3 flex items-center justify-center gap-x-2 font-montserrat text-[4vw] font-[800] text-[#EABB37] lg:text-2xl xl:text-3xl">
                   <Image
-                    src={agendaData[currentIndex].logo}
-                    alt={agendaData[currentIndex].title}
+                    src={lombaData[currentIndex].logo}
+                    alt={lombaData[currentIndex].title}
                     width={1}
                     height={1}
-                    className="w-[2em] h-[2em] inline"
+                    className="inline w-[2em] xl:w-[2.7em]"
                   />
-                  {agendaData[currentIndex].title}
+                  {lombaData[currentIndex].title}
                 </h2>
 
-                <p className="text-justify font-montserrat text-[2.5vw] font-[500] text-white lg:text-2xl">
-                  {agendaData[currentIndex].description}
+                <p className="text-justify font-montserrat text-[3vw] font-[500] text-white md:text-[2.5vw] lg:text-[16px] lg:leading-snug xl:text-[25px]">
+                  {lombaData[currentIndex].description}
                 </p>
               </div>
 
               {/* Garis Abu-Abu dari Kiri ke Kanan*/}
-              <div
-                className="absolute top-0 left-0 w-full h-full pointer-events-none"
-                style={{
-                  transform: `translateX(${lineOffset}vw)`,
-                  transition: 'transform 1s ease-out',
-                }}
-              >
-                <div className="absolute top-[30%] right-[10%] h-[5%] w-[80vw] lg:w-[60vw] bg-white/10 rotate-[-59.27deg]"></div>
-                <div className="absolute top-[30%] left-[10%] h-[5%] w-[80vw] lg:w-[60vw] bg-white/10 rotate-[-59.27deg]"></div>
-                <div className="absolute top-[35%] left-[15%] h-[5%] w-[80vw] lg:w-[60vw] bg-white/10 rotate-[-59.27deg]"></div>
+              <div className="animasi-lampu pointer-events-none absolute left-0 top-0 h-full w-full">
+                <GrayLine className="left-[-45%]" />
+                <GrayLine className="left-[10%]" />
+                <GrayLine className="left-[15%]" />
+                <GrayLine className="left-[55%]" />
+                <GrayLine className="left-[110%]" />
+                <GrayLine className="left-[115%]" />
               </div>
 
               {/* City Position */}
-              <div className="absolute bottom-0 left-0 right-0 h-[40%] z-10 overflow-hidden">
-                <div className="relative w-full h-full overflow-hidden">
-
-                  {/* Gedung */}
-                  <div
-                    className="absolute bottom-[3vh] md:bottom-[5vh] left-0 h-[80px] md:h-[100px] w-[200%] gedung-container"
-                    style={{
-                      transform: `translateX(${buildingOffset}%)`,
-                      transition: transitionEnabled ? 'transform 1s ease-in-out' : 'none',
-                    }}
-                  >
-                    <Image
-                      alt="gedung"
-                      src="/assets/beranda/Competition/gedung.svg"
-                      fill
-                      className="object-contain object-bottom"
-                    />
-                  </div>
+              <div className="absolute bottom-0 left-0 right-0 z-10 h-[40%] overflow-hidden">
+                <div className="relative h-full w-full overflow-hidden">
+                  <Gedung className="left-0" />
+                  <Gedung className="left-[100%]" flip />
+                  <Gedung className="left-[200%]" />
 
                   {/* Jalan */}
-                  <div className="absolute bottom-0 left-0 right-0 min-h-[4vh] md:h-[6vh]">
-                    <Image
-                      alt="jalan"
-                      src="/assets/beranda/Competition/jalan.svg"
-                      fill
-                      className="object-cover object-bottom"
-                    />
-                  </div>
+                  <Jalan />
+                  <Jalan className="left-[100%]" />
+                  <Jalan className="left-[200%]" />
 
                   {/* Mobil */}
-                  <div className="absolute bottom-[calc(2vh)] md:bottom-[calc(3vh)] left-1/2 -translate-x-1/2 w-[5%] min-w-[80px] md:w-[15%] min-w-[100px] z-20">
+                  <div className="absolute bottom-[4%] left-1/2 z-20 w-[18%] -translate-x-1/2 md:bottom-[5%] md:w-[15%]">
                     <Car variant="blue" right={true} className="w-full" />
                   </div>
                 </div>
@@ -157,42 +140,68 @@ export const Competition = () => {
             </div>
 
             {/* Next Button */}
-            <div className="bg-[#003c43] p-1 rounded-full mx-3 md:mx-4">
+            <div className="mx-3 rounded-full bg-[#003c43] p-1 max-md:hidden md:mx-4">
               <button
+                type="button"
                 onClick={handleNext}
-                className="portrait:w-[3vh] portrait:h-[3vh] w-[3vw] h-[3vw] rounded-full bg-[#0f776e] text-[#EABB37] text-2xl font-semibold shadow-md hover:bg-[#0f776e]/90 flex items-center justify-center transition-transform duration-200 hover:scale-105"
+                className="flex h-[3vw] w-[3vw] items-center justify-center rounded-full bg-[#0f776e] text-2xl font-semibold text-[#EABB37] shadow-md transition-transform duration-300 hover:scale-105 hover:bg-[#0f776e]/90 lg:text-4xl portrait:h-[4vh] portrait:w-[4vh]"
               >
-                &#8250;
+                <GoChevronRight className="h-3 w-3 md:h-4 md:w-4 lg:h-6 lg:w-6" />
               </button>
             </div>
 
             {/* Lingkaran Abu-Abu */}
-            <div className="flex absolute flex-col right-[5vw] top-[5vh] items-center justify-center gap-y-[1vh] ">
-              <div className="p-1 bg-black rounded-full">
-                <div className="w-[3vw] h-[3vw] md:w-[2vw] md:h-[2vw] min-w-[20px] min-h-[20px] bg-gray-600 rounded-full"></div>
+            <div className="absolute right-[4%] top-[5vh] flex flex-col items-center justify-center gap-y-[1vh] max-md:hidden">
+              <div className="rounded-full bg-black p-1">
+                <div className="h-[3vw] min-h-[20px] w-[3vw] min-w-[20px] rounded-full bg-gray-600 md:h-[2vw] md:w-[2vw]"></div>
               </div>
-              <div className="p-0.5 bg-black rounded-full">
-                <div className="w-[2.5vw] h-[2.5vw] md:w-[1.5vw] md:h-[1.5vw] min-w-[18px] min-h-[18px] bg-gray-600 rounded-full"></div>
+              <div className="rounded-full bg-black p-0.5">
+                <div className="h-[2.5vw] min-h-[18px] w-[2.5vw] min-w-[18px] rounded-full bg-gray-600 md:h-[1.5vw] md:w-[1.5vw]"></div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Pagination */}
-        <div className="bg-[#0f776e] p-2 rounded-full mt-5">
-          <div className="flex items-center justify-center gap-2 bg-[#003c43] p-5 rounded-full">
-            {agendaData.map((_, index) => (
-              <div
+        <div className="mt-5 rounded-full bg-[#0f776e] p-[6px] max-md:hidden xl:p-2">
+          <div className="flex items-center justify-center gap-2 rounded-full bg-[#003c43] p-2 xl:p-3">
+            {lombaData.map((_, index) => (
+              <button
                 key={index}
-                className={`h-10 w-10 rounded-full cursor-pointer hover:opacity-65 transition-all duration-300 ${currentIndex === index ? 'bg-[#EABB37] scale-110' : 'bg-[#0f776e]'
-                  }`}
-                onClick={() => setCurrentIndex(index)}
+                type="button"
+                className={`h-7 w-7 cursor-pointer rounded-full transition-all duration-300 hover:opacity-65 lg:h-8 lg:w-8 xl:h-10 xl:w-10 ${
+                  currentIndex === index ? 'scale-110 bg-[#EABB37]' : 'bg-[#0f776e]'
+                }`}
+                onClick={() => handleClick(index)}
               />
             ))}
           </div>
         </div>
+        {/* Button buat mobile */}
+        <div className="mt-5 flex w-full justify-around md:hidden">
+          {/* Prev Button */}
+          <div className="mx-3 rounded-full bg-[#003c43] p-1 md:mx-4">
+            <button
+              type="button"
+              onClick={handlePrev}
+              className="flex h-[4vw] w-[4vw] items-center justify-center rounded-full bg-[#0f776e] text-2xl font-semibold text-[#EABB37] shadow-md transition-transform duration-300 hover:scale-105 hover:bg-[#0f776e]/90 lg:text-4xl portrait:h-[4.5vh] portrait:w-[4.5vh]"
+            >
+              <GoChevronLeft className="h-4 w-4 md:h-4 md:w-4 lg:h-6 lg:w-6" />
+            </button>
+          </div>
+          {/* Next Button */}
+          <div className="mx-3 rounded-full bg-[#003c43] p-1 md:mx-4">
+            <button
+              type="button"
+              onClick={handleNext}
+              className="flex h-[4vw] w-[4vw] items-center justify-center rounded-full bg-[#0f776e] text-2xl font-semibold text-[#EABB37] shadow-md transition-transform duration-300 hover:scale-105 hover:bg-[#0f776e]/90 lg:text-4xl portrait:h-[4.5vh] portrait:w-[4.5vh]"
+            >
+              <GoChevronRight className="h-4 w-4 md:h-4 md:w-4 lg:h-6 lg:w-6" />
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 
