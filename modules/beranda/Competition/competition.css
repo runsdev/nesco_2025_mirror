@@ -1,0 +1,51 @@
+@media screen and (min-width: 1024px) and (orientation: portrait) {
+  .lg-portrait\:h-custom {
+    height: 80%;
+  }
+}
+
+.fade-transition {
+  transition:
+    opacity 0.3s ease-in-out,
+    transform 0.3s ease-in-out;
+}
+
+.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.fade-out {
+  opacity: 0;
+  transform: translateY(0);
+}
+/* 
+.gedung-transition {
+  transition: gedung-move ease infinite;
+} */
+
+.animasi-gedung {
+  animation: gedung 30s linear infinite;
+}
+
+@keyframes gedung {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-200%);
+  }
+}
+
+.animasi-lampu {
+  animation: lampu 50s linear infinite;
+}
+
+@keyframes lampu {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
