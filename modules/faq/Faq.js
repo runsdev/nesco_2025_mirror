@@ -112,7 +112,7 @@ export default function FAQ() {
                   '& .MuiAccordionSummary-root.Mui-expanded': {
                     borderBottomLeftRadius: 0,
                     borderBottomRightRadius: 0,
-
+                    fontWeight: 600,
                     transition: 'all 1s ease',
                   },
                   '& .MuiAccordionDetails-root': {
@@ -132,7 +132,7 @@ export default function FAQ() {
                       paddingBottom: 0,
                     },
                   }}
-                  className="font-geist text-[2.5vw] text-blue sm:text-[1rem] md:text-[16px]"
+                  className="font-montserrat text-[2.5vw] text-blue sm:text-[1rem] md:text-[16px]"
                 >
                   {question.title}
                 </AccordionSummary>
@@ -140,7 +140,7 @@ export default function FAQ() {
                   sx={{
                     backgroundColor: '#F5F5F5',
                   }}
-                  className="bg-[#DDFFFC] p-4 font-geist text-[2.5vw] sm:p-6 sm:text-[1rem] md:text-[16px]"
+                  className="bg-[#DDFFFC] p-4 font-montserrat text-[2.5vw] sm:p-6 sm:text-[1rem] md:text-[16px]"
                 >
                   {question.answer}
                 </AccordionDetails>
