@@ -6,7 +6,6 @@ const GunungAwanPohon = () => {
     <div className="relative w-full">
       <div className="relative overflow-x-clip">
         <Image
-          data-gsap="right"
           src="/seminar/trees kiri.png"
           alt="Tress kiri"
           width={1649}
@@ -14,7 +13,6 @@ const GunungAwanPohon = () => {
           className="absolute z-[10] ml-[-6%] mt-[-68%] w-[40%] scale-[155%] md:ml-[-6%] md:mt-[-55%] md:scale-105"
         />
         <Image
-          data-gsap="left"
           src="/seminar/trees kanan.png"
           alt="Tress kanan"
           width={1649}

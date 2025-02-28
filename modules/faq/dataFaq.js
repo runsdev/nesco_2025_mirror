@@ -178,26 +178,26 @@ const DataFaq = [
     title: 'Apa topik yang akan dibahas?',
     answer:
       'Topik yang dibahas adalah seputar masalah energi hijau dan keberlanjutan lingkungan, sesuai dengan subtema yang ditentukan pada panduan.',
-    category: 'Scientific Debate',
+    category: 'Debate',
   },
   {
     id: 27,
     title: 'Apa format lomba debat yang digunakan?',
     answer: 'Format lomba debat menggunakan format Asian Parliamentary (AP)',
-    category: 'Scientific Debate',
+    category: 'Debate',
   },
   {
     id: 28,
     title: 'Apakah debat ini menggunakan bahasa Indonesia?',
     answer: 'Iya, debat menggunakan Bahasa Indonesia',
-    category: 'Scientific Debate',
+    category: 'Debate',
   },
   {
     id: 29,
     title: 'Apakah peserta diperbolehkan menggunakan alat bantu seperti slide presentasi?',
     answer:
       'Mengacu pada format perlombaan, peserta tidak akan menggunakan slide presentasi, tetapi dapat menggunakan alat bantu lainnya seperti kertas dan alat tulis dan yang lebih rincinya akan dijelaskan pada panduan maupun technical meeting.',
-    category: 'Scientific Debate',
+    category: 'Debate',
   },
 ];
 

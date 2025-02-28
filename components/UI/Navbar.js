@@ -17,7 +17,7 @@ const routes = [
       },
       {
         name: 'Innovation Challenge',
-        href: '/competition/electricity',
+        href: '/competition/innovation',
       },
       {
         name: 'Paper',
@@ -65,7 +65,7 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
 
             {/* Dropdown Menu */}
             <motion.div
-              className={`absolute left-[-25%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-4 py-2 text-center shadow-md ${openDropdown === index ? 'visibility-visible opacity-100' : 'opacity-0'}`}
+              className={`absolute left-[-30%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-4 py-2 text-center shadow-md ${openDropdown === index ? 'visibility-visible opacity-100' : 'opacity-0'}`}
               initial={{ height: 0 }}
               animate={{
                 height: openDropdown === index ? 'auto' : 0,
@@ -158,18 +158,17 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
                     <AnimatePresence>
                       {openChild === index && (
                         <motion.div
-                          className="absolute left-[-10%] top-[170%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-[1.6vw] py-[1.6vw] text-center shadow-lg sm:top-[150%]"
+                          className="absolute left-[-20%] top-[170%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-[1.6vw] py-[1.6vw] text-center shadow-lg sm:top-[150%]"
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ ease: 'linear', duration: 0.4 }}
                         >
                           <ul>
-                            <div className="my-[0.5vw] h-[1.5vw] border-b-[0.5vw] border-t-[0.5vw] border-blue" />
                             {route.child.map((child, childIndex) => (
                               <li
                                 key={childIndex}
-                                className="text-nowrap pt-[0.6vw] !font-montserrat text-[2vw] text-darkblue duration-200 ease-in-out hover:text-lightblue"
+                                className="text-nowrap py-[1.2vw] !font-montserrat text-[2.2vw] text-darkblue duration-200 ease-in-out hover:text-lightblue"
                               >
                                 <Link href={child.href} className="block">
                                   {child.name}

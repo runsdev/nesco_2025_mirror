@@ -12,7 +12,7 @@ const GrayLine = ({ className }) => {
   return (
     <div
       className={cn(
-        'absolute top-[30%] h-[5%] w-[80vw] rotate-[-59.27deg] bg-white/10 lg:w-[60vw]',
+        'absolute top-[30%] h-[5%] w-[100vw] rotate-[-59.27deg] bg-white/10 lg:w-[60vw]',
         className,
       )}
     />
@@ -163,7 +163,7 @@ export const Competition = () => {
         </div>
 
         {/* Pagination */}
-        <div className="mt-5 rounded-full bg-[#0f776e] p-[6px] max-md:hidden xl:p-2">
+        <div className="mt-5 rounded-full bg-[#0f776e] p-[6px] max-md:collapse max-md:hidden xl:p-2">
           <div className="flex items-center justify-center gap-2 rounded-full bg-[#003c43] p-2 xl:p-3">
             {lombaData.map((_, index) => (
               <button
@@ -178,25 +178,40 @@ export const Competition = () => {
           </div>
         </div>
         {/* Button buat mobile */}
-        <div className="mt-5 flex w-full justify-around md:hidden">
+        <div className="mt-5 flex w-full justify-around md:collapse md:hidden">
           {/* Prev Button */}
-          <div className="mx-3 rounded-full bg-[#003c43] p-1 md:mx-4">
+          <div className="h-fit rounded-full bg-[#003c43] p-[1.4vw]">
             <button
               type="button"
               onClick={handlePrev}
-              className="flex h-[4vw] w-[4vw] items-center justify-center rounded-full bg-[#0f776e] text-2xl font-semibold text-[#EABB37] shadow-md transition-transform duration-300 hover:scale-105 hover:bg-[#0f776e]/90 lg:text-4xl portrait:h-[4.5vh] portrait:w-[4.5vh]"
+              className="flex aspect-square w-[4vw] items-center justify-center rounded-full bg-[#0f776e] text-2xl font-semibold text-[#EABB37] shadow-md transition-transform duration-300 hover:scale-105 hover:bg-[#0f776e]/90 lg:text-4xl portrait:h-[4.5vh] portrait:w-[4.5vh]"
             >
               <GoChevronLeft className="h-4 w-4 md:h-4 md:w-4 lg:h-6 lg:w-6" />
             </button>
           </div>
+          {/* Pagination */}
+          <div className="flex h-fit w-fit items-center justify-center rounded-full bg-[#0f776e] p-[1vw]">
+            <div className="relative flex items-center justify-center gap-[1.4vw] rounded-full bg-[#003c43] p-[1.4vw] sm:p-[1.4vw] md:gap-2 xl:p-3">
+              {lombaData.map((_, index) => (
+                <button
+                  key={index}
+                  type="button"
+                  className={`aspect-square w-7 cursor-pointer rounded-full transition-all duration-300 hover:opacity-65 lg:w-8 xl:w-10 ${
+                    currentIndex === index ? 'scale-110 bg-[#EABB37]' : 'bg-[#0f776e]'
+                  }`}
+                  onClick={() => handleClick(index)}
+                />
+              ))}
+            </div>
+          </div>
           {/* Next Button */}
-          <div className="mx-3 rounded-full bg-[#003c43] p-1 md:mx-4">
+          <div className="h-fit rounded-full bg-[#003c43] p-[1.4vw]">
             <button
               type="button"
               onClick={handleNext}
-              className="flex h-[4vw] w-[4vw] items-center justify-center rounded-full bg-[#0f776e] text-2xl font-semibold text-[#EABB37] shadow-md transition-transform duration-300 hover:scale-105 hover:bg-[#0f776e]/90 lg:text-4xl portrait:h-[4.5vh] portrait:w-[4.5vh]"
+              className="flex aspect-square w-[4vw] items-center justify-center rounded-full bg-[#0f776e] text-2xl font-semibold text-[#EABB37] shadow-md transition-transform duration-300 hover:scale-105 hover:bg-[#0f776e]/90 lg:text-4xl portrait:h-[4.5vh] portrait:w-[4.5vh]"
             >
-              <GoChevronRight className="h-4 w-4 md:h-4 md:w-4 lg:h-6 lg:w-6" />
+              <GoChevronRight className="h-4 w-4 lg:h-6 lg:w-6" />
             </button>
           </div>
         </div>

@@ -14,7 +14,7 @@ export default function SearchBar({ setSearchQuery }) {
         type="text"
         placeholder="Cari pertanyaan..."
         onChange={handleInputChange}
-        className="w-full rounded-full border border-gray-300 px-4 py-2 text-[2.5vw] text-blue shadow-md outline-none placeholder:text-blue focus:border-transparent focus:outline-none focus:ring-2 focus:ring-blue md:text-[16px]"
+        className="w-full rounded-full border border-gray-300 px-4 py-[1.8vw] text-[2.9vw] text-black shadow-md outline-none placeholder:text-blue focus:border-transparent focus:ring-2 focus:ring-blue md:py-[1.3vw] md:text-[16px] lg:py-3"
       />
     </div>
   );

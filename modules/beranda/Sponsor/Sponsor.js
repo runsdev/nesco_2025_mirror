@@ -36,7 +36,7 @@ export const Sponsor = () => {
       {/* Pohon */}
       <Image
         data-gsap="right"
-        src="/assets/beranda/sponsor/Tree.webp"
+        src="/assets/beranda/sponsor/Tree.svg"
         alt="Tree"
         width={1420}
         height={1217}
