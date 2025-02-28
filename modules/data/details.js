@@ -2,7 +2,7 @@ const details = {
   debate: {
     title: 'Paper Competition',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec lacinia lacinia, nunc nisl lacinia nisl, nec lacinia nisl nisl nec nisl. Nullam auctor, nisl nec lacinia lacinia, nunc nisl lacinia nisl, nec lacinia nisl nisl nec nisl.',
+      'Paper Competition merupakan kompetisi bidang ketenagalistrikan berupa lomba problem solving tentang Load Flow Diagram, forecasting, sistem proteksi listrik, dan sejenisnya, yang bertujuan mendorong perkembangan dan perencanaan sistem ketenagalistrikan, khususnya di Indonesia.',
     kategori: {
       jenis: 'Mahasiswa',
       tim: 'Perorangan',
