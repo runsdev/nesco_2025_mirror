@@ -129,9 +129,9 @@ export const Competition = () => {
                   <Gedung className="left-[200.5%]" />
 
                   {/* Jalan */}
-                  {/* <Jalan />
+                  <Jalan tengah />
                   <Jalan className="left-[99%]" tengah />
-                  <Jalan className="left-[200.5%]" /> */}
+                  <Jalan className="left-[200.5%]" tengah />
 
                   {/* Mobil */}
                   <div className="absolute bottom-[4%] left-1/2 z-20 w-[18%] -translate-x-1/2 md:bottom-[5%] md:w-[15%]">

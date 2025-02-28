@@ -25,7 +25,7 @@
 } */
 
 .animasi-gedung {
-  animation: gedung 7s linear infinite;
+  animation: gedung 30s linear infinite;
 }
 
 @keyframes gedung {
@@ -38,7 +38,7 @@
 }
 
 .animasi-gedung-2 {
-  animation: gedung2 7s linear infinite;
+  animation: gedung2 30s linear infinite;
 }
 
 @keyframes gedung2 {
