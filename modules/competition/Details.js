@@ -39,7 +39,7 @@ export function Details({ slug }) {
           <div className="relative flex w-full space-x-[2%] p-[1.3%]">
             {/* Paper Competition Section */}
             <div className="hidden flex-[2.2] flex-col gap-y-[4%] lg:flex">
-              <div className="relative flex flex-row items-center justify-center space-x-[5%] rounded-[1vw] bg-[#0E5B54] p-[5%] text-center md:rounded-sm">
+              <div className="relative flex flex-row items-center justify-start space-x-[3.4%] rounded-[1vw] bg-[#0E5B54] p-[5%] text-center md:rounded-sm">
                 <div className="relative aspect-square w-[3vw]">
                   <Image src="/competition/Competitions.png" alt="Logo competitions" fill />
                 </div>
@@ -100,35 +100,38 @@ export function Details({ slug }) {
                 </div>
                 <div className="flex flex-col space-y-[5%] px-[7%] pb-[10%] pt-[7%]">
                   <Link
+                    target="_blank"
                     href={`https://line.me/ti/p/${detailsNow.contactPerson.line}`}
                     className="group flex flex-row items-center space-x-[10%] px-[7%]"
                   >
                     <div className="relative flex aspect-square items-center justify-center">
                       <FaLine className="absolute aspect-square w-[1.5vw]" />
                     </div>
-                    <p className="text-[2vw] text-white group-hover:text-[#FFE08D] md:text-base xl:text-lg">
+                    <p className="text-[2vw] text-white duration-500 group-hover:text-[#FFE08D] md:text-base xl:text-lg">
                       {detailsNow.contactPerson.line}
                     </p>
                   </Link>
                   <Link
-                    href={`https://wa.me/62${detailsNow.contactPerson.wa}`}
+                    target="_blank"
+                    href={`https://wa.me/62${detailsNow.contactPerson.wa}?text=Halo!%20Saya%20ingin%20bertanya%20terkait%20NESCO%20UGM!`}
                     className="group flex flex-row items-center space-x-[10%] px-[7%]"
                   >
                     <div className="relative flex items-center justify-center">
                       <FaWhatsapp className="absolute aspect-square w-[1.5vw]" />
                     </div>
-                    <p className="text-[2vw] text-white group-hover:text-[#FFE08D] md:text-base xl:text-lg">
+                    <p className="text-[2vw] text-white duration-500 group-hover:text-[#FFE08D] md:text-base xl:text-lg">
                       {detailsNow.contactPerson.wa}
                     </p>
                   </Link>
                   <Link
+                    target="_blank"
                     href={`https://instagram.com/${detailsNow.contactPerson.instagram}`}
                     className="group flex flex-row items-center space-x-[10%] px-[7%]"
                   >
                     <div className="relative flex items-center justify-center">
                       <FaInstagram className="absolute aspect-square w-[1.5vw]" />
                     </div>
-                    <p className="text-[2vw] text-white group-hover:text-[#FFE08D] md:text-base xl:text-lg">
+                    <p className="text-[2vw] text-white duration-500 group-hover:text-[#FFE08D] md:text-base xl:text-lg">
                       {detailsNow.contactPerson.instagram}
                     </p>
                   </Link>
@@ -137,8 +140,9 @@ export function Details({ slug }) {
               <div className="relative flex h-full flex-row">
                 <div className="flex w-[85%] items-center justify-center rounded-l-[1vw] bg-[#0E5B54] p-[10%] text-center md:rounded-l-sm">
                   <Link
+                    target="_blank"
                     href={detailsNow.guidebook}
-                    className="text-[3vw] font-bold text-[#EABB37] lg:text-xl xl:text-2xl"
+                    className="text-[3vw] font-bold text-[#EABB37] duration-500 hover:text-white lg:text-xl xl:text-2xl"
                   >
                     Guide <br />
                     Book
