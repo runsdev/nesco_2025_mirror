@@ -11,6 +11,7 @@ const details = {
     contactPerson: {
       wa: '081234567890',
       line: '@nesco',
+      instagram: 'nescougm',
     },
     biaya: 'Rp 100.000',
     guidebook: 'Link',
@@ -27,6 +28,7 @@ const details = {
     contactPerson: {
       wa: '081234567890',
       line: '@nesco',
+      instagram: 'nescougm',
     },
     biaya: 'Rp 100.000',
     guidebook: 'Link',
@@ -43,6 +45,7 @@ const details = {
     contactPerson: {
       wa: '081234567890',
       line: '@nesco',
+      instagram: 'nescougm',
     },
     biaya: 'Rp 100.000',
     guidebook: 'Link',
@@ -59,6 +62,7 @@ const details = {
     contactPerson: {
       wa: '081234567890',
       line: '@nesco',
+      instagram: 'nescougm',
     },
     biaya: 'Rp 100.000',
     guidebook: 'Link',
