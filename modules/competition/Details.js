@@ -29,8 +29,8 @@ const KotakTulisan = ({ alt, src, kategori, size = 32 }) => {
   );
 };
 
-export function Details() {
-  const detailsDebate = details.debate;
+export function Details({ slug }) {
+  const detailsDebate = details[slug];
   return (
     <div className="relative z-[12] mt-[7%] flex h-[50dvh] w-full flex-col items-center justify-center text-5xl text-lightyellow md:h-[60dvh] lg:min-h-screen">
       {/* Ini detail komponen detail */}

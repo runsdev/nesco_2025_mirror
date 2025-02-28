@@ -17,7 +17,7 @@ const routes = [
       },
       {
         name: 'Innovation Challenge',
-        href: '/competition/electricity',
+        href: '/competition/innovation',
       },
       {
         name: 'Paper',
