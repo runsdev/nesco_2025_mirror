@@ -1,6 +1,9 @@
+import { title } from 'process';
+
 const agendaData = [
   {
     title: 'Paper Competition',
+    logo: '/assets/beranda/Competition/PaperCompetition.svg',
     slug: 'paper',
     href: '/competition/paper',
     description:
@@ -8,6 +11,7 @@ const agendaData = [
   },
   {
     title: 'Innovation Challenge',
+    logo: '/assets/beranda/Competition/InnovationCompetition.svg',
     slug: 'innovation',
     href: '/competition/innovation',
     description:
@@ -15,6 +19,7 @@ const agendaData = [
   },
   {
     title: 'Poster',
+    logo: '/assets/beranda/Competition/PosterCompetition.svg',
     slug: 'poster',
     href: '/competition/poster',
     description:
@@ -22,6 +27,7 @@ const agendaData = [
   },
   {
     title: 'Scientific Debate',
+    logo: '/assets/beranda/Competition/DebateCompetition.svg',
     slug: 'debate',
     href: '/competition/debate',
     description:
@@ -29,6 +35,7 @@ const agendaData = [
   },
   {
     title: 'Seminar',
+    logo: '/assets/beranda/Competition/Seminar.svg',
     slug: 'seminar',
     href: '/seminar',
     description:

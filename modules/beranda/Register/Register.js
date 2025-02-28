@@ -26,7 +26,7 @@ export const Register = () => {
 
   return (
     <>
-      <div className="relative flex h-[43dvh] w-full items-center justify-center md:h-[47dvh] lg:h-screen">
+      <div className="relative flex h-[43svh] w-full items-center justify-center md:h-[47svh] lg:h-screen">
         <div className="flex min-h-screen w-full flex-col items-center justify-center">
           <Image
             src="/register/road1.png"

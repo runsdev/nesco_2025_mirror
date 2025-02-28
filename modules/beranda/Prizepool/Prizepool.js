@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export const Prizepool = () => {
   return (
-    <div className="relative flex h-[50dvh] w-full items-start justify-center lg:h-[80dvh]">
+    <div className="relative flex h-[50svh] w-full items-start justify-center lg:h-[80svh]">
       {/* BINTANG, BULAN, COMET */}
       <div className="absolute flex h-full w-full flex-col items-center justify-center">
         <Image
