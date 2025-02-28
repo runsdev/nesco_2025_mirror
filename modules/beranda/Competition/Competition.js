@@ -12,7 +12,7 @@ const GrayLine = ({ className }) => {
   return (
     <div
       className={cn(
-        'absolute top-[30%] h-[5%] w-[80vw] rotate-[-59.27deg] bg-white/10 lg:w-[60vw]',
+        'absolute top-[30%] h-[5%] w-[100vw] rotate-[-59.27deg] bg-white/10 lg:w-[60vw]',
         className,
       )}
     />
