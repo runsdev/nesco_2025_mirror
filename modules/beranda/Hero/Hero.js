@@ -7,7 +7,7 @@ import { LogoNesco, Sun } from '@/components/Element/index';
 
 export const Hero = () => {
   return (
-    <section className="relative flex min-h-screen w-full items-center justify-center overflow-x-clip bg-gradient-to-b from-[#61CCC1] to-[#FDDF8D] text-center text-[50px] font-[700]">
+    <section className="relative flex min-h-[100svh] w-full items-center justify-center overflow-x-clip bg-gradient-to-b from-[#61CCC1] to-[#FDDF8D] text-center text-[50px] font-[700] lg:min-h-screen">
       <KumpulanAwan />
       {/* Matahari */}
       <Sun
