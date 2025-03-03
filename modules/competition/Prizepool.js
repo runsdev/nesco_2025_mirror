@@ -9,7 +9,7 @@ import Image from 'next/image';
 
 const Hadiah = ({ kategori, juara1, juara2, juara3 }) => {
   return (
-    <div>
+    <div className="font-montserrat">
       <Image
         src="/prizepoolCompt/frameKategori.png"
         width={400}
@@ -17,10 +17,7 @@ const Hadiah = ({ kategori, juara1, juara2, juara3 }) => {
         alt="prizepool"
         className="absolute top-0 h-auto w-[85vw] justify-center"
       />
-      <h1
-        className="relative left-[2vw] z-20 mt-[1vw] font-montserrat text-[3vw]"
-        style={{ color: '#EABB37' }}
-      >
+      <h1 className="relative left-[2vw] z-20 mt-[1vw] text-[3vw]" style={{ color: '#EABB37' }}>
         Kategori {kategori}
       </h1>
       <div className="relative z-20 mt-[4vw] grid w-full grid-cols-3 place-items-center gap-y-2 text-[4vw]">
@@ -61,7 +58,7 @@ export function Prizepool({ className, slug }) {
   return (
     <div
       className={cn(
-        'z-[12] flex h-[50dvh] w-full items-center justify-center text-5xl lg:h-screen',
+        'z-[12] flex h-[50dvh] w-full items-center justify-center font-montserrat text-5xl lg:h-screen',
         className, // Jangan dihapus yang line ini
       )}
     >
