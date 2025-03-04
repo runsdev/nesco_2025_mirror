@@ -15,9 +15,9 @@ export default async function Page({ params }: { params: Promise<{ competition: 
     return notFound();
   }
   return (
-    <div className="w-full overflow-clip">
+    <div className="w-full overflow-clip bg-gradient-to-b from-[#61CCC1] via-[#FDDF8D]/50 to-[#FDDF8D]">
       <Hero slug={slug} />
-      <div className="relative flex h-auto w-full justify-center overflow-x-clip overflow-y-visible md:h-[60dvh] lg:h-fit 2xl:h-[120vh]">
+      <div className="relative flex h-auto w-full justify-center overflow-x-clip overflow-y-visible md:h-[60svh] lg:h-fit 2xl:h-[120vh]">
         <div className="absolute z-[7] mr-[2%] aspect-[1500/1129.18] w-[145vw] max-lg:ml-[-5vw] md:w-[149vw] lg:w-[122vw] 2xl:w-[122vw]">
           <Image
             alt="background"
