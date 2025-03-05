@@ -13,19 +13,19 @@ const routes = [
     href: '/competition',
     child: [
       {
-        name: 'Debate Competition',
+        name: 'Scientific Debate',
         href: '/competition/debate',
       },
       {
-        name: 'Electricity Innovation Competition',
-        href: '/competition/electricity',
+        name: 'Innovation Challenge',
+        href: '/competition/innovation',
       },
       {
-        name: 'Paper Competition',
+        name: 'Paper',
         href: '/competition/paper',
       },
       {
-        name: 'Poster Competition',
+        name: 'Poster',
         href: '/competition/poster',
       },
     ],
@@ -47,14 +47,13 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
       <li
         key={index}
         className="group relative leading-[7.3vw] xl:leading-[5.3vw]"
-        onBlur={() => toggleMainDropdown(null)}
+        onMouseEnter={() => toggleMainDropdown(openDropdown === index ? null : index)}
+        onMouseLeave={() => toggleMainDropdown(openDropdown === index ? null : index)}
       >
         {route.child ? (
           <>
-            <button
-              className={`flex w-full items-center gap-1 capitalize transition duration-200 ease-in-out focus:outline-none ${openDropdown === index ? 'text-lightblue' : 'text-normal'}`}
-              onClick={() => toggleMainDropdown(openDropdown === index ? null : index)}
-              onMouseEnter={() => toggleMainDropdown(index)}
+            <div
+              className={`flex w-full items-center gap-1 capitalize transition duration-200 ease-in-out hover:text-lightblue focus:outline-none ${openDropdown === index ? 'text-lightblue' : 'text-normal'}`}
             >
               {route.name}
               <IoIosArrowDown
@@ -63,24 +62,23 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
                   transition: 'transform 0.4s ease-in-out',
                 }}
               />
-            </button>
+            </div>
 
             {/* Dropdown Menu */}
             <motion.div
-              className={`absolute left-[-70%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-4 py-2 shadow-md ${openDropdown === index ? 'visibility-visible opacity-100' : 'opacity-0'}`}
+              className={`absolute left-[-30%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-4 py-2 text-center shadow-md ${openDropdown === index ? 'visibility-visible opacity-100' : 'opacity-0'}`}
               initial={{ height: 0 }}
               animate={{
                 height: openDropdown === index ? 'auto' : 0,
                 opacity: openDropdown === index ? 1 : 0,
               }}
-              transition={{ ease: 'linear', duration: 0.4 }}
+              transition={{ ease: 'linear', duration: 0.27 }}
             >
               <ul>
-                <div className="my-[0.6vw] h-[0.8vw] border-b-[0.3vw] border-t-[0.3vw] border-chart-2" />
                 {route.child.map((child, childIndex) => (
                   <li
                     key={childIndex}
-                    className="text-nowrap py-[0.5vw] !font-montserrat text-[1.6vw] !leading-none opacity-70 duration-500 ease-in-out hover:opacity-100 xl:text-[1.1vw]"
+                    className="text-nowrap py-[0.5vw] !font-montserrat text-[1.6vw] !leading-none opacity-70 duration-500 ease-in-out hover:text-lightblue hover:opacity-100 xl:text-[1.1vw]"
                   >
                     <Link href={child.href} className="block">
                       {child.name}
@@ -169,18 +167,17 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
                     <AnimatePresence>
                       {openChild === index && (
                         <motion.div
-                          className="absolute left-[-40%] top-[170%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-[1.6vw] py-[1.6vw] shadow-lg sm:top-[150%]"
+                          className="absolute left-[-20%] top-[170%] z-10 mt-2 w-fit overflow-hidden rounded-lg bg-lightyellow px-[1.6vw] py-[1.6vw] text-center shadow-lg sm:top-[150%]"
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
                           transition={{ ease: 'linear', duration: 0.4 }}
                         >
                           <ul>
-                            <div className="my-[0.5vw] h-[1.5vw] border-b-[0.5vw] border-t-[0.5vw] border-blue" />
                             {route.child.map((child, childIndex) => (
                               <li
                                 key={childIndex}
-                                className="text-nowrap pt-[0.6vw] !font-montserrat text-[2vw] text-darkblue duration-200 ease-in-out hover:text-lightblue"
+                                className="text-nowrap py-[1.2vw] !font-montserrat text-[2.2vw] text-darkblue duration-200 ease-in-out hover:text-lightblue"
                               >
                                 <Link href={child.href} className="block">
                                   {child.name}
@@ -234,7 +231,7 @@ export const Navbar = () => {
   });
 
   return (
-    <nav className="fixed left-0 top-0 z-50 w-full border-b-2 border-white bg-lightyellow font-kodeMono">
+    <nav className="fixed left-0 top-0 z-[60] w-full border-b-2 border-white bg-lightyellow font-kodeMono">
       <div>
         {/* Logo */}
         <div className="relative mx-auto hidden items-center justify-between px-[4vw] md:flex">
@@ -251,6 +248,14 @@ export const Navbar = () => {
           {/* Desktop Menu */}
           <DesktopMenu openDropdown={openDropdown} toggleMainDropdown={toggleMainDropdown} />
 
+          <button
+            type="button"
+            className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
+          >
+            <Link href="/">
+              <p>SIGN IN</p>
+            </Link>
+          </button>
           {user ? (
             <img
               src={user?.user_metadata?.avatar_url || ''}

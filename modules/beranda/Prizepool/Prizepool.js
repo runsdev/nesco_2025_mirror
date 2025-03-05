@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 export const Prizepool = () => {
   return (
-    <div className="relative flex w-full items-start justify-center max-lg:min-h-[50dvh] lg:min-h-[80dvh]">
+    <div className="relative flex h-[50svh] w-full items-start justify-center lg:h-[80svh]">
       {/* BINTANG, BULAN, COMET */}
       <div className="absolute flex h-full w-full flex-col items-center justify-center">
         <Image
@@ -13,18 +13,19 @@ export const Prizepool = () => {
           width={69}
           height={69}
           alt="moon"
-          className="absolute top-[20vw] h-auto w-[15vw] md:top-[15vw] md:w-[10vw] lg:top-[8vw] lg:w-[9vw]"
+          className="absolute top-[20vw] z-[50] h-auto w-[15vw] sm:top-[20vw] sm:w-[15vw] md:top-[10vw] md:w-[13vw] lg:top-[5vw] lg:w-[9vw] xl:w-[9vw] 2xl:w-[9vw]"
         />
         <Image
           src="/prize/comets.png"
           width={810}
           height={456}
           alt="comets"
-          className="absolute top-[60vw] h-auto w-[75vw] md:top-[35vw] md:w-[100vw] lg:top-[15vw] lg:w-[90vw]"
+          className="absolute top-[60%] z-[50] h-auto w-[75vw] sm:top-[45vw] sm:w-[75vw] md:top-[20vw] md:w-[90vw] lg:top-[18vw] lg:w-[90vw] xl:top-[25vw] xl:w-[90vw] 2xl:top-[25vw] 2xl:w-[90vw]"
         />
         <div
-          data-gsap="up"
-          className="absolute top-[68%] aspect-[1304.7/384.54] w-[80%] md:top-[65%] md:w-[80%] lg:top-[64%] lg:w-[68%]"
+          data-aos="zoom-in"
+          data-aos-duration="1000"
+          className="absolute top-[68%] z-[51] aspect-[1304.7/384.54] w-[80%] md:top-[65%] md:w-[80%] lg:top-[64%] lg:w-[68%]"
         >
           <Image
             src="/prize/prizepoolAwan.png"
