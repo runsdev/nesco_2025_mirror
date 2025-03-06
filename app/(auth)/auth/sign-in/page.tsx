@@ -6,18 +6,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 export default async function LoginPage(props: { searchParams: Promise<Message> }) {
-  const searchParams = await props.searchParams;
+  const { searchParams } = await props;
 
   return (
-    <div className="relative flex w-full min-h-screen flex-col items-center justify-center gap-6 bg-darkblue p-6 sm:p-10">
-      <Link href="/" className="group fixed top-6 left-6 z-10 group flex cursor-pointer items-center space-x-1 2xl:space-x-4">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center gap-6 bg-darkblue p-6 sm:p-10">
+      <Link
+        href="/"
+        className="group fixed left-6 top-6 z-10 flex cursor-pointer items-center space-x-1 2xl:space-x-4"
+      >
         <LogoNesco className="w-[10vw] max-w-[100px] transition-transform duration-500 group-hover:scale-110" />
-        <span className="text-[6vw] font-bold font-kodeMono text-[#61CCC2] transition-colors duration-500 group-hover:text-blue xl:text-[2.5vw]">
+        <span className="font-kodeMono text-[6vw] font-bold text-[#61CCC2] transition-colors duration-500 group-hover:text-blue xl:text-[2.5vw]">
           NESCO
         </span>
       </Link>
 
-      <div className="flex w-full max-w-md flex-col gap-6">
+      <div className="flex w-full max-w-xl flex-col gap-6">
         <LoginFormPost />
         <FormMessage message={searchParams} />
       </div>
@@ -30,7 +33,7 @@ export default async function LoginPage(props: { searchParams: Promise<Message> 
         className="absolute bottom-0 h-auto w-full object-cover"
       />
     </div>
-    
+
     // <div className="grid min-h-svh lg:grid-cols-2">
     // <div className="flex flex-col gap-4 p-6 md:p-10">
     //   <div className="flex justify-center gap-2 md:justify-start">
