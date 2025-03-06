@@ -23,7 +23,8 @@ export const Prizepool = () => {
           className="absolute top-[60%] z-[50] h-auto w-[75vw] sm:top-[45vw] sm:w-[75vw] md:top-[20vw] md:w-[90vw] lg:top-[18vw] lg:w-[90vw] xl:top-[25vw] xl:w-[90vw] 2xl:top-[25vw] 2xl:w-[90vw]"
         />
         <div
-          data-gsap="up"
+          data-aos="zoom-in"
+          data-aos-duration="1000"
           className="absolute top-[68%] z-[51] aspect-[1304.7/384.54] w-[80%] md:top-[65%] md:w-[80%] lg:top-[64%] lg:w-[68%]"
         >
           <Image

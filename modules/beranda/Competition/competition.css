@@ -37,6 +37,19 @@
   }
 }
 
+.animasi-gedung-2 {
+  animation: gedung2 30s linear infinite;
+}
+
+@keyframes gedung2 {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-196%);
+  }
+}
+
 .animasi-lampu {
   animation: lampu 50s linear infinite;
 }

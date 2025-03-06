@@ -6,7 +6,7 @@ export const Sponsor = () => {
     <div className="relative min-h-screen w-full bg-gradient-to-b from-[#61CCC2] to-[#FFE08D] text-center text-[50px] font-[700]">
       <div className="absolute h-full w-full overflow-x-clip overflow-y-clip">
         <Image
-          data-gsap="right"
+          data-aos="fade-right"
           src="/assets/beranda/sponsor/Kiri.webp"
           alt="Kiri"
           width={1301}
@@ -15,7 +15,7 @@ export const Sponsor = () => {
         />
 
         <Image
-          data-gsap="left"
+          data-aos="fade-left"
           src="/assets/beranda/sponsor/Kanan.webp"
           alt="Kanan"
           width={623}
@@ -35,7 +35,7 @@ export const Sponsor = () => {
 
       {/* Pohon */}
       <Image
-        data-gsap="right"
+        data-aos="fade-right"
         src="/assets/beranda/sponsor/Tree.svg"
         alt="Tree"
         width={1420}
@@ -53,7 +53,8 @@ export const Sponsor = () => {
       />
 
       <Image
-        data-gsap="up"
+        data-aos="zoom-in-up"
+        data-aos-duration="1000"
         src="/assets/beranda/sponsor/Birds.png"
         alt="Birds"
         width={106}
@@ -61,7 +62,10 @@ export const Sponsor = () => {
         className="absolute left-[75%] top-[10%] w-[15vw] md:left-[80%] md:top-[15%] md:w-[8vw]"
       />
 
-      <div data-gsap="up" className="relative flex h-[400px] w-full items-center justify-center">
+      <div
+        data-aos="fade-up"
+        className="relative flex h-[400px] w-full items-center justify-center"
+      >
         <h1 className="md:text-{5vw] absolute translate-y-[-10vw] font-kodeMono text-[6vw] font-bold md:translate-y-[12vw] lg:translate-y-[10vw] lg:text-[4vw] xl:translate-y-[1vw]">
           Sponsored By
         </h1>

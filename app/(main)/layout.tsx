@@ -21,8 +21,8 @@ const montserrat = Montserrat({
 import LocomotiveProvider from '@/providers/LocomotiveProvider';
 import GSAPProvider from '@/providers/GSAPProvider';
 import { Navbar, Footer } from '@/components/UI/index';
-import '../styles/globals.css';
-import '../styles/animasi.css';
+import '@/styles/globals.css';
+import '@/styles/animasi.css';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
