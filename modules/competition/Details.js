@@ -32,7 +32,7 @@ const KotakTulisan = ({ alt, src, kategori }) => {
 export function Details({ slug }) {
   const detailsNow = details[slug];
   return (
-    <div className="relative z-[12] mt-[7%] flex h-[50dvh] w-full flex-col items-center justify-center text-5xl text-lightyellow md:h-[60dvh] lg:min-h-screen">
+    <div className="relative z-[12] mt-[7%] flex h-[50svh] w-full flex-col items-center justify-center text-5xl text-lightyellow md:h-[60svh] lg:min-h-screen">
       {/* Ini detail komponen detail */}
       <div className="relative flex w-[80%] flex-col">
         <div className="relative z-[14] flex w-full items-center justify-center rounded-[1vw] bg-[#61CCC2] p-[1vw] drop-shadow-md md:rounded-lg md:p-[2%]">

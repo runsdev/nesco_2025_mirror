@@ -19,11 +19,12 @@ const GrayLine = ({ className }) => {
   );
 };
 
-const Gedung = ({ className, flip = false }) => {
+const Gedung = ({ className, flip = false, tengah = false }) => {
   return (
     <div
       className={cn(
-        'animasi-gedung absolute bottom-[12%] left-0 h-[80px] w-[100%] sm:bottom-[10%] md:bottom-[16%] md:h-[100px] lg:bottom-[18%]',
+        'absolute bottom-[12%] left-0 h-[80px] sm:bottom-[10%] md:bottom-[16%] md:h-[100px] lg:bottom-[18%]',
+        tengah ? 'animasi-gedung-2 -mb-[0.2%] w-[102%]' : 'animasi-gedung w-[100%]',
         className,
       )}
     >
@@ -37,11 +38,12 @@ const Gedung = ({ className, flip = false }) => {
   );
 };
 
-const Jalan = ({ className }) => {
+const Jalan = ({ className, tengah = false }) => {
   return (
     <div
       className={cn(
-        'animasi-gedung absolute bottom-[-10%] left-0 right-0 aspect-[480/35] w-full sm:bottom-[-5%]',
+        'absolute bottom-[-10%] left-0 right-0 aspect-[480/35] sm:bottom-[-5%]',
+        tengah ? 'animasi-gedung-2 -mb-[0.2%] w-[102%]' : 'animasi-gedung w-[100.5%]',
         className,
       )}
     >
@@ -75,8 +77,18 @@ export const Competition = () => {
 
   return (
     <section className="z-20 flex min-h-[60vh] w-full flex-col items-center justify-center text-center">
-      <h1 className="mb-8 mt-7 font-kodeMono text-[6vw] font-bold md:text-[5vw]">Competitions</h1>
-      <div className="relative flex w-full flex-col items-center">
+      <h1
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+        className="mb-8 mt-7 font-kodeMono text-[6vw] font-bold md:text-[5vw]"
+      >
+        Competitions
+      </h1>
+      <div
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+        className="relative flex w-full flex-col items-center"
+      >
         <div className="lg-portrait:h-custom flex aspect-[5/4] h-auto max-h-[80vh] w-full max-w-[95vw] items-center justify-center md:aspect-[3/2] lg:max-h-[65vh] lg:w-[60%]">
           <div className="relative flex h-full w-full items-center justify-center rounded-xl bg-white py-4 shadow-lg md:rounded-2xl md:py-5 xl:rounded-[35px]">
             {/* Prev Button */}
@@ -123,13 +135,13 @@ export const Competition = () => {
               <div className="absolute bottom-0 left-0 right-0 z-10 h-[40%] overflow-hidden">
                 <div className="relative h-full w-full overflow-hidden">
                   <Gedung className="left-0" />
-                  <Gedung className="left-[100%]" flip />
-                  <Gedung className="left-[200%]" />
+                  <Gedung className="left-[99%]" flip tengah />
+                  <Gedung className="left-[200.5%]" />
 
                   {/* Jalan */}
-                  <Jalan />
-                  <Jalan className="left-[100%]" />
-                  <Jalan className="left-[200%]" />
+                  <Jalan tengah />
+                  <Jalan className="left-[99%]" tengah />
+                  <Jalan className="left-[200.5%]" tengah />
 
                   {/* Mobil */}
                   <div className="absolute bottom-[4%] left-1/2 z-20 w-[18%] -translate-x-1/2 md:bottom-[5%] md:w-[15%]">
