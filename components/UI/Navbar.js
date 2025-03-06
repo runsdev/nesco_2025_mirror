@@ -134,7 +134,7 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
               type="button"
               className="rounded-md bg-lightblue px-[2.5vw] py-1 font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow"
             >
-              <Link href="/">
+              <Link href="/auth/sign-in">
                 <p>SIGN IN</p>
               </Link>
             </button>
@@ -229,7 +229,7 @@ export const Navbar = () => {
             type="button"
             className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
           >
-            <Link href="/">
+            <Link href="/auth/sign-in">
               <p>SIGN IN</p>
             </Link>
           </button>

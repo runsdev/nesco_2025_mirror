@@ -21,6 +21,14 @@ export default async function LoginPage(props: { searchParams: Promise<Message> 
         <LoginFormPost />
         <FormMessage message={searchParams} />
       </div>
+
+      <Image
+        src="/assets/auth/lantai.svg"
+        alt="Image"
+        width={1}
+        height={1}
+        className="absolute bottom-0 h-auto w-full object-cover"
+      />
     </div>
     
     // <div className="grid min-h-svh lg:grid-cols-2">
