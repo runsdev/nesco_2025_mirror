@@ -55,13 +55,13 @@ export default async function RootLayout({
                 </nav> */}
                 <div className="min-w-full">{children}</div>
 
-                <footer className="mx-auto flex w-full items-center justify-between gap-8 border-t py-6 text-center text-xs">
+                {/* <footer className="mx-auto flex w-full items-center justify-between gap-8 border-t py-6 text-center text-xs">
                   <p className="ml-8">Powered by NESCO 2025</p>
                   <div className="mr-8 flex gap-4">
                     <ThemeSwitcher />
                     <LocaleSwitcher />
                   </div>
-                </footer>
+                </footer> */}
               </div>
             </main>
           </NextIntlClientProvider>
