@@ -224,11 +224,10 @@ export const Navbar = () => {
         data: { user },
       } = await supabase.auth.getUser();
       setUser(user);
-      // console.log(user);
     }
 
     fetchUser();
-  });
+  }, [supabase.auth]);
 
   return (
     <nav className="fixed left-0 top-0 z-[60] w-full border-b-2 border-white bg-lightyellow font-kodeMono">

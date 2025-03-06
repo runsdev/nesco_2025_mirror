@@ -35,7 +35,10 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         </div>
       </div>
       <div className="flex h-[121.34px] flex-col items-start justify-start gap-[15px]">
-        <button className="flex h-[53.17px] flex-col items-start justify-start gap-2 self-stretch rounded-[26.59px] border-2 border-[#ffe08d] bg-gradient-to-b from-[#61ccc2] to-[#ffe08d] px-[108px] py-[13px]">
+        <button
+          className="flex h-[53.17px] flex-col items-start justify-start gap-2 self-stretch rounded-[26.59px] border-2 border-[#ffe08d] bg-gradient-to-b from-[#61ccc2] to-[#ffe08d] px-[108px] py-[13px]"
+          onClick={() => signInWithProviderAction('google')}
+        >
           <div className="inline-flex items-center justify-center gap-2.5">
             <div data-svg-wrapper>
               <svg

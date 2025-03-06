@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
-import { getData } from '@/lib/googleDrive';
+import { User } from '@supabase/supabase-js';
 
 // Tambahkan fungsi untuk upload ke Google Drive
 export const uploadToDrive = async (
@@ -79,6 +79,9 @@ export default function RegisterPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
+  const [competition, setCompetition] = useState<string>('');
+  const [user, setUser] = useState<User | null>();
+  const [leader, setLeader] = useState<string>('');
 
   const handleAddMember = () => {
     setMembers([...members, '']);
@@ -111,10 +114,12 @@ export default function RegisterPage() {
         // Redirect to login page
         router.push('/auth/sign-in');
       }
+
+      setUser(user);
     }
 
     fetchUser();
-  }, [router]);
+  }, [router, supabase.auth]);
 
   const handleSubmit = async () => {
     try {
@@ -124,6 +129,7 @@ export default function RegisterPage() {
       // Validasi form
       if (
         !teamName ||
+        !leader ||
         !instance ||
         !contact ||
         members.some((m) => !m) ||
@@ -141,7 +147,7 @@ export default function RegisterPage() {
       // Buat folder baru dengan format namatim_timestamp
       const timestamp = new Date().getTime();
       const folderName = `${teamName.replace(/\s+/g, '_')}_${timestamp}`;
-      const parentFolderId = '1yknSgj9QqDgZC_m7L6tCcJn1iB3o6cs1'; // ID folder dari kode asli
+      const parentFolderId = '1yknSgj9QqDgZC_m7L6tCcJn1iB3o6cs1';
 
       const newFolderId = await createFolder(parentFolderId, folderName);
 
@@ -169,17 +175,63 @@ export default function RegisterPage() {
       }
 
       // Simpan data tim ke database (Supabase)
-      const { error: dbError } = await supabase.from('teams').insert({
-        team_name: teamName,
-        instance,
-        contact,
-        members,
+      const { data: teamsData, error: dbError } = await supabase
+        .from('teams')
+        .insert({
+          team_name: teamName,
+          institution: instance,
+          email: user?.email,
+          contact,
+          leader,
+          competition,
+          verified: false,
+          created_at: new Date().toISOString(),
+        })
+        .select();
+
+      const { error: dbFilesError } = await supabase.from('team_files').insert({
+        team_id: teamsData?.[0].id,
+        photo: results[0],
+        student_card: results[1],
+        instagram_follow: results[2],
+        twibbon: results[3],
+        payment: results[4],
         folder_id: newFolderId,
-        created_at: new Date().toISOString(),
+      });
+
+      await supabase.from('team_members').insert({
+        team_id: teamsData?.[0].id,
+        name: leader,
+      });
+
+      members.forEach(async (member) => {
+        await supabase.from('team_members').insert({
+          team_id: teamsData?.[0].id,
+          name: member,
+        });
+      });
+
+      const { error: dbRegistrationError } = await supabase.from('registrations').insert({
+        team_id: teamsData?.[0].id,
+        competition,
+        payment_proof: results[4],
+        verification_status: 'pending',
       });
 
       if (dbError) {
         setError(dbError.message);
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (dbFilesError) {
+        setError(dbFilesError.message);
+        setIsSubmitting(false);
+        return;
+      }
+
+      if (dbRegistrationError) {
+        setError(dbRegistrationError.message);
         setIsSubmitting(false);
         return;
       }
@@ -195,6 +247,8 @@ export default function RegisterPage() {
       setProofIG(null);
       setTwibbon(null);
       setPaymentProof(null);
+      setCompetition('');
+      setLeader('');
     } catch (err: any) {
       setError(err.message || 'Terjadi kesalahan');
     } finally {
@@ -203,9 +257,11 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 pb-12 pt-[15%] sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 px-4 pb-12 pt-[10%] sm:px-6 lg:px-8">
       <div className="mx-auto max-w-[80%] rounded-lg bg-white p-8 shadow-md">
-        <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">Pendaftaran Tim</h1>
+        <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">
+          Pendaftaran Tim Perlombaan
+        </h1>
 
         {error && (
           <div className="mb-6 rounded-lg border border-red-400 bg-red-100 p-4 text-red-700">
@@ -227,6 +283,27 @@ export default function RegisterPage() {
           className="space-y-6"
         >
           <div>
+            <label htmlFor="competition" className="mb-1 block text-sm font-medium text-gray-700">
+              Jenis Lomba:
+            </label>
+            <select
+              id="competition"
+              value={competition}
+              onChange={(e) => setCompetition(e.target.value)}
+              className="focus:ring-blue-500 w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+              required
+            >
+              <option value="" disabled>
+                Pilih Jenis Lomba
+              </option>
+              <option value="Paper">Paper</option>
+              <option value="Poster">Poster</option>
+              <option value="Scientific Debate">Scientific Debate</option>
+              <option value="Innovation Challenge">Innovation</option>
+            </select>
+          </div>
+
+          <div>
             <label htmlFor="teamName" className="mb-1 block text-sm font-medium text-gray-700">
               Nama Tim:
             </label>
@@ -235,7 +312,21 @@ export default function RegisterPage() {
               type="text"
               value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
-              className="focus:ring-blue-500 w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+              required
+            />
+          </div>
+
+          <div>
+            <label htmlFor="leader" className="mb-1 block text-sm font-medium text-gray-700">
+              Ketua Tim:
+            </label>
+            <input
+              id="leader"
+              type="text"
+              value={leader}
+              onChange={(e) => setLeader(e.target.value)}
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
               required
             />
           </div>
@@ -249,7 +340,7 @@ export default function RegisterPage() {
               type="text"
               value={instance}
               onChange={(e) => setInstance(e.target.value)}
-              className="focus:ring-blue-500 w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
               required
             />
           </div>
@@ -263,7 +354,7 @@ export default function RegisterPage() {
               type="text"
               value={contact}
               onChange={(e) => setContact(e.target.value)}
-              className="focus:ring-blue-500 w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+              className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
               required
             />
           </div>
@@ -275,7 +366,7 @@ export default function RegisterPage() {
                 <input
                   value={member}
                   onChange={(e) => handleMemberChange(i, e.target.value)}
-                  className="focus:ring-blue-500 flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   placeholder={`Nama Anggota ${i + 1}`}
                   required
                 />
@@ -293,7 +384,8 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={handleAddMember}
-              className="bg-yellow-500 hover:bg-blue-600 mt-2 rounded-md px-4 py-2 text-white transition-colors"
+              className={`mt-2 rounded-md bg-yellow px-4 py-2 text-white transition-colors hover:bg-blue ${members.length >= 2 ? 'cursor-not-allowed opacity-70' : ''}`}
+              disabled={members.length >= 2}
             >
               + Tambah Anggota
             </button>
@@ -302,15 +394,15 @@ export default function RegisterPage() {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="photo" className="mb-1 block text-sm font-medium text-gray-700">
-                Foto (PDF atau Gambar):
+                Foto 3x4 (PDF, merged):
               </label>
               <div className="flex items-center">
                 <input
                   id="photo"
                   type="file"
-                  accept=".pdf,image/*"
+                  accept=".pdf"
                   onChange={(e) => setPhoto(e.target.files?.[0] || null)}
-                  className="focus:ring-blue-500 flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {photo && <span className="ml-2 text-sm text-green-600">✓</span>}
@@ -319,15 +411,15 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="studentCard" className="mb-1 block text-sm font-medium text-gray-700">
-                Kartu Pelajar/Mahasiswa (PDF atau Gambar):
+                Kartu Pelajar/Mahasiswa (PDF, merged):
               </label>
               <div className="flex items-center">
                 <input
                   id="studentCard"
                   type="file"
-                  accept=".pdf,image/*"
+                  accept=".pdf"
                   onChange={(e) => setStudentCard(e.target.files?.[0] || null)}
-                  className="focus:ring-blue-500 flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {studentCard && <span className="ml-2 text-sm text-green-600">✓</span>}
@@ -336,7 +428,7 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="proofIG" className="mb-1 block text-sm font-medium text-gray-700">
-                Bukti Follow Instagram (PDF):
+                Bukti Follow Instagram (PDF, merged):
               </label>
               <div className="flex items-center">
                 <input
@@ -344,7 +436,7 @@ export default function RegisterPage() {
                   type="file"
                   accept=".pdf"
                   onChange={(e) => setProofIG(e.target.files?.[0] || null)}
-                  className="focus:ring-blue-500 flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {proofIG && <span className="ml-2 text-sm text-green-600">✓</span>}
@@ -353,7 +445,7 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="twibbon" className="mb-1 block text-sm font-medium text-gray-700">
-                Bukti Upload Twibbon (PDF):
+                Bukti Upload Twibbon (PDF, merged):
               </label>
               <div className="flex items-center">
                 <input
@@ -361,7 +453,7 @@ export default function RegisterPage() {
                   type="file"
                   accept=".pdf"
                   onChange={(e) => setTwibbon(e.target.files?.[0] || null)}
-                  className="focus:ring-blue-500 flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {twibbon && <span className="ml-2 text-sm text-green-600">✓</span>}
@@ -381,7 +473,7 @@ export default function RegisterPage() {
                   type="file"
                   accept=".pdf,image/*"
                   onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
-                  className="focus:ring-blue-500 flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2"
+                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {paymentProof && <span className="ml-2 text-sm text-green-600">✓</span>}
@@ -393,11 +485,11 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`bg-blue-600 hover:bg-blue-700 focus:ring-blue-500 rounded-md px-6 py-3 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+              className={`focus:ring-blue-500 rounded-md bg-blue px-6 py-3 text-white transition-colors hover:bg-blue focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                 isSubmitting ? 'cursor-not-allowed opacity-70' : ''
               }`}
             >
-              {isSubmitting ? 'Mengirim...' : 'Kirim Pendaftaran'}
+              {isSubmitting ? 'Mengirim...' : 'Daftar'}
             </button>
           </div>
         </form>
