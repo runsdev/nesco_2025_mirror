@@ -3,10 +3,11 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LocaleSwitcher } from '@/components/locale-switcher';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { Geist } from 'next/font/google';
+import { Geist, Kode_Mono, Montserrat } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import Link from 'next/link';
 import '../../styles/globals.css';
+import { cn } from '@/lib/utils';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -23,6 +24,18 @@ const geistSans = Geist({
   subsets: ['latin'],
 });
 
+const kodeMono = Kode_Mono({
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+});
+
+const montserrat = Montserrat({
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['latin'],
+});
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -35,7 +48,12 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} className={geistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body
+        className={cn(
+          'bg-background text-foreground',
+          `${kodeMono.className} ${montserrat.className}`,
+        )}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

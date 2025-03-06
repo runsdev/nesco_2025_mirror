@@ -1,7 +1,7 @@
 'use client';
 
-import '../styles/globals.css';
-import '../styles/animasi.css';
+import '@/styles/globals.css';
+import '@/styles/animasi.css';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import { DecryptedText } from '@/components/Animation/index';
