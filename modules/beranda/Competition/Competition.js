@@ -77,8 +77,18 @@ export const Competition = () => {
 
   return (
     <section className="z-20 flex min-h-[60vh] w-full flex-col items-center justify-center text-center">
-      <h1 className="mb-8 mt-7 font-kodeMono text-[6vw] font-bold md:text-[5vw]">Competitions</h1>
-      <div className="relative flex w-full flex-col items-center">
+      <h1
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+        className="mb-8 mt-7 font-kodeMono text-[6vw] font-bold md:text-[5vw]"
+      >
+        Competitions
+      </h1>
+      <div
+        data-aos="zoom-in"
+        data-aos-duration="1000"
+        className="relative flex w-full flex-col items-center"
+      >
         <div className="lg-portrait:h-custom flex aspect-[5/4] h-auto max-h-[80vh] w-full max-w-[95vw] items-center justify-center md:aspect-[3/2] lg:max-h-[65vh] lg:w-[60%]">
           <div className="relative flex h-full w-full items-center justify-center rounded-xl bg-white py-4 shadow-lg md:rounded-2xl md:py-5 xl:rounded-[35px]">
             {/* Prev Button */}

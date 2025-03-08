@@ -3,10 +3,11 @@ import { ThemeSwitcher } from '@/components/theme-switcher';
 import { LocaleSwitcher } from '@/components/locale-switcher';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { Geist } from 'next/font/google';
+import { Geist, Kode_Mono, Montserrat } from 'next/font/google';
 import { ThemeProvider } from 'next-themes';
 import Link from 'next/link';
 import '../../styles/globals.css';
+import { cn } from '@/lib/utils';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -14,12 +15,24 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: 'Next.js and Supabase Starter Kit',
-  description: 'The fastest way to build apps with Next.js and Supabase',
+  title: 'Sign In to NESCO',
+  description: 'Enroll yourself to this prestigious electrical power system event',
 };
 
 const geistSans = Geist({
   display: 'swap',
+  subsets: ['latin'],
+});
+
+const kodeMono = Kode_Mono({
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+  subsets: ['latin'],
+});
+
+const montserrat = Montserrat({
+  display: 'swap',
+  weight: ['300', '400', '500', '600', '700'],
   subsets: ['latin'],
 });
 
@@ -35,7 +48,12 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} className={geistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+      <body
+        className={cn(
+          'bg-background text-foreground',
+          `${kodeMono.className} ${montserrat.className}`,
+        )}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -55,13 +73,13 @@ export default async function RootLayout({
                 </nav> */}
                 <div className="min-w-full">{children}</div>
 
-                <footer className="mx-auto flex w-full items-center justify-between gap-8 border-t py-6 text-center text-xs">
+                {/* <footer className="mx-auto flex w-full items-center justify-between gap-8 border-t py-6 text-center text-xs">
                   <p className="ml-8">Powered by NESCO 2025</p>
                   <div className="mr-8 flex gap-4">
                     <ThemeSwitcher />
                     <LocaleSwitcher />
                   </div>
-                </footer>
+                </footer> */}
               </div>
             </main>
           </NextIntlClientProvider>

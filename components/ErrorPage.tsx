@@ -1,14 +1,19 @@
 'use client';
 
-import '../styles/globals.css';
-import '../styles/animasi.css';
-import Image from 'next/image';
+import '@/styles/globals.css';
+import '@/styles/animasi.css';
 import { cn } from '@/lib/utils';
 import { DecryptedText } from '@/components/Animation/index';
 import { Awan, KincirAngin, Rumput, Sun } from '@/components/Element/index';
 import Link from 'next/link';
 
-export default function NotFound() {
+interface ErrorPageProps {
+  pesan: string;
+  text1: string;
+  text2: string;
+}
+
+export default function ErrorPage({ pesan, text1, text2 }: ErrorPageProps) {
   return (
     <section className="relative flex min-h-screen w-full items-center justify-center overflow-y-hidden overflow-x-clip bg-darkblue">
       {/* darkblue wrapper */}
@@ -39,7 +44,7 @@ export default function NotFound() {
       />
       {/* 404 */}
       <h1 className="absolute z-[50] font-kodeMono text-[17vw] font-[700] drop-shadow-offset md:text-[14vw] lg:text-[65px] xl:text-[100px] 2xl:text-[130px]">
-        <DecryptedText text="404" animateOn="view" speed={60} maxIterations={20} />
+        <DecryptedText text={pesan} animateOn="view" speed={60} maxIterations={20} />
       </h1>
       {/* Matahari */}
       <Sun
@@ -81,14 +86,12 @@ export default function NotFound() {
       />
       {/* Paeg not found */}
       <span className="absolute left-0 right-0 z-[18] mx-auto -mb-[110%] gap-0 text-center text-white md:-mb-[80%] lg:-mb-[35%]">
-        <p className="text-[3vw] md:text-[2.7vw] lg:text-[20px] 2xl:text-[22px]">
-          {'Halaman tidak ditemukan :('}
-        </p>
+        <p className="text-[3vw] md:text-[2.7vw] lg:text-[20px] 2xl:text-[22px]">{text1}</p>
         <Link
           href="/"
           className="top-[20%] text-[2.8vw] text-lightblue duration-500 hover:text-lightyellow md:text-[2.6vw] lg:text-[17px] 2xl:text-[20px]"
         >
-          Kembali ke Beranda
+          {text2}
         </Link>
       </span>
     </section>

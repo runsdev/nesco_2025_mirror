@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { IoIosArrowDown } from 'react-icons/io';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogoNesco } from '@/components/Element/index';
+import { createClient } from '@/utils/supabase/client';
 
 const routes = [
   {
@@ -20,11 +21,11 @@ const routes = [
         href: '/competition/innovation',
       },
       {
-        name: 'Paper',
+        name: 'Paper Competition',
         href: '/competition/paper',
       },
       {
-        name: 'Poster',
+        name: 'Poster Competition',
         href: '/competition/poster',
       },
     ],
@@ -101,7 +102,7 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
 );
 
 /* Navbar Mobile  */
-const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDropdown }) => (
+const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDropdown, user }) => (
   <div className="md:hidden">
     <div className="relative mx-auto flex items-center justify-between px-6 py-2">
       <Link href="/" className="group flex cursor-pointer items-center space-x-2">
@@ -130,14 +131,22 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
           className="absolute left-0 top-full z-10 w-full border-b-2 border-white bg-lightyellow"
         >
           <ul className="flex flex-row items-center justify-between px-6 pb-[2vw] text-[2.8vw] font-bold text-darkblue">
-            <button
-              type="button"
-              className="rounded-md bg-lightblue px-[2.5vw] py-1 font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow"
-            >
-              <Link href="/">
-                <p>SIGN IN</p>
-              </Link>
-            </button>
+            {user ? (
+              <img
+                src={user?.user_metadata?.avatar_url || ''}
+                alt="User Avatar"
+                className="h-8 w-8 rounded-full"
+              />
+            ) : (
+              <button
+                type="button"
+                className="rounded-md bg-lightblue px-[2.5vw] py-1 font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow"
+              >
+                <Link href="/auth/sign-in">
+                  <p>SIGN IN</p>
+                </Link>
+              </button>
+            )}
             {routes.map((route, index) => (
               <li key={index} className="group relative">
                 {route.child ? (
@@ -200,12 +209,26 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
 export const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openChild, setopenChild] = useState(null);
+  const [user, setUser] = useState(null);
 
   const toggleMainDropdown = (index) => {
     setOpenDropdown(openDropdown === index ? false : index);
     setopenChild(null);
   };
   const toggleChildDropdown = (index) => setopenChild(openChild === index ? null : index);
+
+  const supabase = createClient();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    }
+
+    fetchUser();
+  }, [supabase.auth]);
 
   return (
     <nav className="fixed left-0 top-0 z-[60] w-full border-b-2 border-white bg-lightyellow font-kodeMono">
@@ -225,14 +248,53 @@ export const Navbar = () => {
           {/* Desktop Menu */}
           <DesktopMenu openDropdown={openDropdown} toggleMainDropdown={toggleMainDropdown} />
 
-          <button
-            type="button"
-            className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
-          >
-            <Link href="/">
-              <p>SIGN IN</p>
-            </Link>
-          </button>
+          {user ? (
+            <div className="relative">
+              <button
+                type="button"
+                className="flex items-center space-x-2 rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
+                onClick={() => toggleMainDropdown(!openDropdown)}
+              >
+                <img
+                  src={user?.user_metadata?.avatar_url || ''}
+                  alt="User Avatar"
+                  className="h-8 w-8 rounded-full"
+                />
+                <IoIosArrowDown
+                  className={`transition-transform duration-500 ease-in-out ${openDropdown ? 'rotate-180' : ''}`}
+                />
+              </button>
+              {openDropdown && (
+                <div className="absolute right-0 mt-2 w-48 rounded-md bg-white shadow-lg">
+                  <Link
+                    href="/dashboard"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    type="button"
+                    className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={async () => {
+                      await supabase.auth.signOut();
+                      setUser(null);
+                    }}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
+            >
+              <Link href="/auth/sign-in">
+                <p>SIGN IN</p>
+              </Link>
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu */}
@@ -241,6 +303,7 @@ export const Navbar = () => {
           toggleMainDropdown={toggleMainDropdown}
           openChild={openChild}
           toggleChildDropdown={toggleChildDropdown}
+          user={user}
         />
       </div>
     </nav>
