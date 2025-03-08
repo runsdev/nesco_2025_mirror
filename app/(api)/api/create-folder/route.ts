@@ -16,7 +16,8 @@ const auth = new google.auth.GoogleAuth({
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { parentFolderId, folderName } = body;
+    const { folderName } = body;
+    const parentFolderId = process.env.GOOGLE_FOLDER_ID;
 
     if (!parentFolderId || !folderName) {
       return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });

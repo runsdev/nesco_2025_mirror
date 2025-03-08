@@ -19,8 +19,9 @@ export async function POST(req: NextRequest) {
     const formData = await req.formData();
     const file = formData.get('file') as File;
     const folderId = formData.get('folderId') as string;
+    const userEmail = formData.get('userEmail') as string;
 
-    if (!file || !folderId) {
+    if (!file) {
       return NextResponse.json({ error: 'Missing file or folderId' }, { status: 400 });
     }
 
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
     const fileMetadata = {
       name: file.name,
       parents: [folderId],
+      // parents: process.env.GOOGLE_FOLDER_ID ? [process.env.GOOGLE_FOLDER_ID] : [],
     };
 
     const media = {
@@ -51,6 +53,17 @@ export async function POST(req: NextRequest) {
       media: media,
       fields: 'id',
     });
+
+    if (userEmail) {
+      await drive.permissions.create({
+        fileId: driveResponse.data.id!,
+        requestBody: {
+          type: 'user',
+          role: 'reader',
+          emailAddress: userEmail,
+        },
+      });
+    }
 
     return NextResponse.json({ fileId: driveResponse.data.id });
   } catch (error: any) {

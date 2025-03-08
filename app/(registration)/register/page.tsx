@@ -3,12 +3,15 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
+import Image from 'next/image';
+import ParticlesContainer from '@/components/UI/ParticlesContainer';
 
 // Tambahkan fungsi untuk upload ke Google Drive
 export const uploadToDrive = async (
   file: File,
   folderId: string,
   prefix: string,
+  userEmail: string,
 ): Promise<string | null> => {
   try {
     const formData = new FormData();
@@ -18,6 +21,7 @@ export const uploadToDrive = async (
 
     formData.append('file', newFile);
     formData.append('folderId', folderId);
+    formData.append('userEmail', userEmail);
 
     // Ganti URL dengan endpoint API Anda untuk upload ke Drive
     const response = await fetch('/api/upload-to-drive', {
@@ -38,10 +42,7 @@ export const uploadToDrive = async (
 };
 
 // Tambahkan fungsi untuk membuat folder baru di Drive
-export const createFolder = async (
-  parentFolderId: string,
-  folderName: string,
-): Promise<string | null> => {
+export const createFolder = async (folderName: string): Promise<string | null> => {
   try {
     const response = await fetch('/api/create-folder', {
       method: 'POST',
@@ -49,7 +50,6 @@ export const createFolder = async (
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        parentFolderId,
         folderName,
       }),
     });
@@ -121,6 +121,26 @@ export default function RegisterPage() {
     fetchUser();
   }, [router, supabase.auth]);
 
+  useEffect(() => {
+    async function fetchTeam() {
+      const { data: teams, error } = await supabase
+        .from('teams')
+        .select()
+        .eq('email', user?.email)
+        .single();
+
+      // if (error) {
+      //   setError(error.message);
+      // }
+
+      if (teams) {
+        router.push('/dashboard');
+      }
+    }
+
+    fetchTeam();
+  }, [user?.email, supabase, router]);
+
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
@@ -147,9 +167,8 @@ export default function RegisterPage() {
       // Buat folder baru dengan format namatim_timestamp
       const timestamp = new Date().getTime();
       const folderName = `${teamName.replace(/\s+/g, '_')}_${timestamp}`;
-      const parentFolderId = '1yknSgj9QqDgZC_m7L6tCcJn1iB3o6cs1';
 
-      const newFolderId = await createFolder(parentFolderId, folderName);
+      const newFolderId = await createFolder(folderName);
 
       if (!newFolderId) {
         setError('Gagal membuat folder');
@@ -159,11 +178,11 @@ export default function RegisterPage() {
 
       // Upload semua file dengan prefix
       const uploads = [
-        uploadToDrive(photo, newFolderId, 'photo'),
-        uploadToDrive(studentCard, newFolderId, 'studentCard'),
-        uploadToDrive(proofIG, newFolderId, 'proofIG'),
-        uploadToDrive(twibbon, newFolderId, 'twibbon'),
-        uploadToDrive(paymentProof, newFolderId, 'paymentProof'),
+        uploadToDrive(photo, newFolderId, 'photo', user!.email!),
+        uploadToDrive(studentCard, newFolderId, 'studentCard', user!.email!),
+        uploadToDrive(proofIG, newFolderId, 'proofIG', user!.email!),
+        uploadToDrive(twibbon, newFolderId, 'twibbon', user!.email!),
+        uploadToDrive(paymentProof, newFolderId, 'paymentProof', user!.email!),
       ];
 
       const results = await Promise.all(uploads);
@@ -204,12 +223,14 @@ export default function RegisterPage() {
         name: leader,
       });
 
-      members.forEach(async (member) => {
-        await supabase.from('team_members').insert({
-          team_id: teamsData?.[0].id,
-          name: member,
-        });
-      });
+      await Promise.all(
+        members.map(async (member) => {
+          return supabase.from('team_members').insert({
+            team_id: teamsData?.[0].id,
+            name: member,
+          });
+        }),
+      );
 
       const { error: dbRegistrationError } = await supabase.from('registrations').insert({
         team_id: teamsData?.[0].id,
@@ -249,6 +270,7 @@ export default function RegisterPage() {
       setPaymentProof(null);
       setCompetition('');
       setLeader('');
+      router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Terjadi kesalahan');
     } finally {
@@ -257,8 +279,28 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 px-4 pb-12 pt-[10%] sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[80%] rounded-lg bg-white p-8 shadow-md">
+    // <div className="min-h-screen bg-gray-50 px-4 pb-12 pt-[10%] sm:px-6 lg:px-8">
+    <div className="relative flex min-h-screen w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2] py-[10%]">
+      <ParticlesContainer className="absolute top-0 z-0 h-[93svh] min-h-screen w-full md:h-[97svh] lg:h-[180svh]" />
+      {/* <div className="relative flex h-[50svh] w-full items-start justify-center lg:h-[80svh]">
+        <div className="absolute flex h-full w-full flex-col items-center justify-center">
+          <Image
+            src="/prize/moon.png"
+            width={69}
+            height={69}
+            alt="moon"
+            className="absolute top-[20vw] z-[50] h-auto w-[15vw] sm:top-[20vw] sm:w-[15vw] md:top-[10vw] md:w-[13vw] lg:top-[5vw] lg:w-[9vw] xl:w-[9vw] 2xl:w-[9vw]"
+          />
+          <Image
+            src="/prize/comets.png"
+            width={810}
+            height={456}
+            alt="comets"
+            className="absolute top-[60%] z-[50] h-auto w-[75vw] sm:top-[45vw] sm:w-[75vw] md:top-[20vw] md:w-[90vw] lg:top-[18vw] lg:w-[90vw] xl:top-[25vw] xl:w-[90vw] 2xl:top-[25vw] 2xl:w-[90vw]"
+          />
+        </div>
+      </div> */}
+      <div className="z-[10] mx-auto max-w-[80%] rounded-lg bg-white p-8 shadow-md">
         <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">
           Pendaftaran Tim Perlombaan
         </h1>
@@ -296,10 +338,10 @@ export default function RegisterPage() {
               <option value="" disabled>
                 Pilih Jenis Lomba
               </option>
-              <option value="Paper">Paper</option>
-              <option value="Poster">Poster</option>
+              <option value="Paper Competition">Paper Competition</option>
+              <option value="Poster Competition">Poster Competition</option>
               <option value="Scientific Debate">Scientific Debate</option>
-              <option value="Innovation Challenge">Innovation</option>
+              <option value="Innovation Challenge">Innovation Challenge</option>
             </select>
           </div>
 
@@ -384,7 +426,7 @@ export default function RegisterPage() {
             <button
               type="button"
               onClick={handleAddMember}
-              className={`mt-2 rounded-md bg-yellow px-4 py-2 text-white transition-colors hover:bg-blue ${members.length >= 2 ? 'cursor-not-allowed opacity-70' : ''}`}
+              className={`mt-2 rounded-md px-4 py-2 transition-colors ${members.length >= 2 ? 'cursor-not-allowed bg-muted text-muted-foreground' : 'bg-blue text-white hover:bg-yellow'}`}
               disabled={members.length >= 2}
             >
               + Tambah Anggota
@@ -485,7 +527,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className={`focus:ring-blue-500 rounded-md bg-blue px-6 py-3 text-white transition-colors hover:bg-blue focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+              className={`rounded-md bg-blue px-6 py-3 text-white transition-colors hover:bg-yellow focus:outline-none focus:ring-2 focus:ring-blue focus:ring-offset-2 ${
                 isSubmitting ? 'cursor-not-allowed opacity-70' : ''
               }`}
             >
