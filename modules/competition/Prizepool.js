@@ -68,7 +68,7 @@ export function Prizepool({ className, slug }) {
           width={250}
           height={50}
           alt="prizepool"
-          className="relative h-auto w-[40vw] md:w-[30vw]"
+          className="relative h-auto w-[42vw] md:w-[30vw]"
         />
         <Swiper
           modules={[Pagination]}
