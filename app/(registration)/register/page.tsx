@@ -278,6 +278,15 @@ export default function RegisterPage() {
     }
   };
 
+  if (!user) {
+    return (
+      <div className="flex h-[80vh] items-center justify-center">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-b-transparent"></div>
+        <span className="ml-2">Loading...</span>
+      </div>
+    );
+  }
+
   return (
     // <div className="min-h-screen bg-gray-50 px-4 pb-12 pt-[10%] sm:px-6 lg:px-8">
     <div className="relative flex min-h-screen w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2] py-[10%]">
