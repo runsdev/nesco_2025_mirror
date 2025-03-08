@@ -9,21 +9,14 @@ import Image from 'next/image';
 
 const Hadiah = ({ kategori, juara1, juara2, juara3 }) => {
   return (
-    <div>
-      <Image
-        src="/prizepoolCompt/frameKategori.png"
-        width={400}
-        height={200}
-        alt="prizepool"
-        className="absolute top-0 h-auto w-[85vw] justify-center"
-      />
-      <h1
-        className="relative left-[2vw] z-20 mt-[1vw] font-montserrat text-[3vw]"
+    <div className="rounded-2xl border-4 border-[#0F776E] lg:border-8">
+      <div
+        className="absolute left-[2] z-20 mt-[-1vw] rounded-br-[90vw] rounded-tl-[50vw] bg-[#0F776E] px-5 py-2 font-montserrat text-[2.5vw] lg:rounded-tl-[35vw]"
         style={{ color: '#EABB37' }}
       >
         Kategori {kategori}
-      </h1>
-      <div className="relative z-20 mt-[4vw] grid w-full grid-cols-3 place-items-center gap-y-2 text-[4vw]">
+      </div>
+      <div className="relative z-20 mt-[10vw] grid w-full grid-cols-3 place-items-center gap-y-2 text-[4vw] lg:mt-[5vw]">
         <p className="w-full text-center">Juara 1</p>
         <p className="w-full text-center">Juara 2</p>
         <p className="w-full text-center">Juara 3</p>
@@ -48,9 +41,9 @@ const Hadiah = ({ kategori, juara1, juara2, juara3 }) => {
           alt="prizepool"
           className="md:w-[15vw]"
         />
-        <p className="w-full text-center text-[3vw] md:text-[2vw]">{juara1}</p>
-        <p className="w-full text-center text-[3vw] md:text-[2vw]">{juara2}</p>
-        <p className="w-full text-center text-[3vw] md:text-[2vw]">{juara3}</p>
+        <p className="w-full pb-2 text-center text-[3vw] md:text-[2vw]">{juara1}</p>
+        <p className="w-full pb-2 text-center text-[3vw] md:text-[2vw]">{juara2}</p>
+        <p className="w-full pb-2 text-center text-[3vw] md:text-[2vw]">{juara3}</p>
       </div>
     </div>
   );
@@ -58,6 +51,7 @@ const Hadiah = ({ kategori, juara1, juara2, juara3 }) => {
 
 export function Prizepool({ className, slug }) {
   const kategoriHadiah = dataPrizepool[slug];
+
   return (
     <div
       className={cn(
@@ -65,26 +59,26 @@ export function Prizepool({ className, slug }) {
         className, // Jangan dihapus yang line ini
       )}
     >
-      <div className="flex min-h-screen w-full flex-col items-center justify-center">
+      <div
+        data-aos="zoom-in-up"
+        className="flex min-h-screen w-full flex-col items-center justify-center"
+      >
         <Image
           src="/prizepoolCompt/judul.png"
           width={250}
           height={50}
           alt="prizepool"
-          className="relative h-auto w-[40vw] md:mt-[40vw] md:w-[30vw]"
+          className="relative h-auto w-[40vw] md:w-[30vw]"
         />
         <Swiper
-          spaceBetween={40}
+          modules={[Pagination]}
+          spaceBetween={20}
           slidesPerView={1}
           loop={true}
-          pagination={{
-            clickable: true,
-            el: '.custom-pagination',
-          }}
-          modules={[Pagination]}
+          pagination={{ clickable: true, el: '.custom-pagination' }}
           onSlideChange={() => console.log('slide change')}
           onSwiper={(swiper) => console.log(swiper)}
-          className="mt-[5vw] h-[50vw] w-[80vw]"
+          className="mt-[2vw] h-[48vw] w-[80vw] md:h-[38vw] lg:h-[31vw]"
         >
           {kategoriHadiah.map((item, index) => (
             <SwiperSlide key={index}>
@@ -97,7 +91,7 @@ export function Prizepool({ className, slug }) {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="custom-pagination mt-[-8vw] flex justify-center gap-1 [&>span]:h-[1vw] [&>span]:w-[5vw] [&>span]:rounded-md [&>span]:bg-[#0F776E]"></div>
+        <div className="custom-pagination flex justify-center gap-1 [&>span]:h-[1vw] [&>span]:w-[5vw] [&>span]:rounded-md [&>span]:bg-[#0F776E]"></div>
       </div>
     </div>
   );
