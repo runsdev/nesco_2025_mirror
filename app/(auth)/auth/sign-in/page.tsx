@@ -1,4 +1,3 @@
-import { GalleryVerticalEnd } from 'lucide-react';
 import { FormMessage, Message } from '@/components/form-message';
 import { LoginForm as LoginFormPost } from '@/components/login-form';
 import { LogoNesco } from '@/components/Element/index';
@@ -22,7 +21,7 @@ export default async function LoginPage(props: { searchParams: Promise<Message> 
 
       <div className="flex w-full max-w-xl flex-col gap-6">
         <LoginFormPost />
-        <FormMessage message={searchParams} />
+        {/* <FormMessage message={searchParams} /> */}
       </div>
 
       <Image
