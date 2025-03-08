@@ -7,7 +7,7 @@ import Image from 'next/image';
 import ParticlesContainer from '@/components/UI/ParticlesContainer';
 
 // Tambahkan fungsi untuk upload ke Google Drive
-export const uploadToDrive = async (
+const uploadToDrive = async (
   file: File,
   folderId: string,
   prefix: string,
@@ -42,7 +42,7 @@ export const uploadToDrive = async (
 };
 
 // Tambahkan fungsi untuk membuat folder baru di Drive
-export const createFolder = async (folderName: string): Promise<string | null> => {
+const createFolder = async (folderName: string): Promise<string | null> => {
   try {
     const response = await fetch('/api/create-folder', {
       method: 'POST',
