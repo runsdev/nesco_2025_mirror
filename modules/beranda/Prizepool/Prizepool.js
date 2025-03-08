@@ -35,7 +35,7 @@ export const Prizepool = () => {
           />
           <div className="absolute right-[12.5%] aspect-[355.5/329] w-[27.2%] font-kodeMono font-[700] text-lightyellow">
             <h2 className="leading-0 absolute top-[-35.2%] aspect-[355.4/236] w-full text-[19.6vw] lg:text-[16.5vw]">
-              <CountUp from={0} to={26} duration={2.3} startWhen={true} />
+              <CountUp from={0} to={30} duration={2.3} startWhen={true} />
             </h2>
             <h5 className="absolute bottom-[-10%] left-[4%] text-[5.2vw] lg:text-[4.35vw]">
               <DecryptedText

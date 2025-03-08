@@ -113,6 +113,18 @@ export function Details({ slug }) {
                   </Link>
                   <Link
                     target="_blank"
+                    href={`https://line.me/ti/p/${detailsNow.contactPerson.line2}`}
+                    className="group flex flex-row items-center space-x-[10%] px-[7%]"
+                  >
+                    <div className="relative flex aspect-square items-center justify-center">
+                      <FaLine className="absolute aspect-square w-[1.5vw]" />
+                    </div>
+                    <p className="text-[2vw] text-white duration-500 group-hover:text-[#FFE08D] md:text-base xl:text-lg">
+                      {detailsNow.contactPerson.line2}
+                    </p>
+                  </Link>
+                  <Link
+                    target="_blank"
                     href={`https://wa.me/62${detailsNow.contactPerson.wa}?text=Halo!%20Saya%20ingin%20bertanya%20terkait%20NESCO%20UGM!`}
                     className="group flex flex-row items-center space-x-[10%] px-[7%]"
                   >
@@ -125,6 +137,18 @@ export function Details({ slug }) {
                   </Link>
                   <Link
                     target="_blank"
+                    href={`https://wa.me/62${detailsNow.contactPerson.wa2}?text=Halo!%20Saya%20ingin%20bertanya%20terkait%20NESCO%20UGM!`}
+                    className="group flex flex-row items-center space-x-[10%] px-[7%]"
+                  >
+                    <div className="relative flex items-center justify-center">
+                      <FaWhatsapp className="absolute aspect-square w-[1.5vw]" />
+                    </div>
+                    <p className="text-[2vw] text-white duration-500 group-hover:text-[#FFE08D] md:text-base xl:text-lg">
+                      {detailsNow.contactPerson.wa2}
+                    </p>
+                  </Link>
+                  {/* <Link
+                    target="_blank"
                     href={`https://instagram.com/${detailsNow.contactPerson.instagram}`}
                     className="group flex flex-row items-center space-x-[10%] px-[7%]"
                   >
@@ -134,7 +158,7 @@ export function Details({ slug }) {
                     <p className="text-[2vw] text-white duration-500 group-hover:text-[#FFE08D] md:text-base xl:text-lg">
                       {detailsNow.contactPerson.instagram}
                     </p>
-                  </Link>
+                  </Link> */}
                 </div>
               </div>
               <div className="relative flex h-full flex-row">

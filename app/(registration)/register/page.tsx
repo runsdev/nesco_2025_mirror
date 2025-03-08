@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import Image from 'next/image';
 import ParticlesContainer from '@/components/UI/ParticlesContainer';
 
 // Tambahkan fungsi untuk upload ke Google Drive
@@ -141,6 +140,14 @@ export default function RegisterPage() {
     fetchTeam();
   }, [user?.email, supabase, router]);
 
+  // Add this function to validate file size
+  const validateFileSize = (file: File | null): boolean => {
+    if (!file) return false;
+    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    return file.size <= maxSize;
+  };
+
+  // Modify the handleSubmit function to include file size validation
   const handleSubmit = async () => {
     try {
       setIsSubmitting(true);
@@ -164,6 +171,23 @@ export default function RegisterPage() {
         return;
       }
 
+      // Validate file sizes
+      const files = [
+        { name: 'Foto 3x4', file: photo },
+        { name: 'Kartu Pelajar/Mahasiswa', file: studentCard },
+        { name: 'Bukti Follow Instagram', file: proofIG },
+        { name: 'Bukti Upload Twibbon', file: twibbon },
+        { name: 'Bukti Pembayaran', file: paymentProof },
+      ];
+
+      for (const { name, file } of files) {
+        if (!validateFileSize(file)) {
+          setError(`File ${name} melebihi ukuran maksimum 10MB`);
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
       // Buat folder baru dengan format namatim_timestamp
       const timestamp = new Date().getTime();
       const folderName = `${teamName.replace(/\s+/g, '_')}_${timestamp}`;
@@ -177,12 +201,35 @@ export default function RegisterPage() {
       }
 
       // Upload semua file dengan prefix
+      // Function to retry upload with specified number of attempts
+      const retryUpload = async (
+        file: File,
+        folderId: string,
+        prefix: string,
+        userEmail: string,
+        maxAttempts = 3,
+      ): Promise<string | null> => {
+        let attempts = 0;
+        while (attempts < maxAttempts) {
+          attempts++;
+          const result = await uploadToDrive(file, folderId, prefix, userEmail);
+          if (result !== null) {
+            return result;
+          }
+          console.log(`Upload attempt ${attempts} for ${prefix} failed. Retrying...`);
+          // Wait a short time before retrying
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+        }
+        setError(`Failed to upload ${prefix} after ${maxAttempts} attempts`);
+        return null;
+      };
+
       const uploads = [
-        uploadToDrive(photo, newFolderId, 'photo', user!.email!),
-        uploadToDrive(studentCard, newFolderId, 'studentCard', user!.email!),
-        uploadToDrive(proofIG, newFolderId, 'proofIG', user!.email!),
-        uploadToDrive(twibbon, newFolderId, 'twibbon', user!.email!),
-        uploadToDrive(paymentProof, newFolderId, 'paymentProof', user!.email!),
+        retryUpload(photo, newFolderId, 'photo', user!.email!),
+        retryUpload(studentCard, newFolderId, 'studentCard', user!.email!),
+        retryUpload(proofIG, newFolderId, 'proofIG', user!.email!),
+        retryUpload(twibbon, newFolderId, 'twibbon', user!.email!),
+        retryUpload(paymentProof, newFolderId, 'paymentProof', user!.email!),
       ];
 
       const results = await Promise.all(uploads);
@@ -290,7 +337,7 @@ export default function RegisterPage() {
   return (
     // <div className="min-h-screen bg-gray-50 px-4 pb-12 pt-[10%] sm:px-6 lg:px-8">
     <div className="relative flex min-h-screen w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2] py-[10%]">
-      <ParticlesContainer className="absolute top-0 z-0 h-[93svh] min-h-screen w-full md:h-[97svh] lg:h-[180svh]" />
+      {/* <ParticlesContainer className="absolute top-0 z-0 h-[93svh] min-h-screen w-full md:h-[97svh] lg:h-[180svh]" /> */}
       {/* <div className="relative flex h-[50svh] w-full items-start justify-center lg:h-[80svh]">
         <div className="absolute flex h-full w-full flex-col items-center justify-center">
           <Image
@@ -309,7 +356,7 @@ export default function RegisterPage() {
           />
         </div>
       </div> */}
-      <div className="z-[10] mx-auto max-w-[80%] rounded-lg bg-white p-8 shadow-md">
+      <div className="z-[10] mx-auto max-w-[90%] rounded-lg bg-white p-8 shadow-md md:max-w-[80%]">
         <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">
           Pendaftaran Tim Perlombaan
         </h1>
@@ -329,7 +376,8 @@ export default function RegisterPage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit();
+            setIsSubmitting(true);
+            // handleSubmit();
           }}
           className="space-y-6"
         >
@@ -362,10 +410,21 @@ export default function RegisterPage() {
               id="teamName"
               type="text"
               value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
+              onChange={(e) => {
+                // Allow only alphanumeric, spaces and basic punctuation
+                const sanitizedValue = e.target.value.replace(/[^\w\s\-_.]/gi, '');
+                // Limit to 50 characters
+                const truncatedValue = sanitizedValue.slice(0, 50);
+                setTeamName(truncatedValue);
+              }}
+              maxLength={50}
               className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
               required
+              placeholder="Masukkan nama tim (maks. 50 karakter)"
             />
+            <p className="mt-1 text-xs text-gray-500">
+              {teamName.length}/50 karakter (hanya huruf, angka, spasi, dan tanda - _ .)
+            </p>
           </div>
 
           <div>
@@ -376,10 +435,21 @@ export default function RegisterPage() {
               id="leader"
               type="text"
               value={leader}
-              onChange={(e) => setLeader(e.target.value)}
+              onChange={(e) => {
+                // Allow alphanumeric, spaces and basic punctuation
+                const sanitizedValue = e.target.value.replace(/[^\w\s\-_.,]/gi, '');
+                // Limit to 50 characters
+                const truncatedValue = sanitizedValue.slice(0, 50);
+                setLeader(truncatedValue);
+              }}
+              maxLength={50}
               className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
               required
+              placeholder="Masukkan nama ketua tim"
             />
+            <p className="mt-1 text-xs text-gray-500">
+              {leader.length}/50 karakter (hanya huruf, angka, spasi, dan tanda - _ . ,)
+            </p>
           </div>
 
           <div>
@@ -390,10 +460,21 @@ export default function RegisterPage() {
               id="instance"
               type="text"
               value={instance}
-              onChange={(e) => setInstance(e.target.value)}
+              onChange={(e) => {
+                // Allow alphanumeric, spaces and basic punctuation
+                const sanitizedValue = e.target.value.replace(/[^\w\s\-_.,]/gi, '');
+                // Limit to 100 characters
+                const truncatedValue = sanitizedValue.slice(0, 100);
+                setInstance(truncatedValue);
+              }}
+              maxLength={100}
               className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
               required
+              placeholder="Masukkan nama instansi/sekolah/universitas"
             />
+            <p className="mt-1 text-xs text-gray-500">
+              {instance.length}/100 karakter (hanya huruf, angka, spasi, dan tanda - _ . ,)
+            </p>
           </div>
 
           <div>
@@ -404,10 +485,21 @@ export default function RegisterPage() {
               id="contact"
               type="text"
               value={contact}
-              onChange={(e) => setContact(e.target.value)}
+              onChange={(e) => {
+                // Allow only numbers, plus sign, and hyphens for phone numbers
+                const sanitizedValue = e.target.value.replace(/[^\d+\-\s]/g, '');
+                // Limit to 20 characters for phone numbers
+                const truncatedValue = sanitizedValue.slice(0, 20);
+                setContact(truncatedValue);
+              }}
+              maxLength={20}
               className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
               required
+              placeholder="Contoh: +62812345678"
             />
+            <p className="mt-1 text-xs text-gray-500">
+              {contact.length}/20 karakter (hanya angka, +, dan -)
+            </p>
           </div>
 
           <div>
@@ -416,10 +508,16 @@ export default function RegisterPage() {
               <div key={i} className="mb-2 flex">
                 <input
                   value={member}
-                  onChange={(e) => handleMemberChange(i, e.target.value)}
+                  onChange={(e) => {
+                    // Allow alphanumeric, spaces and basic punctuation
+                    const sanitizedValue = e.target.value.replace(/[^\w\s\-_.,]/gi, '');
+                    // Limit to 50 characters
+                    const truncatedValue = sanitizedValue.slice(0, 50);
+                    handleMemberChange(i, truncatedValue);
+                  }}
                   className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   placeholder={`Nama Anggota ${i + 1}`}
-                  required
+                  maxLength={50}
                 />
                 {members.length > 1 && (
                   <button
@@ -430,6 +528,7 @@ export default function RegisterPage() {
                     <span className="sr-only">Hapus</span>×
                   </button>
                 )}
+                <p className="ml-2 mt-2 text-xs text-gray-500">{member.length}/50</p>
               </div>
             ))}
             <button
@@ -445,7 +544,7 @@ export default function RegisterPage() {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="photo" className="mb-1 block text-sm font-medium text-gray-700">
-                Foto 3x4 (PDF, merged):
+                Foto 3x4 (PDF, merged maks 10MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -453,16 +552,19 @@ export default function RegisterPage() {
                   type="file"
                   accept=".pdf"
                   onChange={(e) => setPhoto(e.target.files?.[0] || null)}
-                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {photo && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
+              {photo?.size && !validateFileSize(photo) && (
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+              )}
             </div>
 
             <div>
               <label htmlFor="studentCard" className="mb-1 block text-sm font-medium text-gray-700">
-                Kartu Pelajar/Mahasiswa (PDF, merged):
+                Kartu Pelajar/Mahasiswa (PDF, merged maks 10MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -470,16 +572,19 @@ export default function RegisterPage() {
                   type="file"
                   accept=".pdf"
                   onChange={(e) => setStudentCard(e.target.files?.[0] || null)}
-                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {studentCard && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
+              {studentCard?.size && !validateFileSize(studentCard) && (
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+              )}
             </div>
 
             <div>
               <label htmlFor="proofIG" className="mb-1 block text-sm font-medium text-gray-700">
-                Bukti Follow Instagram (PDF, merged):
+                Bukti Follow Instagram (PDF, merged maks 10MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -487,16 +592,19 @@ export default function RegisterPage() {
                   type="file"
                   accept=".pdf"
                   onChange={(e) => setProofIG(e.target.files?.[0] || null)}
-                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {proofIG && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
+              {proofIG?.size && !validateFileSize(proofIG) && (
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+              )}
             </div>
 
             <div>
               <label htmlFor="twibbon" className="mb-1 block text-sm font-medium text-gray-700">
-                Bukti Upload Twibbon (PDF, merged):
+                Bukti Upload Twibbon (PDF, merged maks 10MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -504,11 +612,14 @@ export default function RegisterPage() {
                   type="file"
                   accept=".pdf"
                   onChange={(e) => setTwibbon(e.target.files?.[0] || null)}
-                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {twibbon && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
+              {twibbon?.size && !validateFileSize(twibbon) && (
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+              )}
             </div>
 
             <div className="md:col-span-2">
@@ -516,7 +627,7 @@ export default function RegisterPage() {
                 htmlFor="paymentProof"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                Bukti Pembayaran (PDF atau Gambar):
+                Bukti Pembayaran (PDF atau Gambar, maks 10MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -524,11 +635,15 @@ export default function RegisterPage() {
                   type="file"
                   accept=".pdf,image/*"
                   onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
-                  className="flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                   required
                 />
                 {paymentProof && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
+
+              {paymentProof?.size && !validateFileSize(paymentProof) && (
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+              )}
             </div>
           </div>
 
@@ -543,6 +658,61 @@ export default function RegisterPage() {
               {isSubmitting ? 'Mengirim...' : 'Daftar'}
             </button>
           </div>
+          <div className="mt-4 text-sm text-gray-600">
+            <p>
+              <strong>Catatan:</strong>
+            </p>
+            <ul className="ml-5 list-disc">
+              <li>Pastikan semua informasi yang dimasukkan sudah benar</li>
+              <li>File yang diunggah tidak boleh melebihi 10MB</li>
+              <li>Semua file harus dalam format yang ditentukan (PDF/Image)</li>
+            </ul>
+          </div>
+
+          {error && (
+            <div className="mb-6 rounded-lg border border-red-400 bg-red-100 p-4 text-red-700">
+              {error}
+            </div>
+          )}
+
+          {/* Validation Modal */}
+          {isSubmitting && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+                <h3 className="mb-4 text-xl font-bold text-gray-800">Konfirmasi Pendaftaran</h3>
+                <p className="mb-4 text-gray-600">
+                  Untuk konfirmasi, silakan ketik ulang nama tim Anda:
+                  <span className="ml-1 font-bold text-blue">{teamName}</span>
+                </p>
+                <div className="mb-4">
+                  <input
+                    type="text"
+                    className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                    placeholder="Ketik nama tim di sini"
+                    onChange={(e) =>
+                      setError(e.target.value !== teamName ? 'Nama tim tidak sesuai' : null)
+                    }
+                  />
+                  {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+                </div>
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={() => setIsSubmitting(false)}
+                    className="rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50"
+                  >
+                    Kembali
+                  </button>
+                  <button
+                    onClick={handleSubmit}
+                    disabled={error !== null}
+                    className={`rounded-md px-4 py-2 text-white ${error !== null ? 'cursor-not-allowed bg-gray-400' : 'bg-blue hover:bg-yellow'}`}
+                  >
+                    {error !== null ? 'Nama Tim Tidak Sesuai' : 'Konfirmasi'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </form>
       </div>
     </div>
