@@ -3,67 +3,67 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import ParticlesContainer from '@/components/UI/ParticlesContainer';
+import { uploadToDrive, createFolder, deleteFolder } from '@/utils/google/action';
 
-// Tambahkan fungsi untuk upload ke Google Drive
-const uploadToDrive = async (
-  file: File,
-  folderId: string,
-  prefix: string,
-  userEmail: string,
-): Promise<string | null> => {
-  try {
-    const formData = new FormData();
-    // Ubah nama file dengan menambahkan prefix
-    const newFileName = `${prefix}_${file.name}`;
-    const newFile = new File([file], newFileName, { type: file.type });
+// // Tambahkan fungsi untuk upload ke Google Drive
+// const uploadToDrive = async (
+//   file: File,
+//   folderId: string,
+//   prefix: string,
+//   userEmail: string,
+// ): Promise<string | null> => {
+//   try {
+//     const formData = new FormData();
+//     // Ubah nama file dengan menambahkan prefix
+//     const newFileName = `${prefix}_${file.name}`;
+//     const newFile = new File([file], newFileName, { type: file.type });
 
-    formData.append('file', newFile);
-    formData.append('folderId', folderId);
-    formData.append('userEmail', userEmail);
+//     formData.append('file', newFile);
+//     formData.append('folderId', folderId);
+//     formData.append('userEmail', userEmail);
 
-    // Ganti URL dengan endpoint API Anda untuk upload ke Drive
-    const response = await fetch('/api/upload-to-drive', {
-      method: 'POST',
-      body: formData,
-    });
+//     // Ganti URL dengan endpoint API Anda untuk upload ke Drive
+//     const response = await fetch('/api/upload-to-drive', {
+//       method: 'POST',
+//       body: formData,
+//     });
 
-    if (!response.ok) {
-      throw new Error('Failed to upload file');
-    }
+//     if (!response.ok) {
+//       throw new Error('Failed to upload file');
+//     }
 
-    const data = await response.json();
-    return data.fileId;
-  } catch (error: any) {
-    console.error('Error uploading file:', error.message);
-    return null;
-  }
-};
+//     const data = await response.json();
+//     return data.fileId;
+//   } catch (error: any) {
+//     console.error('Error uploading file:', error.message);
+//     return null;
+//   }
+// };
 
-// Tambahkan fungsi untuk membuat folder baru di Drive
-const createFolder = async (folderName: string): Promise<string | null> => {
-  try {
-    const response = await fetch('/api/create-folder', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        folderName,
-      }),
-    });
+// // Tambahkan fungsi untuk membuat folder baru di Drive
+// const createFolder = async (folderName: string): Promise<string | null> => {
+//   try {
+//     const response = await fetch('/api/create-folder', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//       body: JSON.stringify({
+//         folderName,
+//       }),
+//     });
 
-    if (!response.ok) {
-      throw new Error('Failed to create folder');
-    }
+//     if (!response.ok) {
+//       throw new Error('Failed to create folder');
+//     }
 
-    const data = await response.json();
-    return data.folderId;
-  } catch (error: any) {
-    console.error('Error creating folder:', error.message);
-    return null;
-  }
-};
+//     const data = await response.json();
+//     return data.folderId;
+//   } catch (error: any) {
+//     console.error('Error creating folder:', error.message);
+//     return null;
+//   }
+// };
 
 export default function RegisterPage() {
   const [teamName, setTeamName] = useState('');
@@ -81,6 +81,8 @@ export default function RegisterPage() {
   const [competition, setCompetition] = useState<string>('');
   const [user, setUser] = useState<User | null>();
   const [leader, setLeader] = useState<string>('');
+  const [showModal, setShowModal] = useState(false);
+  const [confirmation, setConfirmation] = useState<string>('');
 
   const handleAddMember = () => {
     setMembers([...members, '']);
@@ -236,6 +238,7 @@ export default function RegisterPage() {
 
       if (results.some((r) => r === null)) {
         setError('Beberapa file gagal diupload');
+        await deleteFolder(newFolderId);
         setIsSubmitting(false);
         return;
       }
@@ -283,7 +286,6 @@ export default function RegisterPage() {
         team_id: teamsData?.[0].id,
         competition,
         payment_proof: results[4],
-        verification_status: 'pending',
       });
 
       if (dbError) {
@@ -322,6 +324,7 @@ export default function RegisterPage() {
       setError(err.message || 'Terjadi kesalahan');
     } finally {
       setIsSubmitting(false);
+      setShowModal(false);
     }
   };
 
@@ -376,7 +379,8 @@ export default function RegisterPage() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            setIsSubmitting(true);
+            // setIsSubmitting(true);
+            setShowModal(true);
             // handleSubmit();
           }}
           className="space-y-6"
@@ -664,8 +668,11 @@ export default function RegisterPage() {
             </p>
             <ul className="ml-5 list-disc">
               <li>Pastikan semua informasi yang dimasukkan sudah benar</li>
-              <li>File yang diunggah tidak boleh melebihi 10MB</li>
+              <li>Setiap file yang diunggah tidak boleh melebihi 10MB</li>
               <li>Semua file harus dalam format yang ditentukan (PDF/Image)</li>
+              <li>
+                Pastikan kondisi jaringan internet Anda <b>stabil</b> saat mengunggah file
+              </li>
             </ul>
           </div>
 
@@ -676,7 +683,7 @@ export default function RegisterPage() {
           )}
 
           {/* Validation Modal */}
-          {isSubmitting && (
+          {showModal && !isSubmitting && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
               <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
                 <h3 className="mb-4 text-xl font-bold text-gray-800">Konfirmasi Pendaftaran</h3>
@@ -689,27 +696,49 @@ export default function RegisterPage() {
                     type="text"
                     className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
                     placeholder="Ketik nama tim di sini"
-                    onChange={(e) =>
-                      setError(e.target.value !== teamName ? 'Nama tim tidak sesuai' : null)
-                    }
+                    onChange={(e) => {
+                      setError(e.target.value !== teamName ? 'Nama tim tidak sesuai' : null);
+                      setConfirmation(e.target.value);
+                    }}
                   />
                   {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
                 </div>
                 <div className="flex justify-end space-x-3">
                   <button
-                    onClick={() => setIsSubmitting(false)}
+                    onClick={() => {
+                      setIsSubmitting(false);
+                      setShowModal(false);
+                    }}
                     className="rounded-md border border-gray-300 bg-white px-4 py-2 text-gray-700 hover:bg-gray-50"
                   >
                     Kembali
                   </button>
                   <button
                     onClick={handleSubmit}
-                    disabled={error !== null}
-                    className={`rounded-md px-4 py-2 text-white ${error !== null ? 'cursor-not-allowed bg-gray-400' : 'bg-blue hover:bg-yellow'}`}
+                    disabled={error !== null || confirmation !== teamName}
+                    className={`rounded-md px-4 py-2 text-white ${error !== null || confirmation !== teamName ? 'cursor-not-allowed bg-gray-400' : 'bg-blue hover:bg-yellow'}`}
                   >
-                    {error !== null ? 'Nama Tim Tidak Sesuai' : 'Konfirmasi'}
+                    {error !== null || confirmation !== teamName
+                      ? 'Nama Tim Tidak Sesuai'
+                      : 'Konfirmasi'}
                   </button>
                 </div>
+              </div>
+            </div>
+          )}
+          {/* Loading Modal */}
+          {isSubmitting && showModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+                <h3 className="mb-4 text-xl font-bold text-gray-800">Sedang Mengunggah Data</h3>
+                <div className="flex items-center justify-center space-x-3">
+                  <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue border-b-transparent"></div>
+                  <p className="text-gray-600">Mohon tunggu...</p>
+                </div>
+                <p className="mt-4 text-sm text-gray-500">
+                  Proses ini mungkin memerlukan waktu beberapa saat tergantung ukuran file. Jangan
+                  tutup atau memuat ulang halaman ini.
+                </p>
               </div>
             </div>
           )}
