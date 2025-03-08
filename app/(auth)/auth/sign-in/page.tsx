@@ -25,7 +25,7 @@ export default async function LoginPage(props: { searchParams: Promise<Message> 
       </div>
 
       <Image
-        src="/assets/auth/lantai.svg"
+        src="/assets/auth/Lantai.svg"
         alt="Image"
         width={1}
         height={1}
