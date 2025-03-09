@@ -42,8 +42,8 @@ export default async function Page({ params }: { params: Promise<{ competition: 
             className="absolute w-full"
           />
         </div>
-        <Prizepool slug={slug} className="pt-[12%]" />
-        <Timeline slug={slug} />
+        {/* <Prizepool slug={slug} className="pt-[12%]" /> */}
+        {/* <Timeline slug={slug} /> */}
       </div>
     </div>
   );
