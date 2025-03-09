@@ -4,6 +4,7 @@ import { agendaData } from '@/modules/data/data';
 import { notFound } from 'next/navigation';
 import { Details, Hero, Prizepool, Timeline } from '@/modules/competition';
 import Image from 'next/image';
+import '@/styles/globals.css';
 
 export default async function Page({ params }: { params: Promise<{ competition: string }> }) {
   const { competition: slug } = await params;
@@ -29,7 +30,6 @@ export default async function Page({ params }: { params: Promise<{ competition: 
         </div>
         <Details slug={slug} />
       </div>
-
       <div className="relative flex w-full flex-col items-center overflow-x-clip overflow-y-visible lg:justify-center lg:pt-[5%]">
         <div className="absolute top-[-22vw] z-[7] mr-[2%] aspect-[1500/1676.35] w-[132vw] sm:top-[-20vw] md:top-[-8vw] lg:top-[-6vw] xl:top-[5vw]">
           <Image

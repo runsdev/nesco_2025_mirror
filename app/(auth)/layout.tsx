@@ -15,8 +15,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: 'NESCO 2025',
-  description: 'National Electrical Power System Competition 2025',
+  title: 'Sign In to NESCO',
+  description: 'Enroll yourself to this prestigious electrical power system event',
 };
 
 const geistSans = Geist({
