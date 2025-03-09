@@ -16,7 +16,12 @@ export function Rumput({ className = '', flip = false, variant = 1 }: RumputProp
           flip && 'scale-x-[-1] transform',
         )}
       >
-        <Image alt={`awan ${variant}`} src={`/elements/Rumput/rumput-${variant}.png`} fill />
+        <Image
+          alt={`awan ${variant}`}
+          src={`/elements/Rumput/rumput-${variant}.png`}
+          fill
+          sizes="40vw"
+        />
       </div>
     </div>
   );

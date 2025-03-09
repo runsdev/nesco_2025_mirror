@@ -30,6 +30,7 @@ export const Prizepool = () => {
           <Image
             src="/prize/prizepoolAwan.png"
             alt="prizepool"
+            sizes="50vw"
             className="absolute bottom-0 left-0 right-0 top-0 aspect-[1304.7/384.54] w-full"
             fill
           />

@@ -24,7 +24,7 @@ export function Car({ right = false, variant = 'yellow', className = '' }: CarPr
             right && 'scale-x-[-1] transform',
           )}
         >
-          <Image alt="mobil nesco" src={`/elements/Vehicle/car-${variant}.png`} fill />
+          <Image alt="mobil nesco" src={`/elements/Vehicle/car-${variant}.png`} fill sizes="40vw" />
         </div>
       </div>
     </>
@@ -41,7 +41,7 @@ export function Train({ right = false, className = '' }: TrainProps) {
             right && 'scale-x-[-1] transform',
           )}
         >
-          <Image alt="kereta kencanku nesco" src="/elements/Vehicle/train.png" fill />
+          <Image alt="kereta kencanku nesco" src="/elements/Vehicle/train.png" fill sizes="40vw" />
         </div>
       </div>
     </>
