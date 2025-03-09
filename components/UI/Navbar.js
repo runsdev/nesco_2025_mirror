@@ -6,6 +6,7 @@ import { IoIosArrowDown } from 'react-icons/io';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogoNesco } from '@/components/Element/index';
 import { createClient } from '@/utils/supabase/client';
+import Image from 'next/image';
 
 const routes = [
   {
@@ -38,6 +39,11 @@ const routes = [
     name: 'FAQ',
     href: '/faq',
   },
+];
+
+const userChild = [
+  { name: 'Dashboard', href: '/dashboard', isButton: false },
+  { name: 'Logout', href: null, isButton: true },
 ];
 
 /* Navbar Desktop */
@@ -132,11 +138,60 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
         >
           <ul className="flex flex-row items-center justify-between px-6 pb-[2vw] text-[2.8vw] font-bold text-darkblue">
             {user ? (
-              <img
-                src={user?.user_metadata?.avatar_url || ''}
-                alt="User Avatar"
-                className="h-8 w-8 rounded-full"
-              />
+              <div className="relative">
+                <button
+                  type="button"
+                  className="flex w-[23vw] items-center justify-center space-x-2 rounded-md bg-lightblue py-1 font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow"
+                  onClick={() => toggleChildDropdown(!openChild)}
+                  onBlur={() => toggleChildDropdown(null)}
+                >
+                  <Image
+                    src={user?.user_metadata?.avatar_url || ''}
+                    alt="User Avatar"
+                    width={500}
+                    height={500}
+                    className="h-auto w-[5vw] rounded-full"
+                  />
+                  <IoIosArrowDown
+                    className={`transition-transform duration-500 ease-in-out ${openChild ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                <motion.div
+                  className={`absolute left-0 right-0 z-10 mt-[3vw] w-[23vw] overflow-hidden rounded-lg bg-lightyellow p-[0.5vw] text-center shadow-md transition-opacity duration-500 ${
+                    openChild ? 'visible opacity-100' : 'invisible opacity-0'
+                  }`}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{
+                    height: openChild ? 'auto' : 0,
+                    opacity: openChild ? 1 : 0,
+                  }}
+                >
+                  {userChild.map((item, index) =>
+                    item.isButton ? (
+                      <button
+                        key={index}
+                        type="button"
+                        className="block w-full text-nowrap px-4 pb-3 text-left !font-montserrat text-[2.2vw] font-bold !leading-none text-darkblue opacity-70 transition-all duration-200 ease-in-out hover:text-lightblue hover:opacity-100"
+                        onClick={async () => {
+                          await supabase.auth.signOut();
+                          setUser(null);
+                        }}
+                      >
+                        {item.name}
+                      </button>
+                    ) : (
+                      <Link
+                        key={index}
+                        href={item.href}
+                        className="block w-full text-nowrap px-4 py-3 text-left !font-montserrat text-[2.2vw] font-bold !leading-none text-darkblue opacity-70 transition-all duration-200 ease-in-out hover:text-lightblue hover:opacity-100"
+                      >
+                        {item.name}
+                      </Link>
+                    ),
+                  )}
+                </motion.div>
+              </div>
             ) : (
               <button
                 type="button"
@@ -255,8 +310,10 @@ export const Navbar = () => {
                 className="flex items-center space-x-2 rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
                 onClick={() => toggleMainDropdown(!openDropdown)}
               >
-                <img
+                <Image
                   src={user?.user_metadata?.avatar_url || ''}
+                  width={500}
+                  height={500}
                   alt="User Avatar"
                   className="h-8 w-8 rounded-full"
                 />
@@ -264,34 +321,48 @@ export const Navbar = () => {
                   className={`transition-transform duration-500 ease-in-out ${openDropdown ? 'rotate-180' : ''}`}
                 />
               </button>
-              {openDropdown && (
-                <div className="absolute right-0 mt-2 w-48 rounded-md bg-white shadow-lg">
-                  <Link
-                    href="/dashboard"
-                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  >
-                    Dashboard
-                  </Link>
-                  <button
-                    type="button"
-                    className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                    onClick={async () => {
-                      await supabase.auth.signOut();
-                      setUser(null);
-                    }}
-                  >
-                    Logout
-                  </button>
-                </div>
-              )}
+              <motion.div
+                className={`absolute left-0 right-0 z-10 mt-[3vw] w-fit overflow-hidden rounded-lg bg-lightyellow px-[1.5vw] py-2 text-center shadow-md transition-opacity duration-500 ease-in-out xl:mt-[2vw] xl:px-[22px] ${
+                  openDropdown ? 'visible opacity-100' : 'invisible·opacity-0'
+                }`}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{
+                  height: openDropdown ? 'auto' : 0,
+                  opacity: openDropdown ? 1 : 0,
+                }}
+              >
+                {userChild.map((item, index) =>
+                  item.isButton ? (
+                    <button
+                      key={index}
+                      type="button"
+                      className="block w-full text-nowrap py-3 text-left !font-montserrat text-[1.5vw] font-bold !leading-none text-darkblue opacity-70 transition-all duration-200 ease-in-out hover:text-lightblue hover:opacity-100 xl:text-[1.1vw]"
+                      onClick={async () => {
+                        await supabase.auth.signOut();
+                        setUser(null);
+                      }}
+                    >
+                      {item.name}
+                    </button>
+                  ) : (
+                    <Link
+                      key={index}
+                      href={item.href}
+                      className="block w-full text-nowrap py-3 text-left !font-montserrat text-[1.5vw] font-bold !leading-none text-darkblue opacity-70 transition-all duration-200 ease-in-out hover:text-lightblue hover:opacity-100 xl:text-[1.1vw]"
+                    >
+                      {item.name}
+                    </Link>
+                  ),
+                )}
+              </motion.div>
             </div>
           ) : (
             <button
               type="button"
-              className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
+              className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition-all duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
             >
               <Link href="/auth/sign-in">
-                <p>SIGN IN</p>
+                <p className="transition-all duration-500 ease-in-out hover:scale-105">SIGN IN</p>
               </Link>
             </button>
           )}
