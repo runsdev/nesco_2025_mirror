@@ -42,11 +42,11 @@ const Time = ({ kegiatan, start, end, className, t = false, r = false, l = false
 export function Timeline({ slug }) {
   const dataTimelineNow = dataTimeline[slug];
   return (
-    <div className="relative z-[12] flex h-[50svh] w-full flex-col items-center justify-center gap-5 text-5xl font-[700] lg:h-screen">
-      <h1 className="relative font-kodeMono text-[7vw] font-bold md:text-[5vw] lg:text-5xl">
+    <div className="relative flex h-[50svh] w-full flex-col items-center justify-start gap-5 bg-darkyellow pt-[10vw] text-5xl font-[700] md:h-[60svh] lg:h-[80svh] xl:h-screen">
+      <h1 className="relative z-[12] font-kodeMono text-[7vw] font-bold md:text-[5vw] lg:text-5xl">
         Timeline
       </h1>
-      <div className="relative aspect-[63/27] w-[84vw] translate-y-[0.2vw] items-center justify-center rounded-md bg-[#ffe08d] drop-shadow-offset md:w-[80vw] md:rounded-lg lg:w-[63vw]">
+      <div className="relative z-[12] aspect-[63/27] w-[84vw] translate-y-[0.2vw] items-center justify-center rounded-md bg-[#ffe08d] drop-shadow-offset md:w-[80vw] md:rounded-lg lg:w-[63vw]">
         <Time
           kegiatan={dataTimelineNow[0].kegiatan}
           start={dataTimelineNow[0].start}
