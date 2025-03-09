@@ -101,28 +101,11 @@ const dataPrizepool = {
         },
         {
           nama: 'Runner Up',
-          hadiah: 'Rp 750.000\nCertificate + Trophy',
+          hadiah: 'Rp 2.500.000\nCertificate + Trophy',
         },
         {
           nama: 'Third Place',
-          hadiah: 'Rp 500.000\nCertificate + Trophy',
-        },
-      ],
-    },
-    {
-      kategori: 'SMA',
-      juara: [
-        {
-          nama: 'First Place',
-          hadiah: 'Rp 4.000.000\nCertificate + Trophy',
-        },
-        {
-          nama: 'Runner Up',
-          hadiah: 'Rp 750.000\nCertificate + Trophy',
-        },
-        {
-          nama: 'Third Place',
-          hadiah: 'Rp 500.000\nCertificate + Trophy',
+          hadiah: 'Rp 1.000.000\nCertificate + Trophy',
         },
       ],
     },
