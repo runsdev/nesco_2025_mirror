@@ -736,8 +736,8 @@ export default function RegisterPage() {
                   <p className="text-gray-600">Mohon tunggu...</p>
                 </div>
                 <p className="mt-4 text-sm text-gray-500">
-                  Proses ini mungkin memerlukan waktu beberapa saat tergantung ukuran file. Jangan
-                  tutup atau memuat ulang halaman ini.
+                  Proses ini mungkin memerlukan waktu beberapa saat tergantung ukuran file dan
+                  kondisi jaringan Anda. Jangan tutup atau memuat ulang halaman ini.
                 </p>
               </div>
             </div>
