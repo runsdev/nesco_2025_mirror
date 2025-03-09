@@ -127,7 +127,7 @@ export default function RegisterPage() {
   // Check if registration is still open
   useEffect(() => {
     const currentDate = new Date();
-    const registrationStarts = new Date('2025-03-10 23:59:59');
+    const registrationStarts = new Date('2025-03-09 23:59:59');
 
     if (currentDate > registrationStarts) {
       setOpenRegistration(true);
@@ -267,7 +267,6 @@ export default function RegisterPage() {
           contact,
           leader,
           competition,
-          verified: false,
           created_at: new Date().toISOString(),
         })
         .select();
@@ -429,7 +428,8 @@ export default function RegisterPage() {
                 Pilih Jenis Lomba
               </option>
               <option value="Paper Competition">Paper Competition</option>
-              <option value="Poster Competition">Poster Competition</option>
+              <option value="Poster Competition 1 Karya">Poster Competition (1 karya)</option>
+              <option value="Poster Competition 2 Karya">Poster Competition (2 karya)</option>
               <option value="Scientific Debate">Scientific Debate</option>
               <option value="Innovation Challenge">Innovation Challenge</option>
             </select>
