@@ -102,7 +102,7 @@ export function Details({ slug }) {
                   <Link
                     target="_blank"
                     href={`https://line.me/ti/p/${detailsNow.contactPerson.line}`}
-                    className="group flex flex-row items-center space-x-[10%] px-[7%]"
+                    className="group flex cursor-pointer flex-row items-center space-x-[10%] px-[7%]"
                   >
                     <div className="relative flex aspect-square items-center justify-center">
                       <FaLine className="absolute aspect-square w-[1.5vw]" />
@@ -114,7 +114,7 @@ export function Details({ slug }) {
                   <Link
                     target="_blank"
                     href={`https://line.me/ti/p/${detailsNow.contactPerson.line2}`}
-                    className="group flex flex-row items-center space-x-[10%] px-[7%]"
+                    className="group flex cursor-pointer flex-row items-center space-x-[10%] px-[7%]"
                   >
                     <div className="relative flex aspect-square items-center justify-center">
                       <FaLine className="absolute aspect-square w-[1.5vw]" />
@@ -126,7 +126,7 @@ export function Details({ slug }) {
                   <Link
                     target="_blank"
                     href={`https://wa.me/62${detailsNow.contactPerson.wa}?text=Halo!%20Saya%20ingin%20bertanya%20terkait%20NESCO%20UGM!`}
-                    className="group flex flex-row items-center space-x-[10%] px-[7%]"
+                    className="group flex cursor-pointer flex-row items-center space-x-[10%] px-[7%]"
                   >
                     <div className="relative flex items-center justify-center">
                       <FaWhatsapp className="absolute aspect-square w-[1.5vw]" />
@@ -138,7 +138,7 @@ export function Details({ slug }) {
                   <Link
                     target="_blank"
                     href={`https://wa.me/62${detailsNow.contactPerson.wa2}?text=Halo!%20Saya%20ingin%20bertanya%20terkait%20NESCO%20UGM!`}
-                    className="group flex flex-row items-center space-x-[10%] px-[7%]"
+                    className="group flex cursor-pointer flex-row items-center space-x-[10%] px-[7%]"
                   >
                     <div className="relative flex items-center justify-center">
                       <FaWhatsapp className="absolute aspect-square w-[1.5vw]" />
@@ -163,18 +163,19 @@ export function Details({ slug }) {
               </div>
               <div className="relative flex h-full flex-row">
                 <div className="flex w-[85%] items-center justify-center rounded-l-[1vw] bg-[#0E5B54] p-[10%] text-center md:rounded-l-sm">
-                  <Link
-                    target="_blank"
-                    href={detailsNow.guidebook}
-                    className="text-[3vw] font-bold text-[#EABB37] duration-500 hover:text-white lg:text-xl xl:text-2xl"
+                  <div
+                    // target="_blank"
+                    // aria-disabled={true}
+                    // href={detailsNow.guidebook}
+                    className="cursor-not-allowed text-[3vw] font-bold text-[#EABB37] duration-500 hover:text-white lg:text-xl xl:text-2xl"
                   >
                     Guide <br />
                     Book
-                  </Link>
+                  </div>
                 </div>
-                <div className="ml-[-2%] w-[5%] rounded-l-[1vw] bg-[#61CCC2] md:rounded-l-sm"></div>
-                <div className="w-[5%] rounded-l-[1vw] bg-[#0F776E] md:rounded-l-sm"></div>
-                <div className="w-[10%] bg-[#0E5B53]"></div>
+                <div className="ml-[-2%] w-[5%] rounded-l-[1vw] bg-[#61CCC2] md:rounded-l-sm" />
+                <div className="w-[5%] rounded-l-[1vw] bg-[#0F776E] md:rounded-l-sm" />
+                <div className="w-[10%] bg-[#0E5B53]" />
               </div>
             </div>
           </div>

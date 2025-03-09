@@ -5,8 +5,6 @@ import '../beranda/Competition/competition.css';
 import Image from 'next/image';
 import { Car } from '@/components/Element';
 import { cn } from '@/lib/utils';
-import { GoChevronLeft, GoChevronRight } from 'react-icons/go';
-import { useState } from 'react';
 
 const GrayLine = ({ className }) => {
   return (
@@ -61,18 +59,34 @@ export function Hero({ slug }) {
   const lombaData = agendaData.find((item) => item.slug === slug);
 
   return (
-    <div className="z-[10] flex min-h-[100svh] w-full flex-col items-center justify-center lg:min-h-screen">
-      {' '}
+    <div className="relative z-[10] flex h-[100svh] w-full flex-col items-center justify-center lg:min-h-screen">
       <h1
         data-aos="zoom-in"
-        className="mb-8 mt-7 font-kodeMono text-[6vw] font-bold md:text-[5vw] lg:mt-[7%]"
+        className="z-[12] mb-8 mt-7 font-kodeMono text-[6vw] font-bold md:text-[5.7vw] lg:mt-[7%] lg:text-4xl xl:text-7xl"
       >
         Competitions
       </h1>
+      <Image
+        data-aos="fade-left"
+        alt="Cahaya Nesco"
+        src="/assets/competition/cahaya-2.svg"
+        width={2000}
+        height={2000}
+        className="absolute right-0 top-[20%] z-[11] w-[45%] lg:top-[15%]"
+      />
+      <Image
+        data-aos="fade-left"
+        data-aos-delay="400"
+        alt="Cahaya Nesco"
+        src="/assets/competition/cahaya-1.svg"
+        width={2000}
+        height={2000}
+        className="absolute right-0 top-[90%] z-[11] w-[57%] lg:top-[80%]"
+      />
       <div
         data-aos="zoom-in"
         data-aos-duration="500"
-        className="relative flex w-full flex-col items-center"
+        className="relative z-[12] flex w-full flex-col items-center"
       >
         <div className="lg-portrait:h-custom flex aspect-[5/4] h-auto max-h-[80vh] w-full max-w-[95vw] items-center justify-center md:aspect-[3/2] lg:max-h-[65vh] lg:w-[60%]">
           <div className="relative flex h-full w-full items-center justify-center rounded-xl bg-white py-4 shadow-lg md:rounded-2xl md:py-5 xl:rounded-[35px]">

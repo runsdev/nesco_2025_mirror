@@ -2,7 +2,7 @@ const details = {
   debate: {
     title: 'Scientific Debate',
     description:
-      'Paper Competition merupakan kompetisi bidang ketenagalistrikan berupa lomba problem solving tentang Load Flow Diagram, forecasting, sistem proteksi listrik, dan sejenisnya, yang bertujuan mendorong perkembangan dan perencanaan sistem ketenagalistrikan, khususnya di Indonesia.',
+      'Scientific Debate Competition NESCO 2025 adalah kompetisi yang dirancang untuk mengasah kemampuan berpikir kritis, analitis, dan argumentatif para peserta dalam menyikapi isu-isu terkini di bidang ketenagalistrikan dan keberlanjutan lingkungan.',
     kategori: {
       jenis: 'Mahasiswa',
       tim: 'Perorangan',
@@ -38,7 +38,7 @@ const details = {
   paper: {
     title: 'Paper Competition',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec lacinia lacinia, nunc nisl lacinia nisl, nec lacinia nisl nisl nec nisl. Nullam auctor, nisl nec lacinia lacinia, nunc nisl lacinia nisl, nec lacinia nisl nisl nec nisl.',
+      'Paper Competition NESCO 2025 merupakan ajang yang dirancang untuk menguji kemampuan problem-solving peserta dalam menganalisis dan memberikan solusi atas permasalahan di bidang ketenagalistrikan dan sistem tenaga listrik.',
     kategori: {
       jenis: 'Mahasiswa',
       tim: 'Perorangan',
@@ -56,9 +56,9 @@ const details = {
   poster: {
     title: 'Poster Competition',
     description:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl nec lacinia lacinia, nunc nisl lacinia nisl, nec lacinia nisl nisl nec nisl. Nullam auctor, nisl nec lacinia lacinia, nunc nisl lacinia nisl, nec lacinia nisl nisl nec nisl.',
+      'Poster Competition NESCO 2025 adalah kompetisi yang dirancang untuk memberikan platform bagi siswa SMA (Junior) dan mahasiswa (Senior) untuk mengungkapkan ide dan pemikiran mereka mengenai berbagai isu dan inovasi di bidang ketenagalistrikan dan energi terbarukan melalui media visual digital.',
     kategori: {
-      jenis: 'Mahasiswa',
+      jenis: 'Mahasiswa / SMA',
       tim: 'Perorangan',
       jumlah: 'Tim maksimal 3 orang',
     },
