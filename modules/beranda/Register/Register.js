@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 export const Register = () => {
-  const targetDate = new Date('2025-03-22 23:59:59').getTime();
+  const targetDate = new Date('2025-04-05 23:59:59').getTime();
   const [timeLeft, setTimeLeft] = useState(10);
 
   useEffect(() => {

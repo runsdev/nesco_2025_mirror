@@ -24,7 +24,7 @@ export default async function Home() {
         <Seminar />
         <Galeri />
       </div>
-      <Sponsor />
+      {/* <Sponsor /> */}
     </>
   );
 }
