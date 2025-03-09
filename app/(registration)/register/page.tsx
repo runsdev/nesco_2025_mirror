@@ -175,7 +175,6 @@ export default function RegisterPage() {
         !leader ||
         !instance ||
         !contact ||
-        members.some((m) => !m) ||
         !photo ||
         !studentCard ||
         !proofIG ||

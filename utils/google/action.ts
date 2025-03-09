@@ -123,6 +123,7 @@ export async function uploadToDrive(
           role: 'reader',
           emailAddress: userEmail,
         },
+        sendNotificationEmail: false,
       });
     }
 

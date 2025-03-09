@@ -10,6 +10,7 @@ import { Badge } from '@/components/UI/badge';
 import { Button } from '@/components/UI/button';
 import { FileIcon, UploadIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
 import { dataTimeline } from '@/modules/data/timeline';
+import { uploadToDrive, createFolder, deleteFolder } from '@/utils/google/action';
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -19,7 +20,10 @@ export default function Dashboard() {
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [submissionFile, setSubmissionFile] = useState<File | null>(null);
+  const [secondSubmissionFile, setSecondSubmissionFile] = useState<File | null>(null);
   const [uploadStatus, setUploadStatus] = useState('idle');
+  const [originalityFile, setOriginalityFile] = useState<File | null>(null);
+  const [originals, setOriginals] = useState<any[]>([]);
   const [isVerified, setIsVerified] = useState(false);
 
   const supabase = createClient();
@@ -105,19 +109,25 @@ export default function Dashboard() {
       const fileName = `${teamData.competition}_${teamData.team_name}_${Date.now()}.${fileExt}`;
 
       // Upload to storage
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from('submissions')
-        .upload(fileName, submissionFile);
+      // Prepare folder structure in Google Drive
+      const competitionFolderId = await createFolder(
+        teamData.competition,
+        process.env.NEXT_PUBLIC_GOOGLE_SUBMISSION_FOLDER_ID!,
+      );
+      const teamFolderId = await createFolder(teamData.team_name, competitionFolderId);
 
-      if (uploadError) throw uploadError;
+      // Upload file to Google Drive in the team's folder
+      const uploadResult = await uploadToDrive(
+        submissionFile,
+        fileName,
+        teamFolderId,
+        submissionFile.type,
+      );
 
-      // Save submission record
       const { error: submissionError } = await supabase.from('submissions').insert({
         team_id: teamData.id,
-        file_path: uploadData.path,
-        file_name: fileName,
+        submission: uploadResult,
         submitted_at: new Date().toISOString(),
-        status: 'pending',
       });
 
       if (submissionError) throw submissionError;
@@ -137,6 +147,67 @@ export default function Dashboard() {
 
       // Reset file input
       const fileInput = document.getElementById('submission-file') as HTMLInputElement;
+      if (fileInput) fileInput.value = '';
+    } catch (error) {
+      console.error('Submission error:', error);
+      setUploadStatus('error');
+    }
+  };
+
+  const handleSecondFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files[0]) return;
+    setSecondSubmissionFile(e.target.files[0]);
+  };
+
+  const handleSecondSubmission = async () => {
+    if (!secondSubmissionFile || !teamData) return;
+
+    setUploadStatus('loading');
+
+    try {
+      // Create unique filename
+      const fileExt = secondSubmissionFile.name.split('.').pop();
+      const fileName = `${teamData.competition}_${teamData.team_name}_${Date.now()}.${fileExt}`;
+
+      // Upload to storage
+      // Prepare folder structure in Google Drive
+      const competitionFolderId = await createFolder(
+        teamData.competition,
+        process.env.NEXT_PUBLIC_GOOGLE_SUBMISSION_FOLDER_ID!,
+      );
+      const teamFolderId = await createFolder(teamData.team_name, competitionFolderId);
+
+      // Upload file to Google Drive in the team's folder
+      const uploadResult = await uploadToDrive(
+        secondSubmissionFile,
+        fileName,
+        teamFolderId,
+        secondSubmissionFile.type,
+      );
+
+      const { error: submissionError } = await supabase.from('submissions').insert({
+        team_id: teamData.id,
+        submission: uploadResult,
+        submitted_at: new Date().toISOString(),
+      });
+
+      if (submissionError) throw submissionError;
+
+      // Refresh submissions
+      const { data: submissionData } = await supabase
+        .from('submissions')
+        .select('*')
+        .eq('team_id', teamData.id);
+
+      if (submissionData) {
+        setSubmissions(submissionData);
+      }
+
+      setUploadStatus('success');
+      setSecondSubmissionFile(null);
+
+      // Reset file input
+      const fileInput = document.getElementById('second-submission-file') as HTMLInputElement;
       if (fileInput) fileInput.value = '';
     } catch (error) {
       console.error('Submission error:', error);
@@ -185,7 +256,9 @@ export default function Dashboard() {
       </div>
 
       <Tabs defaultValue="data" className="w-full">
-        <TabsList className="mb-4 grid w-full grid-cols-2">
+        <TabsList
+          className={`mb-4 grid w-full ${teamData?.verified && teamData?.competition !== 'Scientific Debate' ? 'grid-cols-3' : 'grid-cols-2'}`}
+        >
           <TabsTrigger value="data" className="data-[state=active]:text-white">
             Data
           </TabsTrigger>
@@ -284,19 +357,178 @@ export default function Dashboard() {
                     <div className="flex flex-col items-center justify-center space-y-2 text-center">
                       <UploadIcon className="h-8 w-8 text-gray-400" />
                       <p className="text-sm text-gray-500">
-                        {teamData?.competition === 'Poster'
-                          ? 'Upload file gambar poster (JPG, PNG)'
+                        {teamData.competition === 'Poster Competition 1 Karya' ||
+                        teamData.competition === 'Poster Competition 2 Karya'
+                          ? 'Upload file gambar poster'
                           : 'Upload file PDF karya lomba'}
                       </p>
                       <input
                         id="submission-file"
                         type="file"
-                        accept={teamData?.competition === 'Poster' ? 'image/*' : '.pdf'}
+                        accept={
+                          teamData.competition === 'Poster Competition 1 Karya' ||
+                          teamData.competition === 'Poster Competition 2 Karya'
+                            ? 'image/*'
+                            : '.pdf'
+                        }
                         onChange={handleFileUpload}
                         className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
                       />
                     </div>
                   </div>
+                  {teamData.competition === 'Poster Competition 2 Karya' && (
+                    <>
+                      <div className="mt-4 rounded-lg border border-dashed border-gray-300 p-6">
+                        <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                          <UploadIcon className="h-8 w-8 text-gray-400" />
+                          <p className="text-sm text-gray-500">Upload file gambar poster kedua</p>
+                          <input
+                            id="second-submission-file"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleSecondFileUpload}
+                            className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
+                          />
+                        </div>
+                      </div>
+
+                      {secondSubmissionFile && (
+                        <div className="bg-blue-50 rounded-md p-3 text-sm">
+                          File kedua dipilih: {secondSubmissionFile.name}
+                        </div>
+                      )}
+
+                      <Button
+                        onClick={handleSecondSubmission}
+                        disabled={!secondSubmissionFile || uploadStatus === 'loading'}
+                        className="mt-2 w-full"
+                      >
+                        {uploadStatus === 'loading' ? 'Uploading...' : 'Submit Karya Kedua'}
+                      </Button>
+                    </>
+                  )}
+
+                  {(teamData.competition === 'Poster Competition 1 Karya' ||
+                    teamData.competition === 'Poster Competition 2 Karya') && (
+                    <>
+                      <div className="rounded-lg border border-dashed border-gray-300 p-6">
+                        <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                          <UploadIcon className="h-8 w-8 text-gray-400" />
+                          <p className="text-sm text-gray-500">
+                            Upload surat pernyataan orisinalitas karya
+                          </p>
+                          <input
+                            id="originality-file"
+                            type="file"
+                            accept=".pdf"
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files[0]) {
+                                setOriginalityFile(e.target.files[0]);
+                              }
+                            }}
+                            className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
+                          />
+                        </div>
+                      </div>
+
+                      {originalityFile && (
+                        <div className="bg-blue-50 rounded-md p-3 text-sm">
+                          File pernyataan orisinalitas dipilih: {originalityFile.name}
+                        </div>
+                      )}
+
+                      <Button
+                        onClick={async () => {
+                          if (!originalityFile || !teamData) return;
+
+                          setUploadStatus('loading');
+
+                          try {
+                            // Create unique filename
+                            const fileExt = originalityFile.name.split('.').pop();
+                            const fileName = `${teamData.competition}_${teamData.team_name}_Originality_${Date.now()}.${fileExt}`;
+
+                            // Upload to storage
+                            const competitionFolderId = await createFolder(
+                              teamData.competition,
+                              process.env.NEXT_PUBLIC_GOOGLE_SUBMISSION_FOLDER_ID!,
+                            );
+                            const teamFolderId = await createFolder(
+                              teamData.team_name,
+                              competitionFolderId,
+                            );
+
+                            // Upload file to Google Drive in the team's folder
+                            const uploadResult = await uploadToDrive(
+                              originalityFile,
+                              fileName,
+                              teamFolderId,
+                              originalityFile.type,
+                            );
+
+                            const { error } = await supabase.from('originals').insert({
+                              team_id: teamData.id,
+                              file_id: uploadResult,
+                              submitted_at: new Date().toISOString(),
+                            });
+
+                            if (error) throw error;
+
+                            // Refresh originals
+                            const { data: originalsData } = await supabase
+                              .from('originals')
+                              .select('*')
+                              .eq('team_id', teamData.id);
+
+                            if (originalsData) {
+                              setOriginals(originalsData);
+                            }
+
+                            setIsVerified(true);
+                            setUploadStatus('success');
+                            setOriginalityFile(null);
+
+                            // Reset file input
+                            const fileInput = document.getElementById(
+                              'originality-file',
+                            ) as HTMLInputElement;
+                            if (fileInput) fileInput.value = '';
+                          } catch (error) {
+                            console.error('Originality upload error:', error);
+                            setUploadStatus('error');
+                          }
+                        }}
+                        disabled={!originalityFile || uploadStatus === 'loading'}
+                        className="mt-2 w-full"
+                      >
+                        {uploadStatus === 'loading'
+                          ? 'Uploading...'
+                          : 'Submit Pernyataan Orisinalitas'}
+                      </Button>
+
+                      <div className="mt-4">
+                        <h3 className="mb-2 font-medium">Pernyataan Orisinalitas</h3>
+                        {originals.length > 0 ? (
+                          <div className="flex items-center justify-between rounded-md border p-3">
+                            <div>
+                              <p className="font-medium">Pernyataan Orisinalitas</p>
+                              <p className="text-sm text-gray-500">
+                                {new Date(originals[0].submitted_at).toLocaleString()}
+                              </p>
+                            </div>
+                            <Badge variant="success" className="flex items-center gap-1">
+                              <CheckCircleIcon size={14} />
+                              <span>Terupload</span>
+                            </Badge>
+                          </div>
+                        ) : (
+                          <p className="text-sm text-amber-600">
+                            *Harap upload surat pernyataan orisinalitas karya
+                          </p>
+                        )}
+                      </div>
+                    </>
+                  )}
 
                   {submissionFile && (
                     <div className="bg-blue-50 rounded-md p-3 text-sm">
@@ -395,7 +627,8 @@ export default function Dashboard() {
                             ? 'debate'
                             : teamData.competition === 'Technology Innovation'
                               ? 'innovation'
-                              : teamData.competition === 'Poster'
+                              : teamData.competition === 'Poster Competition 1 Karya' ||
+                                  teamData.competition === 'Poster Competition 2 Karya'
                                 ? 'poster'
                                 : 'paper';
 
