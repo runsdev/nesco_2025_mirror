@@ -72,6 +72,7 @@ export const Footer = () => {
               <div className="flex flex-col space-y-[3%] text-[4vw] md:text-[0.9vw]">
                 {socialLinks.map((link) => (
                   <Link
+                    target="_blank"
                     key={link.href}
                     href={link.href}
                     className="font-montserrat text-[#69C7BF] transition-colors hover:text-white"
