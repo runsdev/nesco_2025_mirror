@@ -5,6 +5,7 @@
 
 import { Kode_Mono } from 'next/font/google';
 import { Montserrat } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 
 const kodeMono = Kode_Mono({
   display: 'swap',
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <GSAPProvider>
             <Navbar />
             {children}
+            <Analytics />
             <Footer />
           </GSAPProvider>
         </LocomotiveProvider>

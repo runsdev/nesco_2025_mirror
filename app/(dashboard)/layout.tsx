@@ -6,6 +6,7 @@ import '../../styles/globals.css';
 
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
+import { Analytics } from '@vercel/analytics/next';
 
 const geist = Geist({
   display: 'swap',
@@ -44,7 +45,9 @@ export default async function DashboardRootLayout({
   return (
     <html lang={locale} suppressHydrationWarning>
       <body className="bg-gradient-to-b from-[#61CCC2] to-[#FFE08D]">
-        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider messages={messages}>
+          {children} <Analytics />
+        </NextIntlClientProvider>
       </body>
     </html>
   );
