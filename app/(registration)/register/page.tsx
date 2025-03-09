@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import { uploadToDrive, createFolder, deleteFolder } from '@/utils/google/action';
+import ParticlesContainer from '@/components/UI/ParticlesContainer';
 
 // // Tambahkan fungsi untuk upload ke Google Drive
 // const uploadToDrive = async (
@@ -83,6 +84,7 @@ export default function RegisterPage() {
   const [leader, setLeader] = useState<string>('');
   const [showModal, setShowModal] = useState(false);
   const [confirmation, setConfirmation] = useState<string>('');
+  const [openRegistration, setOpenRegistration] = useState<boolean>(false);
 
   const handleAddMember = () => {
     setMembers([...members, '']);
@@ -121,6 +123,18 @@ export default function RegisterPage() {
 
     fetchUser();
   }, [router, supabase.auth]);
+
+  // Check if registration is still open
+  useEffect(() => {
+    const currentDate = new Date();
+    const registrationStarts = new Date('2025-03-10 23:59:59');
+
+    if (currentDate > registrationStarts) {
+      setOpenRegistration(true);
+    } else {
+      setOpenRegistration(false);
+    }
+  }, [router]);
 
   useEffect(() => {
     async function fetchTeam() {
@@ -327,6 +341,21 @@ export default function RegisterPage() {
       setShowModal(false);
     }
   };
+
+  if (!openRegistration) {
+    return (
+      <div className="flex min-h-[100svh] items-center justify-center bg-gradient-to-b from-[#003C43] to-[#61CCC2] md:min-h-screen">
+        <ParticlesContainer className="absolute top-0 z-0 min-h-[100svh] w-full md:min-h-screen" />
+        <div className="flex flex-col items-center justify-center text-center">
+          <h1 className="text-3xl font-bold text-white">Pendaftaran Belum Dibuka</h1>
+          <p className="mt-4 text-white">
+            Pendaftaran akan dibuka pada tanggal <strong>10 Maret 2025</strong>. Silakan kembali
+            lagi nanti.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!user) {
     return (

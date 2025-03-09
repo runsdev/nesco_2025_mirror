@@ -13,11 +13,8 @@ const quickLinks = [
 ];
 
 const socialLinks = [
-  { href: 'https://instagram.com/nesco', label: 'Instagram' },
-  { href: 'https://tiktok.com/@nesco', label: 'Tiktok' },
-  { href: 'https://youtube.com/@nesco', label: 'Youtube' },
-  { href: 'https://twitter.com/nesco', label: 'Twitter' },
-  { href: 'https://linkedin.com/company/nesco', label: 'LinkedIn' },
+  { href: 'https://instagram.com/nescougm', label: 'Instagram' },
+  { href: 'https://tiktok.com/@nesco.ugm', label: 'Tiktok' },
 ];
 
 const TulisanNesco = () => {
@@ -95,7 +92,7 @@ export const Footer = () => {
                   href="mailto:nesco@mail.ugm.ac.id"
                   className="font-montserrat text-[4vw] text-[#69C7BF] transition-colors hover:text-white md:text-[0.9vw]"
                 >
-                  <p>nesco@mail.ugm.ac.id</p>
+                  <p>nesco2025@gmail.com</p>
                 </Link>
               </div>
             </div>

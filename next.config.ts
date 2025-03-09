@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '15MB',
     },
   },
+  images: {
+    domains: ['lh3.googleusercontent.com'],
+  },
 };
 
 export default withNextIntl(nextConfig);

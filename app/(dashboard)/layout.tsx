@@ -44,7 +44,7 @@ export default async function DashboardRootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="bg-gradient-to-b from-[#61CCC2] to-[#FFE08D]">
+      <body className="min-h-[100svh] bg-gradient-to-b from-[#61CCC2] to-[#FFE08D] md:min-h-screen">
         <NextIntlClientProvider messages={messages}>
           {children} <Analytics />
         </NextIntlClientProvider>
