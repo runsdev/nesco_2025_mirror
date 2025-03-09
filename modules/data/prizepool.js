@@ -12,7 +12,12 @@ const dataPrizepool = {
     { kategori: 'SMA', juara1: 'Rp 3.000.000', juara2: 'Rp 750.000', juara3: 'Rp 500.000' },
   ],
   paper: [
-    { kategori: 'Mahasiswa', juara1: 'Rp 4.000.000', juara2: 'Rp 750.000', juara3: 'Rp 500.000' },
+    {
+      kategori: 'Mahasiswa',
+      juara1: 'Rp 4.000.000 + Sertifikat',
+      juara2: 'Rp 750.000\n+ Sertifikat',
+      juara3: 'Rp 500.000\n+ Sertifikat',
+    },
     { kategori: 'SMA', juara1: 'Rp 4.000.000', juara2: 'Rp 750.000', juara3: 'Rp 500.000' },
   ],
 };

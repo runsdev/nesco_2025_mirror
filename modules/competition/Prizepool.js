@@ -9,17 +9,23 @@ import Image from 'next/image';
 
 const Hadiah = ({ kategori, juara1, juara2, juara3 }) => {
   return (
-    <div className="rounded-2xl border-4 border-[#0F776E] lg:border-8">
+    <div className="relative overflow-clip rounded-xl border-4 border-[#0F776E] bg-gradient-to-b from-[#FFE08D] to-[#EABB37] font-montserrat font-[600] lg:rounded-3xl lg:border-8">
       <div
-        className="absolute left-[2] z-20 mt-[-1vw] rounded-br-[90vw] rounded-tl-[50vw] bg-[#0F776E] px-5 py-2 font-montserrat text-[2.5vw] lg:rounded-tl-[35vw]"
+        className="absolute left-0 top-0 z-20 -mt-1 rounded-br-[60vw] bg-[#0F776E] px-3 py-2 pr-4 text-[2.5vw] md:px-6 md:py-4 md:pr-8 md:text-[2vw] lg:px-5 lg:py-3 lg:pr-10 lg:text-2xl xl:py-4 xl:text-4xl"
         style={{ color: '#EABB37' }}
       >
         Kategori {kategori}
       </div>
-      <div className="relative z-20 mt-[10vw] grid w-full grid-cols-3 place-items-center gap-y-2 text-[4vw] lg:mt-[5vw]">
-        <p className="w-full text-center">Juara 1</p>
-        <p className="w-full text-center">Juara 2</p>
-        <p className="w-full text-center">Juara 3</p>
+      <div className="relative z-20 mb-4 mt-[10vw] grid w-full grid-cols-3 place-items-center gap-y-2 text-[4vw] lg:mt-[5.5vw] lg:text-4xl xl:text-5xl">
+        {['Juara 1', 'Juara 2', 'Juara 3'].map((juara, index) => (
+          <h3
+            key={index}
+            className="w-full text-center !font-montserrat font-[700] drop-shadow-offset-lg"
+          >
+            {juara}
+          </h3>
+        ))}
+
         <Image
           src="/prizepoolCompt/kotak.png"
           width={60}
@@ -41,9 +47,14 @@ const Hadiah = ({ kategori, juara1, juara2, juara3 }) => {
           alt="prizepool"
           className="md:w-[15vw]"
         />
-        <p className="w-full pb-2 text-center text-[3vw] md:text-[2vw]">{juara1}</p>
-        <p className="w-full pb-2 text-center text-[3vw] md:text-[2vw]">{juara2}</p>
-        <p className="w-full pb-2 text-center text-[3vw] md:text-[2vw]">{juara3}</p>
+        {[juara1, juara2, juara3].map((juara, index) => (
+          <p
+            key={index}
+            className="w-full whitespace-pre pb-2 text-center text-[2.3vw] drop-shadow-offset-lg sm:text-[2vw] md:text-lg xl:text-3xl"
+          >
+            {juara}
+          </p>
+        ))}
       </div>
     </div>
   );
@@ -55,13 +66,13 @@ export function Prizepool({ className, slug }) {
   return (
     <div
       className={cn(
-        'z-[12] flex h-[50dvh] w-full items-center justify-center text-5xl lg:h-screen',
+        'z-[12] flex h-[50svh] w-full items-center justify-center text-5xl lg:h-screen',
         className, // Jangan dihapus yang line ini
       )}
     >
       <div
-        data-aos="zoom-in-up"
-        className="flex min-h-screen w-full flex-col items-center justify-center"
+        // data-aos="zoom-in-up"
+        className="relative flex min-h-screen w-full flex-col items-center justify-center font-montserrat"
       >
         <Image
           src="/prizepoolCompt/judul.png"
@@ -70,28 +81,29 @@ export function Prizepool({ className, slug }) {
           alt="prizepool"
           className="relative h-auto w-[42vw] md:w-[30vw]"
         />
-        <Swiper
-          modules={[Pagination]}
-          spaceBetween={20}
-          slidesPerView={1}
-          loop={true}
-          pagination={{ clickable: true, el: '.custom-pagination' }}
-          onSlideChange={() => console.log('slide change')}
-          onSwiper={(swiper) => console.log(swiper)}
-          className="mt-[2vw] h-[48vw] w-[80vw] md:h-[38vw] lg:h-[31vw]"
-        >
-          {kategoriHadiah.map((item, index) => (
-            <SwiperSlide key={index}>
-              <Hadiah
-                kategori={item.kategori}
-                juara1={item.juara1}
-                juara2={item.juara2}
-                juara3={item.juara3}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        <div className="custom-pagination flex justify-center gap-1 [&>span]:h-[1vw] [&>span]:w-[5vw] [&>span]:rounded-md [&>span]:bg-[#0F776E]"></div>
+
+        <div className="relative flex w-full flex-col">
+          <Swiper
+            modules={[Pagination]}
+            spaceBetween={20}
+            slidesPerView={1}
+            pagination={{ clickable: true, el: '.custom-pagination' }}
+            className="mt-[2vw] h-[48vw] w-[80vw] md:h-[38vw] lg:h-[31vw]"
+          >
+            {kategoriHadiah.map((item, index) => (
+              <SwiperSlide key={index}>
+                <Hadiah
+                  kategori={item.kategori}
+                  juara1={item.juara1}
+                  juara2={item.juara2}
+                  juara3={item.juara3}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        <div className="custom-pagination relative flex justify-center gap-1 [&>span]:h-[1vw] [&>span]:w-[5vw] [&>span]:rounded-md [&>span]:bg-[#0F776E]" />
       </div>
     </div>
   );
