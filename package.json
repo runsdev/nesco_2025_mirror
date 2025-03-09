@@ -52,6 +52,7 @@
     "react-dom": "19.0.0",
     "react-dropzone": "^14.3.8",
     "react-icons": "^5.5.0",
+    "swiper": "^11.2.5",
     "tls": "^0.0.1",
     "use-breakpoint": "^4.0.5",
     "use-breakpoints": "^0.0.7",

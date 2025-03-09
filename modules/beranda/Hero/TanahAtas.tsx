@@ -6,8 +6,8 @@ import { Train, ThreeKincirAngin } from '@/components/Element/index';
 
 export default function TanahAtas() {
   return (
-    <div className="relative aspect-[785/166] w-full overflow-x-clip lg:aspect-[3839/571]">
-      <div className="absolute bottom-0 left-0 right-0 top-0 z-[12] m-auto aspect-[785/166] w-full lg:aspect-[3839/571]">
+    <div className="relative z-[9] aspect-[785/166] w-full overflow-x-clip lg:aspect-[3839/571]">
+      <div className="absolute bottom-0 left-0 right-0 top-0 z-[9] m-auto aspect-[785/166] w-full lg:aspect-[3839/571]">
         <Image
           alt="land nesco"
           src="/assets/beranda/Hero/land-up-m.png"
