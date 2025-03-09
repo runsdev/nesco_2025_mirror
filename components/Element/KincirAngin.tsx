@@ -31,6 +31,7 @@ export function KincirAngin({
             src={`/elements/KincirAngin/batang-${variant}.png`}
             className="drop-shadow-offset"
             fill
+            sizes="50vw"
           />
         </div>
         <div
@@ -43,6 +44,7 @@ export function KincirAngin({
             alt="matahari nesco"
             src={`/elements/KincirAngin/turbine-${variant}.png`}
             className="drop-shadow-offset-lg"
+            sizes="50vw"
             fill
           />
         </div>

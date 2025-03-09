@@ -16,6 +16,7 @@ export function LogoNesco({ shadow = false, className = '' }: NescoProps) {
           <Image
             alt="logo nesco"
             src="/elements/Nesco/logo-nesco.png"
+            sizes="50vw"
             className={cn(shadow && 'drop-shadow-offset-lg')}
             fill
           />

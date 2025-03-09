@@ -24,6 +24,7 @@ export function ThreeKincirAngin({
           src="/elements/KincirAngin/TanahKincir.png"
           className="aspect-[523/60] w-full"
           fill
+          sizes="50vw"
         />
       </div>
     </div>

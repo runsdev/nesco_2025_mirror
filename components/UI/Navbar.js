@@ -108,9 +108,17 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
 );
 
 /* Navbar Mobile  */
-const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDropdown, user }) => (
-  <div className="md:hidden">
-    <div className="relative mx-auto flex items-center justify-between px-6 py-2">
+const MobileMenu = ({
+  openDropdown,
+  toggleMainDropdown,
+  openChild,
+  toggleChildDropdown,
+  toggleLoginDropdown,
+  loginOpenDropdown,
+  user,
+}) => (
+  <div className="z-[100] md:hidden">
+    <div className="relative z-[100] mx-auto flex items-center justify-between px-6 py-2">
       <Link href="/" className="group flex cursor-pointer items-center space-x-2">
         <LogoNesco className="w-[7vw] transition-transform duration-500 group-hover:scale-[1.05]" />
         <span className="text-[5vw] font-bold text-darkblue transition-colors duration-500 group-hover:text-blue">
@@ -134,16 +142,16 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ ease: 'linear', duration: 0.3 }}
-          className="absolute left-0 top-full z-10 w-full bg-lightyellow drop-shadow-offset"
+          className="absolute left-0 top-full z-[97] w-full bg-lightyellow"
         >
-          <ul className="flex flex-row items-center justify-between px-6 pb-[2vw] text-[2.8vw] font-bold text-darkblue">
+          <ul className="z-[97] flex flex-row items-center justify-between px-6 pb-[2vw] text-[2.8vw] font-bold text-darkblue">
             {user ? (
               <div className="relative">
                 <button
                   type="button"
                   className="flex w-[23vw] items-center justify-center space-x-2 rounded-md bg-lightblue py-1 font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow"
-                  onClick={() => toggleChildDropdown(!openChild)}
-                  onBlur={() => toggleChildDropdown(null)}
+                  onClick={() => toggleLoginDropdown()}
+                  onBlur={() => toggleLoginDropdown()}
                 >
                   <Image
                     src={user?.user_metadata?.avatar_url || ''}
@@ -153,18 +161,18 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
                     className="h-auto w-[5vw] rounded-full"
                   />
                   <IoIosArrowDown
-                    className={`transition-transform duration-500 ease-in-out ${openChild ? 'rotate-180' : ''}`}
+                    className={`transition-transform duration-500 ease-in-out ${loginOpenDropdown ? 'rotate-180' : ''}`}
                   />
                 </button>
 
                 <motion.div
                   className={`absolute left-0 right-0 z-10 mt-[3vw] w-[23vw] overflow-hidden rounded-lg bg-lightyellow p-[0.5vw] text-center shadow-md transition-opacity duration-500 ${
-                    openChild ? 'visible opacity-100' : 'invisible opacity-0'
+                    loginOpenDropdown ? 'visible opacity-100' : 'invisible opacity-0'
                   }`}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{
-                    height: openChild ? 'auto' : 0,
-                    opacity: openChild ? 1 : 0,
+                    height: loginOpenDropdown ? 'auto' : 0,
+                    opacity: loginOpenDropdown ? 1 : 0,
                   }}
                 >
                   {userChild.map((item, index) =>
@@ -262,6 +270,7 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
 );
 
 export const Navbar = () => {
+  const [loginOpenDropdown, setLoginOpenDropdown] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openChild, setopenChild] = useState(null);
   const [user, setUser] = useState(null);
@@ -270,7 +279,9 @@ export const Navbar = () => {
     setOpenDropdown(openDropdown === index ? false : index);
     setopenChild(null);
   };
+
   const toggleChildDropdown = (index) => setopenChild(openChild === index ? null : index);
+  const toggleLoginDropdown = () => setLoginOpenDropdown(!loginOpenDropdown);
 
   const supabase = createClient();
 
@@ -286,10 +297,10 @@ export const Navbar = () => {
   }, [supabase.auth]);
 
   return (
-    <nav className="fixed left-0 top-0 z-[60] w-full bg-lightyellow font-kodeMono drop-shadow-offset">
-      <div>
+    <nav className="fixed left-0 top-0 z-[100] w-full bg-lightyellow font-kodeMono drop-shadow-offset">
+      <div className="z-[100]">
         {/* Logo */}
-        <div className="relative mx-auto hidden items-center justify-between px-[4vw] md:flex">
+        <div className="relative z-[999] mx-auto hidden items-center justify-between px-[4vw] md:flex">
           <Link
             href="/"
             className="group relative flex cursor-pointer items-center space-x-3 2xl:space-x-4"
@@ -308,7 +319,7 @@ export const Navbar = () => {
               <button
                 type="button"
                 className="flex items-center space-x-2 rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
-                onClick={() => toggleMainDropdown(!openDropdown)}
+                onClick={() => toggleLoginDropdown()}
               >
                 <Image
                   src={user?.user_metadata?.avatar_url || ''}
@@ -323,12 +334,12 @@ export const Navbar = () => {
               </button>
               <motion.div
                 className={`absolute left-0 right-0 z-10 mt-[3vw] w-fit overflow-hidden rounded-lg bg-lightyellow px-[1.5vw] py-2 text-center shadow-md transition-opacity duration-500 ease-in-out xl:mt-[2vw] xl:px-[22px] ${
-                  openDropdown ? 'visible opacity-100' : 'invisible·opacity-0'
+                  loginOpenDropdown ? 'visible opacity-100' : 'invisible·opacity-0'
                 }`}
                 initial={{ height: 0, opacity: 0 }}
                 animate={{
-                  height: openDropdown ? 'auto' : 0,
-                  opacity: openDropdown ? 1 : 0,
+                  height: loginOpenDropdown ? 'auto' : 0,
+                  opacity: loginOpenDropdown ? 1 : 0,
                 }}
               >
                 {userChild.map((item, index) =>
@@ -374,6 +385,8 @@ export const Navbar = () => {
           toggleMainDropdown={toggleMainDropdown}
           openChild={openChild}
           toggleChildDropdown={toggleChildDropdown}
+          toggleLoginDropdown={toggleLoginDropdown}
+          loginOpenDropdown={loginOpenDropdown}
           user={user}
         />
       </div>

@@ -39,6 +39,7 @@ export function Sun({
               src="/elements/Sun/sun-plain.png"
               className={cn(shadow && 'drop-shadow-offset-lg')}
               fill
+              sizes="50vw"
             />
           </div>
         </RenderIf>
@@ -49,6 +50,7 @@ export function Sun({
               src="/elements/Sun/sun-pale.png"
               className={cn(shadow && 'drop-shadow-offset-lg')}
               fill
+              sizes="50vw"
             />
           </div>
           <div
@@ -62,6 +64,7 @@ export function Sun({
               src="/elements/Sun/sinar-pale.png"
               className={cn(shadow && 'drop-shadow-offset')}
               fill
+              sizes="50vw"
             />
           </div>
         </RenderIf>

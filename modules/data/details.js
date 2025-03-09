@@ -2,7 +2,7 @@ const details = {
   debate: {
     title: 'Scientific Debate',
     description:
-      'Optimization of Technology in Supporting Renewable Energy Integration. \n\nPaper Competition merupakan kompetisi bidang ketenagalistrikan berupa lomba problem solving tentang Load Flow Diagram, forecasting, sistem proteksi listrik, dan sejenisnya, yang bertujuan mendorong perkembangan dan perencanaan sistem ketenagalistrikan, khususnya di Indonesia.',
+      'Scientific Debate Competition NESCO 2025 adalah kompetisi yang dirancang untuk mengasah kemampuan berpikir kritis, analitis, dan argumentatif para peserta dalam menyikapi isu-isu terkini di bidang ketenagalistrikan dan keberlanjutan lingkungan.',
     kategori: {
       jenis: 'Mahasiswa S1/D4/D3/D2/D1',
       tim: 'Perorangan',
@@ -38,7 +38,7 @@ const details = {
   paper: {
     title: 'Paper Competition',
     description:
-      'Optimization of Technology in Supporting Renewable Energy Integration. \n\nPaper Competition NESCO 2025 merupakan ajang perlombaan yang dirancang untuk menguji kemampuan problem-solving peserta dalam menganalisis dan memberikan solusi atas permasalahan di bidang ketenagalistrikan dan sistem tenaga listrik.',
+      'Paper Competition NESCO 2025 merupakan ajang yang dirancang untuk menguji kemampuan problem-solving peserta dalam menganalisis dan memberikan solusi atas permasalahan di bidang ketenagalistrikan dan sistem tenaga listrik.',
     kategori: {
       jenis: 'Mahasiswa S1/D4/D3/D2/D1',
       tim: 'Perorangan',
@@ -58,7 +58,7 @@ const details = {
     description:
       'Poster Competition NESCO 2025 adalah kompetisi yang dirancang untuk memberikan platform bagi siswa SMA (Junior) dan mahasiswa (Senior) untuk mengungkapkan ide dan pemikiran mereka mengenai berbagai isu dan inovasi di bidang ketenagalistrikan dan energi terbarukan melalui media visual digital.',
     kategori: {
-      jenis: 'Mahasiswa S1/D dan SMA/Sederajat',
+      jenis: 'Mahasiswa / SMA',
       tim: 'Perorangan',
       jumlah: 'Tim maksimal 3 orang',
     },

@@ -20,6 +20,9 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
               className="absolute z-10 h-auto w-full max-w-[15vw]"
             />
             <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+              <div className="absolute aspect-[5/6] w-[70%] overflow-clip rounded-lg">
+                <Image src="/assets/beranda/Galeri/1.webp" fill objectFit="cover" alt="1" />
+              </div>
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1524.png'}
                 width={1000}
@@ -38,6 +41,9 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
               className="absolute z-10 h-auto w-full max-w-[15vw]"
             />
             <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+              <div className="absolute aspect-[3/2] w-[70%] overflow-clip rounded-lg">
+                <Image src="/assets/beranda/Galeri/2.webp" fill objectFit="cover" alt="1" />
+              </div>
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1521.png'}
                 width={1000}
@@ -59,6 +65,9 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
             className="absolute z-10 h-auto w-full max-w-[15vw]"
           />
           <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+            <div className="absolute aspect-square w-[40%] overflow-clip rounded-lg">
+              <Image src="/assets/beranda/Galeri/3.webp" fill objectFit="cover" alt="1" />
+            </div>
             <Image
               src={'/assets/beranda/Galeri/Rectangle 1522.png'}
               width={1000}
@@ -80,6 +89,9 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
               className="absolute z-10 h-auto w-full max-w-[15vw]"
             />
             <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+              <div className="absolute aspect-[3/2] w-[70%] overflow-clip rounded-lg">
+                <Image src="/assets/beranda/Galeri/4.webp" fill objectFit="cover" alt="1" />
+              </div>
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1521.png'}
                 width={1000}
@@ -98,6 +110,9 @@ const GaleriMobile: React.FC<GaleriMobProps> = ({ className }) => {
               className="absolute z-10 h-auto w-full max-w-[15vw] scale-x-[-1]"
             />
             <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+              <div className="absolute aspect-[5/6] w-[70%] overflow-clip rounded-lg">
+                <Image src="/assets/beranda/Galeri/5.webp" fill objectFit="cover" alt="1" />
+              </div>
               <Image
                 src={'/assets/beranda/Galeri/Rectangle 1524.png'}
                 width={1000}

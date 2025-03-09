@@ -43,9 +43,9 @@ export const Galeri = () => {
         Gallery
       </h1>
 
-      <GaleriDesktop className="z-30 hidden md:block" />
+      <GaleriDesktop className="z-30 hidden max-md:collapse md:block" />
 
-      <GaleriMobile className="z-30 md:hidden" />
+      <GaleriMobile className="z-30 md:collapse md:hidden" />
     </div>
   );
 };

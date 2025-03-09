@@ -1,12 +1,16 @@
 import { dataTimeline } from '@/modules/data/timeline';
 import { cn } from '@/lib/utils';
 
-const Garis = () => {
+const Garis = ({ end = false }) => {
   return (
     <>
-      <div className="absolute left-[2.3vw] top-[4.5vw] h-[0.8vw] w-[0.8vw] rounded-full bg-[#EABB37]" />
-      <div className="absolute left-[2.6vw] top-[5vw] h-[4.2vw] w-[0.1vw] bg-[#EABB37] md:left-[2.65vw] md:h-[4vw] lg:h-[2.7vw]" />
-      <div className="absolute left-[2.3vw] top-[8.7vw] h-[0.8vw] w-[0.8vw] rounded-full bg-[#EABB37] md:top-[8.5vw] lg:top-[7.7vw]" />
+      <div className="absolute left-[2.3vw] top-[4.5vw] h-[0.8vw] w-[0.8vw] rounded-full bg-lightyellow duration-500" />
+      {end && (
+        <div className="absolute left-[2.6vw] top-[5vw] h-[4.2vw] w-[0.1vw] bg-lightyellow duration-500 md:left-[2.65vw] md:h-[4vw] lg:h-[2.7vw]" />
+      )}
+      {end && (
+        <div className="absolute left-[2.3vw] top-[8.7vw] h-[0.8vw] w-[0.8vw] rounded-full bg-lightyellow duration-500 md:top-[8.5vw] lg:top-[7.7vw]" />
+      )}
     </>
   );
 };
@@ -16,7 +20,7 @@ const Time = ({ kegiatan, start, end, className, t = false, r = false, l = false
     <>
       <div
         className={cn(
-          'absolute m-[1.8vw] aspect-[28.8/11] w-[45%] rounded-sm bg-[#0f776e] lg:rounded-md',
+          'group absolute m-[1.8vw] aspect-[28.8/11] w-[45%] rounded-sm bg-[#0f776e] text-lightyellow duration-500 hover:scale-[1.025] lg:rounded-md',
           t && 'top-[0%]',
           r && 'right-[0%]',
           b && 'bottom-[0%]',
@@ -24,16 +28,18 @@ const Time = ({ kegiatan, start, end, className, t = false, r = false, l = false
           className,
         )}
       >
-        <h3 className="translate-x-[1.4vw] translate-y-[1.4vw] text-[2vw] font-bold text-[#EABB37] lg:text-[1.7vw]">
+        <h3 className="translate-x-[1.4vw] translate-y-[1.4vw] text-[2vw] font-bold lg:text-[1.5vw]">
           {kegiatan}
         </h3>
-        <Garis />
-        <h6 className="translate-x-[4vw] translate-y-[2.6vw] text-[1.5vw] font-bold text-[#EABB37] lg:text-[1.2vw]">
+        <Garis end={end ? end : null} />
+        <h6 className="translate-x-[4vw] translate-y-[2.6vw] text-[1.5vw] font-bold lg:text-[1.2vw]">
           {start}
         </h6>
-        <h6 className="translate-x-[4vw] translate-y-[4.7vw] text-[1.5vw] font-bold text-[#EABB37] lg:text-[1.2vw]">
-          {end}
-        </h6>
+        {end && (
+          <h6 className="translate-x-[4vw] translate-y-[4.7vw] text-[1.5vw] font-bold lg:text-[1.2vw]">
+            {end}
+          </h6>
+        )}
       </div>
     </>
   );
@@ -43,7 +49,7 @@ export function Timeline({ slug }) {
   const dataTimelineNow = dataTimeline[slug];
   return (
     <div className="relative flex h-[50svh] w-full flex-col items-center justify-start gap-5 bg-darkyellow pt-[10vw] text-5xl font-[700] md:h-[60svh] lg:h-[80svh] xl:h-screen">
-      <h1 className="relative z-[12] font-kodeMono text-[7vw] font-bold md:text-[5vw] lg:text-5xl">
+      <h1 className="relative z-[12] font-kodeMono text-[6vw] font-bold md:text-[5.7vw] lg:text-4xl xl:text-7xl">
         Timeline
       </h1>
       <div className="relative z-[12] aspect-[63/27] w-[84vw] translate-y-[0.2vw] items-center justify-center rounded-md bg-[#ffe08d] drop-shadow-offset md:w-[80vw] md:rounded-lg lg:w-[63vw]">
