@@ -15,7 +15,7 @@ const details = {
       line2: 'hazellut',
     },
     biaya: 'Rp 300.000',
-    guidebook: 'Link',
+    guidebook: 'https://bit.ly/GuidebookScientificDebateNesco2025',
   },
   innovation: {
     title: 'Innovation Challenge',
@@ -33,7 +33,7 @@ const details = {
       line2: 'nassywats',
     },
     biaya: 'Rp 100.000',
-    guidebook: 'Link',
+    guidebook: 'https://bit.ly/GuidebookInnovationChallengeNesco2025 ',
   },
   paper: {
     title: 'Paper Competition',
@@ -51,7 +51,7 @@ const details = {
       line2: 'bismadaniswara',
     },
     biaya: 'Rp 100.000',
-    guidebook: 'Link',
+    guidebook: 'https://bit.ly/GuidebookPaperCompetitionNesco2025 ',
   },
   poster: {
     title: 'Poster Competition',
@@ -69,7 +69,7 @@ const details = {
       line2: 'putraparindra_',
     },
     biaya: 'Rp 50.000 / Rp 80.000',
-    guidebook: 'Link',
+    guidebook: 'https://bit.ly/GuidebookPosterCompetitionNesco2025 ',
   },
 };
 
