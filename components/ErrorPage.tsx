@@ -44,7 +44,7 @@ export default function ErrorPage({ pesan, text1, text2 }: ErrorPageProps) {
       />
       {/* 404 */}
       <h1 className="absolute z-[50] font-kodeMono text-[17vw] font-[700] drop-shadow-offset md:text-[14vw] lg:text-[65px] xl:text-[100px] 2xl:text-[130px]">
-        <DecryptedText text={pesan} animateOn="view" speed={60} maxIterations={20} />
+        <DecryptedText text={pesan} animateOn="view" speed={60} maxIterations={40} />
       </h1>
       {/* Matahari */}
       <Sun
