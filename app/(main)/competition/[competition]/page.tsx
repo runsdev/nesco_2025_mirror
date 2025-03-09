@@ -5,9 +5,11 @@ import { notFound } from 'next/navigation';
 import { Details, Hero, Prizepool, Timeline } from '@/modules/competition';
 import Image from 'next/image';
 import '@/styles/globals.css';
+import { useRef } from 'react';
 
 export default async function Page({ params }: { params: Promise<{ competition: string }> }) {
   const { competition: slug } = await params;
+
   const slugList = agendaData.map((agenda) => agenda.slug);
   if (slug === 'seminar') {
     return notFound();

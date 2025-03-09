@@ -134,7 +134,7 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ ease: 'linear', duration: 0.3 }}
-          className="absolute left-0 top-full z-10 w-full border-b-2 border-white bg-lightyellow"
+          className="absolute left-0 top-full z-10 w-full bg-lightyellow drop-shadow-offset"
         >
           <ul className="flex flex-row items-center justify-between px-6 pb-[2vw] text-[2.8vw] font-bold text-darkblue">
             {user ? (
@@ -286,7 +286,7 @@ export const Navbar = () => {
   }, [supabase.auth]);
 
   return (
-    <nav className="fixed left-0 top-0 z-[60] w-full border-b-2 border-white bg-lightyellow font-kodeMono">
+    <nav className="fixed left-0 top-0 z-[60] w-full bg-lightyellow font-kodeMono drop-shadow-offset">
       <div>
         {/* Logo */}
         <div className="relative mx-auto hidden items-center justify-between px-[4vw] md:flex">
