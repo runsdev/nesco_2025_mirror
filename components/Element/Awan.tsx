@@ -28,7 +28,12 @@ export function Awan({ className = '', flip = false, variant = 1 }: Awan) {
           ratio[variant - 1],
         )}
       >
-        <Image alt={`awan ${variant}`} src={`/elements/Awan/awan-${variant}.png`} fill />
+        <Image
+          alt={`awan ${variant}`}
+          src={`/elements/Awan/awan-${variant}.png`}
+          fill
+          sizes="30vw"
+        />
       </div>
     </div>
   );

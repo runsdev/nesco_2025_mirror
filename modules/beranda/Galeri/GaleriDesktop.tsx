@@ -19,13 +19,13 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
               alt="Drone 6"
               className="h-auto w-full max-w-[15vw]"
             />
-            <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+            <div className="flex aspect-[3/2] h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-offset-lg">
               <Image
-                src={'/assets/beranda/Galeri/Rectangle 1521.png'}
-                width={1000}
-                height={1000}
+                src={'/assets/beranda/Galeri/1.webp'}
                 alt="Pic 1"
-                className="h-auto w-full object-contain"
+                fill
+                objectFit="cover"
+                className="absolute"
               />
             </div>
           </div>
@@ -37,13 +37,13 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
               alt="Drone 6"
               className="absolute z-10 h-auto w-full max-w-[15vw]"
             />
-            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+            <div className="mt-[4vw] flex aspect-[5/6] h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg drop-shadow-offset-lg">
               <Image
-                src={'/assets/beranda/Galeri/Rectangle 1524.png'}
-                width={1000}
-                height={1000}
-                alt="Pic 1"
-                className="h-auto w-full object-contain"
+                src={'/assets/beranda/Galeri/2.webp'}
+                alt="Pic 2"
+                fill
+                objectFit="cover"
+                className="absolute"
               />
             </div>
           </div>
@@ -58,13 +58,13 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
             alt="Drone 6"
             className="h-auto w-full max-w-[15vw]"
           />
-          <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+          <div className="flex aspect-square h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg drop-shadow-offset-lg">
             <Image
-              src={'/assets/beranda/Galeri/Rectangle 1522.png'}
-              width={1000}
-              height={1000}
-              alt="Pic 1"
-              className="h-auto w-full object-contain"
+              src={'/assets/beranda/Galeri/3.webp'}
+              alt="Pic 3"
+              fill
+              objectFit="cover"
+              className="absolute"
             />
           </div>
         </div>
@@ -79,13 +79,13 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
               alt="Drone 6"
               className="absolute z-10 h-auto w-full max-w-[15vw] scale-x-[-1]"
             />
-            <div className="mt-[4vw] flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+            <div className="mt-[4vw] flex aspect-[5/6] h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg drop-shadow-offset-lg">
               <Image
-                src={'/assets/beranda/Galeri/Rectangle 1524.png'}
-                width={1000}
-                height={1000}
-                alt="Pic 1"
-                className="h-auto w-full object-contain"
+                src={'/assets/beranda/Galeri/4.webp'}
+                alt="Pic 4"
+                fill
+                objectFit="cover"
+                className="absolute"
               />
             </div>
           </div>
@@ -97,13 +97,13 @@ const GaleriDesktop: React.FC<GaleriDesktopProps> = ({ className }) => {
               alt="Drone 6"
               className="h-auto w-full max-w-[15vw]"
             />
-            <div className="flex h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg">
+            <div className="flex aspect-[3/2] h-auto w-full items-center justify-center overflow-hidden rounded-lg drop-shadow-lg drop-shadow-offset-lg">
               <Image
-                src={'/assets/beranda/Galeri/Rectangle 1521.png'}
-                width={1000}
-                height={1000}
-                alt="Pic 1"
-                className="h-auto w-full object-contain"
+                src={'/assets/beranda/Galeri/5.webp'}
+                alt="Pic 5"
+                fill
+                objectFit="cover"
+                className="absolute"
               />
             </div>
           </div>

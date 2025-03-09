@@ -26,6 +26,8 @@ export const Hero = () => {
             alt="NESCO 2025 NATIONAL ELECTRICAL POWER SYSTEM COMPETITION 2025"
             src="/assets/beranda/Hero/nesco2025.png"
             fill
+            sizes="50vw"
+            priority
           />
         </div>
         <LogoNesco
@@ -54,14 +56,24 @@ export const Hero = () => {
         data-aos-delay="1000"
         className="absolute bottom-[8vw] left-[-14%] z-[8] aspect-[1194/1450] w-[58%] md:left-[-13%] md:w-[55%] lg:left-[-6%] lg:w-[29.5%]"
       >
-        <Image alt="gunung nesco kiri" src="/assets/beranda/Hero/gunung-kiri.png" fill />
+        <Image
+          alt="gunung nesco kiri"
+          src="/assets/beranda/Hero/gunung-kiri.png"
+          fill
+          sizes="50vw"
+        />
       </div>
       <div
         data-aos="fade-left"
         data-aos-delay="900"
         className="absolute bottom-[4vw] right-[-25%] z-[8] aspect-[631/728] w-[68%] md:right-[-24%] md:w-[70%] lg:right-[-8%] lg:w-[34%]"
       >
-        <Image alt="gunung nesco kanan" src="/assets/beranda/Hero/gunung-kanan.png" fill />
+        <Image
+          alt="gunung nesco kanan"
+          src="/assets/beranda/Hero/gunung-kanan.png"
+          fill
+          sizes="50vw"
+        />
       </div>
       {/* Gunung kanan */}
       <div
