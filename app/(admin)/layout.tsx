@@ -4,9 +4,9 @@ import { Kode_Mono } from 'next/font/google';
 import { Montserrat } from 'next/font/google';
 import '../../styles/globals.css';
 
+import { Analytics } from '@vercel/analytics/next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
-import { Analytics } from '@vercel/analytics/next';
 
 const geist = Geist({
   display: 'swap',
@@ -25,16 +25,6 @@ const montserrat = Montserrat({
   subsets: ['latin'],
 });
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : 'http://localhost:3000';
-
-export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: 'Dashboard',
-  description: 'National Electrical Power System Competition 2025',
-};
-
 export default async function DashboardRootLayout({
   children,
 }: Readonly<{
@@ -44,7 +34,7 @@ export default async function DashboardRootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="bg-gradient-to-b from-[#61CCC2] to-[#FFE08D]">
+      <body className="">
         <NextIntlClientProvider messages={messages}>
           {children} <Analytics />
         </NextIntlClientProvider>

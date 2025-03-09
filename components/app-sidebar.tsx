@@ -10,6 +10,7 @@ import {
   Command,
   Frame,
   GalleryVerticalEnd,
+  Speech,
   Image,
   Info,
   Map,
@@ -18,6 +19,10 @@ import {
   Settings2,
   SquareTerminal,
   User2,
+  Ear,
+  Lightbulb,
+  Lectern,
+  Podcast,
 } from 'lucide-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -39,6 +44,54 @@ const data = {
     avatar: '/avatars/shadcn.jpg',
   },
   navMain: [
+    {
+      title: 'Debate Competition',
+      url: '#',
+      icon: Speech,
+      // isActive: true,
+      items: [
+        {
+          title: 'Overview',
+          url: '#',
+        },
+        {
+          title: 'Terms and Conditions',
+          url: '#',
+        },
+        {
+          title: 'Registration',
+          url: '#',
+        },
+        {
+          title: 'Submission',
+          url: '#',
+        },
+      ],
+    },
+    {
+      title: 'Electricity Innovation',
+      url: '#',
+      icon: Lightbulb,
+      // isActive: true,
+      items: [
+        {
+          title: 'Overview',
+          url: '#',
+        },
+        {
+          title: 'Terms and Conditions',
+          url: '#',
+        },
+        {
+          title: 'Registration',
+          url: '#',
+        },
+        {
+          title: 'Submission',
+          url: '#',
+        },
+      ],
+    },
     {
       title: 'Paper Competition',
       url: '#',
@@ -87,32 +140,9 @@ const data = {
       ],
     },
     {
-      title: 'Documentation',
+      title: 'Seminar',
       url: '#',
-      icon: BookOpen,
-      items: [
-        {
-          title: 'Overview',
-          url: '#',
-        },
-        {
-          title: 'Terms and Conditions',
-          url: '#',
-        },
-        {
-          title: 'Registration',
-          url: '#',
-        },
-        {
-          title: 'Submission',
-          url: '#',
-        },
-      ],
-    },
-    {
-      title: 'Settings',
-      url: '#',
-      icon: Settings2,
+      icon: Podcast,
       items: [
         {
           title: 'Overview',

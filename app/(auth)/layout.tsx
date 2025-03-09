@@ -8,6 +8,7 @@ import { ThemeProvider } from 'next-themes';
 import Link from 'next/link';
 import '../../styles/globals.css';
 import { cn } from '@/lib/utils';
+import { Analytics } from '@vercel/analytics/next';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -15,8 +16,8 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: 'NESCO 2025',
-  description: 'National Electrical Power System Competition 2025',
+  title: 'Sign In to NESCO',
+  description: 'Enroll yourself to this prestigious electrical power system event',
 };
 
 const geistSans = Geist({
@@ -71,7 +72,9 @@ export default async function RootLayout({
                     <HeaderAuth />
                   </div>
                 </nav> */}
-                <div className="min-w-full">{children}</div>
+                <div className="min-w-full">
+                  {children} <Analytics />
+                </div>
 
                 {/* <footer className="mx-auto flex w-full items-center justify-between gap-8 border-t py-6 text-center text-xs">
                   <p className="ml-8">Powered by NESCO 2025</p>

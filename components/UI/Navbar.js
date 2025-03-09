@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { IoIosArrowDown } from 'react-icons/io';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogoNesco } from '@/components/Element/index';
+import { createClient } from '@/utils/supabase/client';
+import Image from 'next/image';
 
 const routes = [
   {
@@ -20,11 +22,11 @@ const routes = [
         href: '/competition/innovation',
       },
       {
-        name: 'Paper',
+        name: 'Paper Competition',
         href: '/competition/paper',
       },
       {
-        name: 'Poster',
+        name: 'Poster Competition',
         href: '/competition/poster',
       },
     ],
@@ -37,6 +39,11 @@ const routes = [
     name: 'FAQ',
     href: '/faq',
   },
+];
+
+const userChild = [
+  { name: 'Dashboard', href: '/dashboard', isButton: false },
+  { name: 'Logout', href: null, isButton: true },
 ];
 
 /* Navbar Desktop */
@@ -101,7 +108,7 @@ const DesktopMenu = ({ openDropdown, toggleMainDropdown }) => (
 );
 
 /* Navbar Mobile  */
-const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDropdown }) => (
+const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDropdown, user }) => (
   <div className="md:hidden">
     <div className="relative mx-auto flex items-center justify-between px-6 py-2">
       <Link href="/" className="group flex cursor-pointer items-center space-x-2">
@@ -127,17 +134,74 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ ease: 'linear', duration: 0.3 }}
-          className="absolute left-0 top-full z-10 w-full border-b-2 border-white bg-lightyellow"
+          className="absolute left-0 top-full z-10 w-full bg-lightyellow drop-shadow-offset"
         >
           <ul className="flex flex-row items-center justify-between px-6 pb-[2vw] text-[2.8vw] font-bold text-darkblue">
-            <button
-              type="button"
-              className="rounded-md bg-lightblue px-[2.5vw] py-1 font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow"
-            >
-              <Link href="/auth/sign-in">
-                <p>SIGN IN</p>
-              </Link>
-            </button>
+            {user ? (
+              <div className="relative">
+                <button
+                  type="button"
+                  className="flex w-[23vw] items-center justify-center space-x-2 rounded-md bg-lightblue py-1 font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow"
+                  onClick={() => toggleChildDropdown(!openChild)}
+                  onBlur={() => toggleChildDropdown(null)}
+                >
+                  <Image
+                    src={user?.user_metadata?.avatar_url || ''}
+                    alt="User Avatar"
+                    width={500}
+                    height={500}
+                    className="h-auto w-[5vw] rounded-full"
+                  />
+                  <IoIosArrowDown
+                    className={`transition-transform duration-500 ease-in-out ${openChild ? 'rotate-180' : ''}`}
+                  />
+                </button>
+
+                <motion.div
+                  className={`absolute left-0 right-0 z-10 mt-[3vw] w-[23vw] overflow-hidden rounded-lg bg-lightyellow p-[0.5vw] text-center shadow-md transition-opacity duration-500 ${
+                    openChild ? 'visible opacity-100' : 'invisible opacity-0'
+                  }`}
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{
+                    height: openChild ? 'auto' : 0,
+                    opacity: openChild ? 1 : 0,
+                  }}
+                >
+                  {userChild.map((item, index) =>
+                    item.isButton ? (
+                      <button
+                        key={index}
+                        type="button"
+                        className="block w-full text-nowrap px-4 pb-3 text-left !font-montserrat text-[2.2vw] font-bold !leading-none text-darkblue opacity-70 transition-all duration-200 ease-in-out hover:text-lightblue hover:opacity-100"
+                        onClick={async () => {
+                          await supabase.auth.signOut();
+                          setUser(null);
+                        }}
+                      >
+                        {item.name}
+                      </button>
+                    ) : (
+                      <Link
+                        key={index}
+                        href={item.href}
+                        className="block w-full text-nowrap px-4 py-3 text-left !font-montserrat text-[2.2vw] font-bold !leading-none text-darkblue opacity-70 transition-all duration-200 ease-in-out hover:text-lightblue hover:opacity-100"
+                      >
+                        {item.name}
+                      </Link>
+                    ),
+                  )}
+                </motion.div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                className="rounded-md bg-lightblue px-[2.5vw] py-1 font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow active:bg-darkyellow"
+              >
+                <Link href="/auth/sign-in">
+                  <p>SIGN IN</p>
+                </Link>
+              </button>
+            )}
             {routes.map((route, index) => (
               <li key={index} className="group relative">
                 {route.child ? (
@@ -200,6 +264,7 @@ const MobileMenu = ({ openDropdown, toggleMainDropdown, openChild, toggleChildDr
 export const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(false);
   const [openChild, setopenChild] = useState(null);
+  const [user, setUser] = useState(null);
 
   const toggleMainDropdown = (index) => {
     setOpenDropdown(openDropdown === index ? false : index);
@@ -207,8 +272,21 @@ export const Navbar = () => {
   };
   const toggleChildDropdown = (index) => setopenChild(openChild === index ? null : index);
 
+  const supabase = createClient();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      setUser(user);
+    }
+
+    fetchUser();
+  }, [supabase.auth]);
+
   return (
-    <nav className="fixed left-0 top-0 z-[60] w-full border-b-2 border-white bg-lightyellow font-kodeMono">
+    <nav className="fixed left-0 top-0 z-[60] w-full bg-lightyellow font-kodeMono drop-shadow-offset">
       <div>
         {/* Logo */}
         <div className="relative mx-auto hidden items-center justify-between px-[4vw] md:flex">
@@ -225,14 +303,69 @@ export const Navbar = () => {
           {/* Desktop Menu */}
           <DesktopMenu openDropdown={openDropdown} toggleMainDropdown={toggleMainDropdown} />
 
-          <button
-            type="button"
-            className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
-          >
-            <Link href="/auth/sign-in">
-              <p>SIGN IN</p>
-            </Link>
-          </button>
+          {user ? (
+            <div className="relative">
+              <button
+                type="button"
+                className="flex items-center space-x-2 rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
+                onClick={() => toggleMainDropdown(!openDropdown)}
+              >
+                <Image
+                  src={user?.user_metadata?.avatar_url || ''}
+                  width={500}
+                  height={500}
+                  alt="User Avatar"
+                  className="h-8 w-8 rounded-full"
+                />
+                <IoIosArrowDown
+                  className={`transition-transform duration-500 ease-in-out ${openDropdown ? 'rotate-180' : ''}`}
+                />
+              </button>
+              <motion.div
+                className={`absolute left-0 right-0 z-10 mt-[3vw] w-fit overflow-hidden rounded-lg bg-lightyellow px-[1.5vw] py-2 text-center shadow-md transition-opacity duration-500 ease-in-out xl:mt-[2vw] xl:px-[22px] ${
+                  openDropdown ? 'visible opacity-100' : 'invisible·opacity-0'
+                }`}
+                initial={{ height: 0, opacity: 0 }}
+                animate={{
+                  height: openDropdown ? 'auto' : 0,
+                  opacity: openDropdown ? 1 : 0,
+                }}
+              >
+                {userChild.map((item, index) =>
+                  item.isButton ? (
+                    <button
+                      key={index}
+                      type="button"
+                      className="block w-full text-nowrap py-3 text-left !font-montserrat text-[1.5vw] font-bold !leading-none text-darkblue opacity-70 transition-all duration-200 ease-in-out hover:text-lightblue hover:opacity-100 xl:text-[1.1vw]"
+                      onClick={async () => {
+                        await supabase.auth.signOut();
+                        setUser(null);
+                      }}
+                    >
+                      {item.name}
+                    </button>
+                  ) : (
+                    <Link
+                      key={index}
+                      href={item.href}
+                      className="block w-full text-nowrap py-3 text-left !font-montserrat text-[1.5vw] font-bold !leading-none text-darkblue opacity-70 transition-all duration-200 ease-in-out hover:text-lightblue hover:opacity-100 xl:text-[1.1vw]"
+                    >
+                      {item.name}
+                    </Link>
+                  ),
+                )}
+              </motion.div>
+            </div>
+          ) : (
+            <button
+              type="button"
+              className="rounded-md bg-lightblue px-[2.7vw] py-[0.5vw] text-[1.6vw] font-bold text-darkblue transition-all duration-500 ease-in-out hover:bg-blue hover:text-lightyellow hover:shadow-2xl active:bg-darkyellow xl:text-[1.1vw]"
+            >
+              <Link href="/auth/sign-in">
+                <p className="transition-all duration-500 ease-in-out hover:scale-105">SIGN IN</p>
+              </Link>
+            </button>
+          )}
         </div>
 
         {/* Mobile Menu */}
@@ -241,6 +374,7 @@ export const Navbar = () => {
           toggleMainDropdown={toggleMainDropdown}
           openChild={openChild}
           toggleChildDropdown={toggleChildDropdown}
+          user={user}
         />
       </div>
     </nav>
