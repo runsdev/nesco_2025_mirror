@@ -175,3 +175,25 @@ export async function deleteFolder(folderId: string): Promise<boolean> {
     throw new Error(`Failed to delete folder: ${error.message}`);
   }
 }
+
+/**
+ * Deletes a file from Google Drive
+ * @param fileId ID of the file to delete
+ * @returns True if deletion was successful
+ */
+export async function deleteFile(fileId: string): Promise<boolean> {
+  if (!fileId) {
+    throw new Error('File ID is required');
+  }
+
+  try {
+    const auth = getAuth();
+    const drive = google.drive({ version: 'v3', auth });
+
+    await drive.files.delete({ fileId });
+    return true;
+  } catch (error: any) {
+    console.error('Error deleting file:', error.message);
+    throw new Error(`Failed to delete file: ${error.message}`);
+  }
+}

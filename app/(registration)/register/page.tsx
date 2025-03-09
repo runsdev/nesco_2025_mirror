@@ -285,14 +285,19 @@ export default function RegisterPage() {
         name: leader,
       });
 
-      await Promise.all(
-        members.map(async (member) => {
-          return supabase.from('team_members').insert({
-            team_id: teamsData?.[0].id,
-            name: member,
-          });
-        }),
-      );
+      // Only insert members if they exist
+      if (members.length > 0 && members.some((m) => m.trim() !== '')) {
+        await Promise.all(
+          members
+            .filter((member) => member.trim() !== '') // Filter out empty member names
+            .map(async (member) => {
+              return supabase.from('team_members').insert({
+                team_id: teamsData?.[0].id,
+                name: member,
+              });
+            }),
+        );
+      }
 
       const { error: dbRegistrationError } = await supabase.from('registrations').insert({
         team_id: teamsData?.[0].id,
@@ -699,7 +704,10 @@ export default function RegisterPage() {
               <li>Setiap file yang diunggah tidak boleh melebihi 10MB</li>
               <li>Semua file harus dalam format yang ditentukan (PDF/Image)</li>
               <li>
-                Pastikan kondisi jaringan internet Anda <b>stabil</b> saat mengunggah file
+                Pastikan kondisi jaringan internet Anda <b>stabil</b> saat mengunggah file.
+                {/*  Beberapa{' '}
+                <i>Internet Service Provider</i> yang dilaporkan mungkin terjadi masalah adalah{' '}
+                <b>Telkomsel, By.U</b>. */}
               </li>
             </ul>
           </div>

@@ -24,6 +24,7 @@ export default function AdminDashboard() {
   const [teamFiles, setTeamFiles] = useState<{ [key: string]: any }>({});
   const [teamMembers, setTeamMembers] = useState<{ [key: string]: any[] }>({});
   const [submissions, setSubmissions] = useState<{ [key: string]: any[] }>({});
+  const [registrations, setRegistrations] = useState<{ [key: string]: any[] }>({});
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, pending, verified
   const [competitionFilter, setCompetitionFilter] = useState('all');
@@ -112,8 +113,7 @@ export default function AdminDashboard() {
       // Fetch all submissions
       const { data: submissionsData, error: submissionsError } = await supabase
         .from('submissions')
-        .select('*')
-        .order('submitted_at', { ascending: false });
+        .select('*');
 
       if (!submissionsError && submissionsData) {
         const submissionsMap = submissionsData.reduce((acc: any, submission: any) => {
@@ -124,6 +124,21 @@ export default function AdminDashboard() {
           return acc;
         }, {});
         setSubmissions(submissionsMap);
+      }
+
+      const { data: registrationData, error: registrationError } = await supabase
+        .from('registrations')
+        .select('*');
+
+      if (!registrationError && registrationData) {
+        const registrationMap = registrationData.reduce((acc: any, registration: any) => {
+          if (!acc[registration.team_id]) {
+            acc[registration.team_id] = [];
+          }
+          acc[registration.team_id].push(registration);
+          return acc;
+        }, {});
+        setRegistrations(registrationMap);
       }
 
       setIsLoading(false);
@@ -157,8 +172,18 @@ export default function AdminDashboard() {
       .update({ verified: verifyStatus })
       .eq('id', teamId);
 
+    const { error: updateError } = await supabase
+      .from('registrations')
+      .update({ verified: verifyStatus })
+      .eq('team_id', teamId);
+
     if (error) {
       console.error('Error updating team verification status:', error);
+      return;
+    }
+
+    if (updateError) {
+      console.error('Error updating registration verification status:', updateError);
       return;
     }
 

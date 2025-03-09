@@ -1,8 +1,8 @@
 {
   "auth": {
     "signin": {
-      "title": "Login to your account",
-      "description": "Use one of these services to login",
+      "title": "Sign-in to your account",
+      "description": "Use one of these services to sign-in",
       "login_with_google": "Login with Google",
       "login_with_github": "Login with GitHub",
       "terms_and_privacy": {
