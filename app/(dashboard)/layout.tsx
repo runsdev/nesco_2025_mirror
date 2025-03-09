@@ -24,6 +24,16 @@ const montserrat = Montserrat({
   subsets: ['latin'],
 });
 
+const defaultUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : 'http://localhost:3000';
+
+export const metadata = {
+  metadataBase: new URL(defaultUrl),
+  title: 'Dashboard',
+  description: 'National Electrical Power System Competition 2025',
+};
+
 export default async function DashboardRootLayout({
   children,
 }: Readonly<{
@@ -33,15 +43,8 @@ export default async function DashboardRootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className="">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
-        </ThemeProvider>
+      <body className="bg-gradient-to-b from-[#61CCC2] to-[#FFE08D]">
+        <NextIntlClientProvider messages={messages}>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

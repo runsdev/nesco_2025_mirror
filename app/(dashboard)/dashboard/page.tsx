@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/UI/badge';
 import { Button } from '@/components/UI/button';
 import { FileIcon, UploadIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
+import { dataTimeline } from '@/modules/data/timeline';
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -154,29 +155,49 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="mb-8">
+      {/* <div className="mb-8">
         <h1 className="mb-2 text-3xl font-bold">Dashboard Peserta</h1>
-        <p className="text-gray-600">Selamat datang, {user?.email}</p>
+        <p className="text-gray-600">Selamat datang, {teamData?.leader}</p>
+      </div> */}
+
+      <div className="mb-4">
+        <Button
+          onClick={() => router.push('/')}
+          variant="secondary"
+          className="flex items-center gap-2"
+        >
+          <span>&#8592;</span> Kembali ke Beranda
+        </Button>
       </div>
 
       <div className="mb-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
-              <span>Kompetisi {teamData?.competition}</span>
+              <span>{teamData?.competition}</span>
               <Badge variant={teamData?.verified ? 'success' : 'secondary'}>
                 {teamData?.verified ? 'Terverifikasi' : 'Menunggu Verifikasi'}
               </Badge>
             </CardTitle>
-            <CardDescription>Status pendaftaran dan informasi tim</CardDescription>
+            <CardDescription>Status Pendaftaran dan Informasi Tim</CardDescription>
           </CardHeader>
         </Card>
       </div>
 
       <Tabs defaultValue="data" className="w-full">
         <TabsList className="mb-4 grid w-full grid-cols-2">
-          <TabsTrigger value="data">Data</TabsTrigger>
-          <TabsTrigger value="submission">Submission</TabsTrigger>
+          <TabsTrigger value="data" className="data-[state=active]:text-white">
+            Data
+          </TabsTrigger>
+          {/* <TabsTrigger value="timeline">Timeline</TabsTrigger> */}
+          {teamData?.verified && teamData?.competition !== 'Scientific Debate' && (
+            <TabsTrigger value="submission" className="data-[state=active]:text-white">
+              Submission
+            </TabsTrigger>
+          )}
+          <TabsTrigger value="timeline" className="data-[state=active]:text-white">
+            Timeline
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="data">
@@ -248,7 +269,7 @@ export default function Dashboard() {
           </div>
         </TabsContent>
 
-        {teamData?.verified && (
+        {teamData?.verified && teamData?.competition !== 'Scientific Debate' && (
           <TabsContent value="submission">
             <Card>
               <CardHeader>
@@ -355,6 +376,63 @@ export default function Dashboard() {
             </Card>
           </TabsContent>
         )}
+
+        <TabsContent value="timeline">
+          <Card>
+            <CardHeader>
+              <CardTitle>Timeline Lomba</CardTitle>
+              <CardDescription>Jadwal kegiatan untuk lomba {teamData?.competition}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {teamData && (
+                <div className="space-y-6">
+                  <div className="relative">
+                    <div className="absolute bottom-0 left-4 top-0 w-0.5 bg-gray-200"></div>
+                    <div className="space-y-6">
+                      {(() => {
+                        const competitionKey =
+                          teamData.competition === 'Scientific Debate'
+                            ? 'debate'
+                            : teamData.competition === 'Technology Innovation'
+                              ? 'innovation'
+                              : teamData.competition === 'Poster'
+                                ? 'poster'
+                                : 'paper';
+
+                        // Import this at the top of your component when implementing
+
+                        return dataTimeline[competitionKey].map((item, index) => (
+                          <div key={index} className="flex">
+                            <div className="mr-4 mt-1 flex-none">
+                              <div className="bg-blue-500 flex h-8 w-8 items-center justify-center rounded-full text-white">
+                                {index + 1}
+                              </div>
+                            </div>
+                            <div className="flex-1">
+                              <h3 className="text-lg font-medium">{item.kegiatan}</h3>
+                              <div className="text-sm text-gray-600">
+                                {item.start === item.end
+                                  ? item.start
+                                  : `${item.start} - ${item.end}`}
+                              </div>
+                              <div className="bg-blue-50 mt-2 rounded-md px-3 py-2 text-sm">
+                                {index === 0
+                                  ? 'Masa pendaftaran lomba'
+                                  : index === dataTimeline[competitionKey].length - 1
+                                    ? 'Pengumuman pemenang'
+                                    : `Tahap ${index}`}
+                              </div>
+                            </div>
+                          </div>
+                        ));
+                      })()}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </TabsContent>
       </Tabs>
     </div>
   );

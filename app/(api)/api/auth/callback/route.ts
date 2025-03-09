@@ -3,8 +3,8 @@ import { NextResponse } from 'next/server';
 import { createClient } from '@/utils/supabase/server';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const origin = request.headers.get('host') ? `https://${request.headers.get('host')}` : '';
+  const { searchParams, origin } = new URL(request.url);
+  // const origin = request.headers.get('host') ? `https://${request.headers.get('host')}` : '';
   const code = searchParams.get('code');
   // if "next" is in param, use it as the redirect URL
   const next = searchParams.get('next') ?? '/';
