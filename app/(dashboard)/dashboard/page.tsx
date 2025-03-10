@@ -112,9 +112,9 @@ export default function Dashboard() {
         }
 
         const FolderId =
-          teamData.competition === 'Innovation Challenge'
+          teamsData.competition === 'Innovation Challenge'
             ? process.env.NEXT_PUBLIC_INNOVATION_SUBMISSION_FOLDER_ID
-            : teamData.competition.includes('Poster')
+            : teamsData.competition.includes('Poster')
               ? process.env.NEXT_PUBLIC_POSTER_SUBMISSION_FOLDER_ID
               : process.env.NEXT_PUBLIC_PAPER_SUBMISSION_FOLDER_ID;
 
