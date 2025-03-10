@@ -687,7 +687,9 @@ export default function Dashboard() {
                             id="submission-file"
                             type="file"
                             accept={
-                              teamData.competition.includes('Poster') ? 'image/*,.zip,.rar' : '.pdf'
+                              teamData?.competition.includes('Poster')
+                                ? 'image/*,.zip,.rar'
+                                : '.pdf'
                             }
                             onChange={handleFileUpload}
                             className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
@@ -704,7 +706,7 @@ export default function Dashboard() {
                     )}
 
                     {/* Second submission (only for Poster 2 Karya) */}
-                    {teamData.competition === 'Poster Competition 2 Karya' &&
+                    {teamData?.competition === 'Poster Competition 2 Karya' &&
                       (submissions.find((s) => s.submission_2) ? (
                         <div className="flex flex-col rounded-lg border p-4">
                           <h3 className="mb-2 font-medium">Karya Kedua</h3>
@@ -792,7 +794,7 @@ export default function Dashboard() {
                       ))}
 
                     {/* Originality file (only for Poster competitions) */}
-                    {teamData.competition.includes('Poster') &&
+                    {teamData?.competition.includes('Poster') &&
                       (submissions.find((s) => s.originality) ? (
                         <div className="flex flex-col rounded-lg border p-4">
                           <h3 className="mb-2 font-medium">Surat Pernyataan Orisinalitas</h3>
@@ -935,12 +937,12 @@ export default function Dashboard() {
                     <div className="space-y-6">
                       {(() => {
                         const competitionKey =
-                          teamData.competition === 'Scientific Debate'
+                          teamData?.competition === 'Scientific Debate'
                             ? 'debate'
-                            : teamData.competition === 'Technology Innovation'
+                            : teamData?.competition === 'Technology Innovation'
                               ? 'innovation'
-                              : teamData.competition === 'Poster Competition 1 Karya' ||
-                                  teamData.competition === 'Poster Competition 2 Karya'
+                              : teamData?.competition === 'Poster Competition 1 Karya' ||
+                                  teamData?.competition === 'Poster Competition 2 Karya'
                                 ? 'poster'
                                 : 'paper';
 
