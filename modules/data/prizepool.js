@@ -89,7 +89,7 @@ const dataPrizepool = {
         },
         {
           nama: 'Third Place',
-          url: '/prizepoolCompt/3nd-place-medal-svgrepo-com.svg',
+          url: '/prizepoolCompt/3rd-place-medal-svgrepo-com.svg',
           hadiah: 'Rp 400.000\nCertificate + Trophy',
         },
       ],
