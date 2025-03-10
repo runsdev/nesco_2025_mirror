@@ -29,6 +29,15 @@ export default function Dashboard() {
   const [originals, setOriginals] = useState<any[]>([]);
   const [isVerified, setIsVerified] = useState(false);
 
+  const submissionFolderId =
+    teamData.competition === 'Innovation Challenge'
+      ? process.env.NEXT_PUBLIC_INNOVATION_SUBMISSION_FOLDER_ID
+      : teamData.competition.includes('Poster')
+        ? process.env.NEXT_PUBLIC_POSTER_SUBMISSION_FOLDER_ID
+        : process.env.NEXT_PUBLIC_PAPER_SUBMISSION_FOLDER_ID;
+
+  const originalityFolderId = process.env.NEXT_PUBLIC_ORIGINALITY_SUBMISSION_FOLDER_ID;
+
   const supabase = createClient();
   const router = useRouter();
 
@@ -132,16 +141,13 @@ export default function Dashboard() {
       const fileExt = submissionFile.name.split('.').pop();
       const fileName = `${teamData.competition}_${teamData.team_name}_${Date.now()}.${fileExt}`;
 
-      // Upload to storage
-      // Prepare folder structure in Google Drive
-      const competitionFolderId = await createFolder(
-        teamData.competition,
-        process.env.NEXT_PUBLIC_GOOGLE_SUBMISSION_FOLDER_ID!,
-      );
-      const teamFolderId = await createFolder(teamData.team_name, competitionFolderId);
-
       // Upload file to Google Drive in the team's folder
-      const uploadResult = await uploadToDrive(submissionFile, teamFolderId, fileName, user!.email);
+      const uploadResult = await uploadToDrive(
+        submissionFile,
+        submissionFolderId!,
+        fileName,
+        user!.email,
+      );
 
       // Find existing submission record
       const { data: existingSubmission } = await supabase
@@ -203,18 +209,10 @@ export default function Dashboard() {
       const fileExt = secondSubmissionFile.name.split('.').pop();
       const fileName = `${teamData.competition}_${teamData.team_name}_${Date.now()}.${fileExt}`;
 
-      // Upload to storage
-      // Prepare folder structure in Google Drive
-      const competitionFolderId = await createFolder(
-        teamData.competition,
-        process.env.NEXT_PUBLIC_GOOGLE_SUBMISSION_FOLDER_ID!,
-      );
-      const teamFolderId = await createFolder(teamData.team_name, competitionFolderId);
-
       // Upload file to Google Drive in the team's folder
       const uploadResult = await uploadToDrive(
         secondSubmissionFile,
-        teamFolderId,
+        submissionFolderId!,
         fileName,
         user!.email,
       );
@@ -280,17 +278,10 @@ export default function Dashboard() {
       const fileExt = originalityFile.name.split('.').pop();
       const fileName = `${teamData.competition}_${teamData.team_name}_Originality_${Date.now()}.${fileExt}`;
 
-      // Upload to storage
-      const competitionFolderId = await createFolder(
-        teamData.competition,
-        process.env.NEXT_PUBLIC_GOOGLE_SUBMISSION_FOLDER_ID!,
-      );
-      const teamFolderId = await createFolder(teamData.team_name, competitionFolderId);
-
       // Upload file to Google Drive in the team's folder
       const uploadResult = await uploadToDrive(
         originalityFile,
-        teamFolderId,
+        originalityFolderId!,
         fileName,
         user!.email,
       );
