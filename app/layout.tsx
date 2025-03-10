@@ -41,10 +41,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${kodeMono.className} ${montserrat.className}`}>
         <LocomotiveProvider>
           <GSAPProvider>
-            <Navbar />
             {children}
             <Analytics />
-            <Footer />
           </GSAPProvider>
         </LocomotiveProvider>
       </body>
