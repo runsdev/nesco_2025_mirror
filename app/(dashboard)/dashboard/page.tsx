@@ -57,6 +57,15 @@ export default function Dashboard() {
         .single();
 
       if (teamsData) {
+        if (teamsData.competition) {
+          const FolderId =
+            teamsData.competition === 'Innovation Challenge'
+              ? process.env.NEXT_PUBLIC_INNOVATION_SUBMISSION_FOLDER_ID
+              : teamsData.competition.includes('Poster')
+                ? process.env.NEXT_PUBLIC_POSTER_SUBMISSION_FOLDER_ID
+                : process.env.NEXT_PUBLIC_PAPER_SUBMISSION_FOLDER_ID;
+          setSubmissionFolderId(FolderId!);
+        }
         setTeamData(teamsData);
 
         // Fetch team members
@@ -110,15 +119,6 @@ export default function Dashboard() {
         if (registrationData) {
           setRegistrationData(registrationData);
         }
-
-        const FolderId =
-          teamsData.competition === 'Innovation Challenge'
-            ? process.env.NEXT_PUBLIC_INNOVATION_SUBMISSION_FOLDER_ID
-            : teamsData.competition.includes('Poster')
-              ? process.env.NEXT_PUBLIC_POSTER_SUBMISSION_FOLDER_ID
-              : process.env.NEXT_PUBLIC_PAPER_SUBMISSION_FOLDER_ID;
-
-        setSubmissionFolderId(FolderId!);
       } else {
         router.push('/register');
       }
