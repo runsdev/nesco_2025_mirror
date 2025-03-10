@@ -28,13 +28,7 @@ export default function Dashboard() {
   const [originalityFile, setOriginalityFile] = useState<File | null>(null);
   const [originals, setOriginals] = useState<any[]>([]);
   const [isVerified, setIsVerified] = useState(false);
-
-  const submissionFolderId =
-    teamData.competition === 'Innovation Challenge'
-      ? process.env.NEXT_PUBLIC_INNOVATION_SUBMISSION_FOLDER_ID
-      : teamData.competition.includes('Poster')
-        ? process.env.NEXT_PUBLIC_POSTER_SUBMISSION_FOLDER_ID
-        : process.env.NEXT_PUBLIC_PAPER_SUBMISSION_FOLDER_ID;
+  const [submissionFolderId, setSubmissionFolderId] = useState<string | null>(null);
 
   const originalityFolderId = process.env.NEXT_PUBLIC_ORIGINALITY_SUBMISSION_FOLDER_ID;
 
@@ -116,6 +110,15 @@ export default function Dashboard() {
         if (registrationData) {
           setRegistrationData(registrationData);
         }
+
+        const FolderId =
+          teamData.competition === 'Innovation Challenge'
+            ? process.env.NEXT_PUBLIC_INNOVATION_SUBMISSION_FOLDER_ID
+            : teamData.competition.includes('Poster')
+              ? process.env.NEXT_PUBLIC_POSTER_SUBMISSION_FOLDER_ID
+              : process.env.NEXT_PUBLIC_PAPER_SUBMISSION_FOLDER_ID;
+
+        setSubmissionFolderId(FolderId!);
       } else {
         router.push('/register');
       }
