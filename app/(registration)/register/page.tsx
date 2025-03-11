@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import { uploadToDrive, createFolder, deleteFolder } from '@/utils/google/action';
 import ParticlesContainer from '@/components/UI/ParticlesContainer';
+import { PostgrestError } from '@supabase/supabase-js';
 
 // // Tambahkan fungsi untuk upload ke Google Drive
 // const uploadToDrive = async (
@@ -306,19 +307,40 @@ export default function RegisterPage() {
       });
 
       if (dbError) {
-        setError(dbError.message);
+        setError('Terjadi masalah saat membuat tim ke database: ' + dbError.message);
+        await supabase.from('logs').insert({
+          flag: 'error',
+          message: dbError?.message,
+          details: dbError?.details,
+          hint: dbError?.hint,
+          code: dbError?.code,
+        });
         setIsSubmitting(false);
         return;
       }
 
       if (dbFilesError) {
-        setError(dbFilesError.message);
+        setError('Terjadi masalah saat mengirim file: ' + dbFilesError.message);
+        await supabase.from('logs').insert({
+          flag: 'error',
+          message: dbFilesError?.message,
+          details: dbFilesError?.details,
+          hint: dbFilesError?.hint,
+          code: dbFilesError?.code,
+        });
         setIsSubmitting(false);
         return;
       }
 
       if (dbRegistrationError) {
-        setError(dbRegistrationError.message);
+        setError('Terjadi masalah saat menghubungkan ke database: ' + dbRegistrationError.message);
+        await supabase.from('logs').insert({
+          flag: 'error',
+          message: dbRegistrationError?.message,
+          details: dbRegistrationError?.details,
+          hint: dbRegistrationError?.hint,
+          code: dbRegistrationError?.code,
+        });
         setIsSubmitting(false);
         return;
       }
@@ -338,6 +360,10 @@ export default function RegisterPage() {
       setLeader('');
       router.push('/dashboard');
     } catch (err: any) {
+      await supabase.from('logs').insert({
+        flag: 'error',
+        message: err,
+      });
       setError(err.message || 'Terjadi kesalahan');
     } finally {
       setIsSubmitting(false);
