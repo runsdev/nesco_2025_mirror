@@ -5,67 +5,7 @@ import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
 import { uploadToDrive, createFolder, deleteFolder } from '@/utils/google/action';
 import ParticlesContainer from '@/components/UI/ParticlesContainer';
-import { PostgrestError } from '@supabase/supabase-js';
-
-// // Tambahkan fungsi untuk upload ke Google Drive
-// const uploadToDrive = async (
-//   file: File,
-//   folderId: string,
-//   prefix: string,
-//   userEmail: string,
-// ): Promise<string | null> => {
-//   try {
-//     const formData = new FormData();
-//     // Ubah nama file dengan menambahkan prefix
-//     const newFileName = `${prefix}_${file.name}`;
-//     const newFile = new File([file], newFileName, { type: file.type });
-
-//     formData.append('file', newFile);
-//     formData.append('folderId', folderId);
-//     formData.append('userEmail', userEmail);
-
-//     // Ganti URL dengan endpoint API Anda untuk upload ke Drive
-//     const response = await fetch('/api/upload-to-drive', {
-//       method: 'POST',
-//       body: formData,
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to upload file');
-//     }
-
-//     const data = await response.json();
-//     return data.fileId;
-//   } catch (error: any) {
-//     console.error('Error uploading file:', error.message);
-//     return null;
-//   }
-// };
-
-// // Tambahkan fungsi untuk membuat folder baru di Drive
-// const createFolder = async (folderName: string): Promise<string | null> => {
-//   try {
-//     const response = await fetch('/api/create-folder', {
-//       method: 'POST',
-//       headers: {
-//         'Content-Type': 'application/json',
-//       },
-//       body: JSON.stringify({
-//         folderName,
-//       }),
-//     });
-
-//     if (!response.ok) {
-//       throw new Error('Failed to create folder');
-//     }
-
-//     const data = await response.json();
-//     return data.folderId;
-//   } catch (error: any) {
-//     console.error('Error creating folder:', error.message);
-//     return null;
-//   }
-// };
+import Cookies from 'js-cookie';
 
 export default function RegisterPage() {
   const [teamName, setTeamName] = useState('');
@@ -164,6 +104,43 @@ export default function RegisterPage() {
     return file.size <= maxSize;
   };
 
+  // Save form data to cookies
+  const saveFormDataToCookies = () => {
+    const formData = {
+      teamName,
+      instance,
+      contact,
+      members,
+      competition,
+      leader,
+    };
+    Cookies.set('formData', JSON.stringify(formData), { expires: 7 });
+  };
+
+  // Load form data from cookies
+  const loadFormDataFromCookies = () => {
+    const formData = Cookies.get('formData');
+    if (formData) {
+      const parsedData = JSON.parse(formData);
+      setTeamName(parsedData.teamName || '');
+      setInstance(parsedData.instance || '');
+      setContact(parsedData.contact || '');
+      setMembers(parsedData.members || ['']);
+      setCompetition(parsedData.competition || '');
+      setLeader(parsedData.leader || '');
+    }
+  };
+
+  // Call loadFormDataFromCookies on component mount
+  useEffect(() => {
+    loadFormDataFromCookies();
+  }, []);
+
+  // Save form data to cookies whenever it changes
+  useEffect(() => {
+    saveFormDataToCookies();
+  }, [teamName, instance, contact, members, competition, leader]);
+
   // Modify the handleSubmit function to include file size validation
   const handleSubmit = async () => {
     try {
@@ -241,11 +218,11 @@ export default function RegisterPage() {
       };
 
       const uploads = [
-        retryUpload(photo, newFolderId, 'photo', user!.email!),
-        retryUpload(studentCard, newFolderId, 'studentCard', user!.email!),
-        retryUpload(proofIG, newFolderId, 'proofIG', user!.email!),
-        retryUpload(twibbon, newFolderId, 'twibbon', user!.email!),
-        retryUpload(paymentProof, newFolderId, 'paymentProof', user!.email!),
+        await retryUpload(photo, newFolderId, 'photo', user!.email!),
+        await retryUpload(studentCard, newFolderId, 'studentCard', user!.email!),
+        await retryUpload(proofIG, newFolderId, 'proofIG', user!.email!),
+        await retryUpload(twibbon, newFolderId, 'twibbon', user!.email!),
+        await retryUpload(paymentProof, newFolderId, 'paymentProof', user!.email!),
       ];
 
       const results = await Promise.all(uploads);
@@ -314,6 +291,7 @@ export default function RegisterPage() {
           details: dbError?.details,
           hint: dbError?.hint,
           code: dbError?.code,
+          raw: dbError,
         });
         setIsSubmitting(false);
         return;
@@ -327,6 +305,7 @@ export default function RegisterPage() {
           details: dbFilesError?.details,
           hint: dbFilesError?.hint,
           code: dbFilesError?.code,
+          raw: dbFilesError,
         });
         setIsSubmitting(false);
         return;
