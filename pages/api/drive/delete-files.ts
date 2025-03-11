@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { google } from 'googleapis';
 import { getAuth } from '@/utils/google/action';
 
-export async function DELETE(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'DELETE') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
