@@ -299,11 +299,11 @@ export default function AdminDashboard() {
               onChange={(e) => setCompetitionFilter(e.target.value)}
             >
               <option value="all">All Competitions</option>
-              <option value="Paper">Paper</option>
+              <option value="Paper Competition">Paper</option>
               <option value="Poster Competition 1 Karya">Poster 1 Karya</option>
               <option value="Poster Competition 2 Karya">Poster 2 Karya</option>
               <option value="Scientific Debate">Scientific Debate</option>
-              <option value="Technology Innovation">Innovation Challenge</option>
+              <option value="Innovation Challenge">Innovation Challenge</option>
             </select>
           </div>
         </div>
