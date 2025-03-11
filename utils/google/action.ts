@@ -4,7 +4,7 @@ import { google } from 'googleapis';
 import { Readable } from 'stream';
 
 // Configure Google API authentication
-const getAuth = () => {
+export const getAuth = () => {
   return new google.auth.GoogleAuth({
     credentials: {
       type: 'service_account',

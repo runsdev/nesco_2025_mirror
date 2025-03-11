@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { createClient } from '@/utils/supabase/client';
 import { useRouter } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import { uploadToDrive, createFolder, deleteFolder } from '@/utils/google/action';
+import { uploadToDrive, createFolder, deleteFolder } from '@/lib/driveApi';
 import ParticlesContainer from '@/components/UI/ParticlesContainer';
 import Cookies from 'js-cookie';
 
@@ -787,8 +787,8 @@ export default function RegisterPage() {
 
           {/* Announcement Modal */}
           {announcementOpen && (
-            <div className="mt-6 rounded-lg border border-amber-300 bg-amber-50 p-4 text-amber-800">
-              <div className="flex items-start">
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+              <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
                 <div className="flex-shrink-0">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
