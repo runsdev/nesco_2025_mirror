@@ -227,6 +227,7 @@ export default function RegisterPage() {
       ];
 
       const results = await Promise.all(uploads);
+      console.log('Upload results:', results);
 
       if (results.some((r) => r === null)) {
         setError('Beberapa file gagal diupload');
