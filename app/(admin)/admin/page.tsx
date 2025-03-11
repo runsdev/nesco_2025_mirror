@@ -410,7 +410,7 @@ export default function AdminDashboard() {
 
                       {/* Verification Confirmation Modal */}
                       {verifyModalOpen && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10">
                           <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
                             <h3 className="mb-4 text-lg font-bold">Confirm Verification</h3>
                             <p className="mb-6">
