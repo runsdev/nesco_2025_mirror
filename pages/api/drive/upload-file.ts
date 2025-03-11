@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { google } from 'googleapis';
 import { getAuth } from '@/utils/google/action';
 import { Readable } from 'stream';
+import formidable from 'formidable';
 
 // Disable the default body parser
 export const config = {
@@ -19,79 +20,70 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const auth = await getAuth();
     const drive = google.drive({ version: 'v3', auth: auth });
-    const formData = await new Promise<{
-      file: File;
+    const form = new formidable.IncomingForm();
+    const { file, folderId, fileName, userEmail } = await new Promise<{
+      file: formidable.File;
       folderId: string;
       fileName?: string;
       userEmail?: string;
     }>((resolve, reject) => {
-      const formData: any = {};
-      const chunks: Buffer[] = [];
-
-      req.on('data', (chunk) => {
-        chunks.push(chunk);
-      });
-
-      req.on('end', () => {
-        const buffer = Buffer.concat(chunks);
-        const boundary = req.headers['content-type']?.split('boundary=')[1];
-        if (!boundary) {
-          return reject(new Error('No boundary found in Content-Type header'));
+      form.parse(req, (err, fields, files) => {
+        if (err) {
+          reject(err);
+          return;
         }
-
-        const parts = buffer.toString().split(`--${boundary}`);
-        parts.forEach((part) => {
-          if (part.includes('Content-Disposition: form-data;')) {
-            const match = part.match(/name="([^"]+)"\s*\r\n\r\n(.+)\r\n/);
-            if (match) {
-              formData[match[1]] = match[2];
-            }
-          }
+        resolve({
+          file: files.file as unknown as formidable.File,
+          folderId: fields.folderId as unknown as string,
+          fileName: fields.fileName as string | undefined,
+          userEmail: fields.userEmail as string | undefined,
         });
-
-        resolve(formData);
-      });
-
-      req.on('error', (err) => {
-        reject(err);
       });
     });
 
-    const { file, folderId, fileName, userEmail } = formData;
-
-    // Convert the file to a readable stream
+    // Create a readable stream from the uploaded file
     const fileStream = new Readable();
-    fileStream.push(file);
+    fileStream.push(require('fs').readFileSync(file.filepath));
     fileStream.push(null);
 
-    const media = {
-      // mimeType: file.type,
-      body: fileStream,
-    };
-
+    // Define file metadata
     const fileMetadata = {
-      name: fileName || file.name,
+      name: fileName || file.originalFilename || 'file',
       parents: [folderId],
     };
 
-    const response = await drive.files.create({
+    // Define media for the file upload
+    const media = {
+      mimeType: file.mimetype || 'application/octet-stream',
+      body: fileStream,
+    };
+
+    // Upload the file to Google Drive
+    const driveResponse = await drive.files.create({
       requestBody: fileMetadata,
       media: media,
       fields: 'id',
     });
 
+    if (!driveResponse.data.id) {
+      throw new Error('Failed to upload file');
+    }
+
+    // Grant access if userEmail is provided
     if (userEmail) {
       await drive.permissions.create({
-        fileId: response.data.id!,
+        fileId: driveResponse.data.id,
         requestBody: {
-          role: 'reader',
           type: 'user',
+          role: 'reader',
           emailAddress: userEmail,
         },
+        sendNotificationEmail: false,
       });
     }
 
-    return res.status(200).json({ id: response.data.id });
+    // Return the file ID
+    return res.status(200).json({ id: driveResponse.data.id });
   } catch (error: any) {
     console.error('Error uploading file:', error.message, error);
     return res.status(500).json({ error: `Failed to upload file: ${error.message}` });
