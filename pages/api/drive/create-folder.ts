@@ -3,11 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { google } from 'googleapis';
 import { getAuth } from '@/utils/google/action';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
-  }
-
+export const POST = async (req: NextApiRequest, res: NextApiResponse) => {
   const { folderName, parentFolderId } = req.body;
 
   if (!folderName) {
@@ -45,4 +41,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     console.error('Error creating folder:', error.message);
     return res.status(500).json({ error: `Failed to create folder: ${error.message}` });
   }
-}
+};

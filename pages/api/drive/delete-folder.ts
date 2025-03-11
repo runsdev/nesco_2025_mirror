@@ -30,12 +30,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // If the file is a folder, recursively delete it
         if (file.mimeType === 'application/vnd.google-apps.folder') {
           // Make a request to the delete-folder endpoint
-          await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/api/drive/delete-folder?folderId=${file.id}`,
-            {
-              method: 'DELETE',
-            },
-          );
+          await fetch(`${process.env.VERCEL_URL}/api/drive/delete-folder?folderId=${file.id}`, {
+            method: 'DELETE',
+          });
         } else {
           await drive.files.delete({ fileId: file.id! });
         }
