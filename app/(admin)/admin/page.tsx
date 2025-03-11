@@ -271,11 +271,6 @@ export default function AdminDashboard() {
         </Button>
       </div>
 
-      <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold">Admin Dashboard</h1>
-        <p className="text-gray-600">Manage teams, verify participants, and review submissions</p>
-      </div>
-
       <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-2 rounded-md border p-2">
