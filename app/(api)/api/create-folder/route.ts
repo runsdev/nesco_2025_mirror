@@ -21,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const auth = getAuth();
+    const auth = await getAuth();
     const drive = google.drive({ version: 'v3', auth });
 
     // Create new folder
