@@ -300,11 +300,11 @@ export default function RegisterPage() {
         );
       }
 
-      const { error: dbRegistrationError } = await supabase.from('registrations').insert({
-        team_id: teamsData?.[0].id,
-        competition,
-        payment_proof: results[4],
-      });
+      // const { error: dbRegistrationError } = await supabase.from('registrations').insert({
+      //   team_id: teamsData?.[0].id,
+      //   competition,
+      //   payment_proof: results[4],
+      // });
 
       if (dbError) {
         setError('Terjadi masalah saat membuat tim ke database: ' + dbError.message);
@@ -332,18 +332,18 @@ export default function RegisterPage() {
         return;
       }
 
-      if (dbRegistrationError) {
-        setError('Terjadi masalah saat menghubungkan ke database: ' + dbRegistrationError.message);
-        await supabase.from('logs').insert({
-          flag: 'error',
-          message: dbRegistrationError?.message,
-          details: dbRegistrationError?.details,
-          hint: dbRegistrationError?.hint,
-          code: dbRegistrationError?.code,
-        });
-        setIsSubmitting(false);
-        return;
-      }
+      // if (dbRegistrationError) {
+      //   setError('Terjadi masalah saat menghubungkan ke database: ' + dbRegistrationError.message);
+      //   await supabase.from('logs').insert({
+      //     flag: 'error',
+      //     message: dbRegistrationError?.message,
+      //     details: dbRegistrationError?.details,
+      //     hint: dbRegistrationError?.hint,
+      //     code: dbRegistrationError?.code,
+      //   });
+      //   setIsSubmitting(false);
+      //   return;
+      // }
 
       setSuccess(true);
       // Reset form setelah sukses
