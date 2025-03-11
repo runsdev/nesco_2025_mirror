@@ -3,8 +3,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { google } from 'googleapis';
 import { getAuth } from '@/utils/google/action';
 import { Readable } from 'stream';
-import formidable from 'formidable';
-import fs from 'fs';
 
 // Disable the default body parser
 export const config = {
@@ -19,81 +17,83 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const form = new formidable.IncomingForm();
-
-    const [fields, files] = await new Promise<[formidable.Fields, formidable.Files]>(
-      (resolve, reject) => {
-        form.parse(req, (err, fields, files) => {
-          if (err) reject(err);
-          resolve([fields, files]);
-        });
-      },
-    );
-
-    const folderId = fields.folderId as unknown as string;
-    const fileName = fields.fileName as unknown as string;
-    const userEmail = fields.userEmail as unknown as string;
-
-    if (!folderId) {
-      return res.status(400).json({ error: 'Folder ID is required' });
-    }
-
-    if (!files.file) {
-      return res.status(400).json({ error: 'File is required' });
-    }
-
-    const file = files.file as unknown as formidable.File;
-    const filePath = file.filepath;
-    const fileBuffer = fs.readFileSync(filePath);
-    const name = fileName || file.originalFilename || 'file';
-
     const auth = await getAuth();
-    const drive = google.drive({ version: 'v3', auth });
+    const drive = google.drive({ version: 'v3', auth: auth });
+    const formData = await new Promise<{
+      file: File;
+      folderId: string;
+      fileName?: string;
+      userEmail?: string;
+    }>((resolve, reject) => {
+      const formData: any = {};
+      const chunks: Buffer[] = [];
 
-    // Create readable stream from buffer
+      req.on('data', (chunk) => {
+        chunks.push(chunk);
+      });
+
+      req.on('end', () => {
+        const buffer = Buffer.concat(chunks);
+        const boundary = req.headers['content-type']?.split('boundary=')[1];
+        if (!boundary) {
+          return reject(new Error('No boundary found in Content-Type header'));
+        }
+
+        const parts = buffer.toString().split(`--${boundary}`);
+        parts.forEach((part) => {
+          if (part.includes('Content-Disposition: form-data;')) {
+            const match = part.match(/name="([^"]+)"\s*\r\n\r\n(.+)\r\n/);
+            if (match) {
+              formData[match[1]] = match[2];
+            }
+          }
+        });
+
+        resolve(formData);
+      });
+
+      req.on('error', (err) => {
+        reject(err);
+      });
+    });
+
+    const { file, folderId, fileName, userEmail } = formData;
+
+    // Convert the file to a readable stream
     const fileStream = new Readable();
-    fileStream.push(fileBuffer);
+    fileStream.push(file);
     fileStream.push(null);
 
-    // Upload file to Google Drive
-    const fileMetadata = {
-      name,
-      parents: [folderId],
-    };
-
     const media = {
+      // mimeType: file.type,
       body: fileStream,
     };
 
-    const driveResponse = await drive.files.create({
+    const fileMetadata = {
+      name: fileName || file.name,
+      parents: [folderId],
+    };
+
+    const response = await drive.files.create({
       requestBody: fileMetadata,
       media: media,
       fields: 'id',
     });
 
-    if (!driveResponse.data.id) {
-      return res.status(500).json({ error: 'Failed to upload file' });
-    }
-
-    // Grant access if userEmail is provided
     if (userEmail) {
       await drive.permissions.create({
-        fileId: driveResponse.data.id,
+        fileId: response.data.id!,
         requestBody: {
-          type: 'user',
           role: 'reader',
+          type: 'user',
           emailAddress: userEmail,
         },
-        sendNotificationEmail: false,
       });
     }
 
-    // Clean up the temp file
-    fs.unlinkSync(filePath);
-
-    return res.status(200).json({ id: driveResponse.data.id });
+    return res.status(200).json({ id: response.data.id });
   } catch (error: any) {
-    console.error('Error uploading file:', error.message);
+    console.error('Error uploading file:', error.message, error);
     return res.status(500).json({ error: `Failed to upload file: ${error.message}` });
   }
 }
