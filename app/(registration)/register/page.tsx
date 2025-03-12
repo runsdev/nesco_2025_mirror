@@ -101,7 +101,7 @@ export default function RegisterPage() {
   // Add this function to validate file size
   const validateFileSize = (file: File | null): boolean => {
     if (!file) return false;
-    const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+    const maxSize = 4.5 * 1024 * 1024; // 4,5MB in bytes
     return file.size <= maxSize;
   };
 
@@ -176,7 +176,7 @@ export default function RegisterPage() {
 
       for (const { name, file } of files) {
         if (!validateFileSize(file)) {
-          setError(`File ${name} melebihi ukuran maksimum 10MB`);
+          setError(`File ${name} melebihi ukuran maksimum 4,5MB`);
           setIsSubmitting(false);
           return;
         }
@@ -588,7 +588,7 @@ export default function RegisterPage() {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             <div>
               <label htmlFor="photo" className="mb-1 block text-sm font-medium text-gray-700">
-                Foto 3x4 (PDF, merged maks 10MB):
+                Foto 3x4 (PDF, merged maks 4,5MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -602,13 +602,13 @@ export default function RegisterPage() {
                 {photo && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
               {photo?.size && !validateFileSize(photo) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
             </div>
 
             <div>
               <label htmlFor="studentCard" className="mb-1 block text-sm font-medium text-gray-700">
-                Kartu Pelajar/Mahasiswa (PDF, merged maks 10MB):
+                Kartu Pelajar/Mahasiswa (PDF, merged maks 4,5MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -622,13 +622,13 @@ export default function RegisterPage() {
                 {studentCard && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
               {studentCard?.size && !validateFileSize(studentCard) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
             </div>
 
             <div>
               <label htmlFor="proofIG" className="mb-1 block text-sm font-medium text-gray-700">
-                Bukti Follow Instagram (PDF, merged maks 10MB):
+                Bukti Follow Instagram (PDF, merged maks 4,5MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -642,13 +642,13 @@ export default function RegisterPage() {
                 {proofIG && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
               {proofIG?.size && !validateFileSize(proofIG) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
             </div>
 
             <div>
               <label htmlFor="twibbon" className="mb-1 block text-sm font-medium text-gray-700">
-                Bukti Upload Twibbon (PDF, merged maks 10MB):
+                Bukti Upload Twibbon (PDF, merged maks 4,5MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -662,7 +662,7 @@ export default function RegisterPage() {
                 {twibbon && <span className="ml-2 text-sm text-green-600">✓</span>}
               </div>
               {twibbon?.size && !validateFileSize(twibbon) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
             </div>
 
@@ -671,7 +671,7 @@ export default function RegisterPage() {
                 htmlFor="paymentProof"
                 className="mb-1 block text-sm font-medium text-gray-700"
               >
-                Bukti Pembayaran (PDF atau Gambar, maks 10MB):
+                Bukti Pembayaran (PDF atau Gambar, maks 4,5MB):
               </label>
               <div className="flex items-center">
                 <input
@@ -686,7 +686,7 @@ export default function RegisterPage() {
               </div>
 
               {paymentProof?.size && !validateFileSize(paymentProof) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 10MB</span>
+                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
             </div>
           </div>
@@ -708,7 +708,7 @@ export default function RegisterPage() {
             </p>
             <ul className="ml-5 list-disc">
               <li>Pastikan semua informasi yang dimasukkan sudah benar</li>
-              <li>Setiap file yang diunggah tidak boleh melebihi 10MB</li>
+              <li>Setiap file yang diunggah tidak boleh melebihi 4,5MB</li>
               <li>Semua file harus dalam format yang ditentukan (PDF/Image)</li>
               <li>
                 Pastikan kondisi jaringan internet Anda <b>stabil</b> saat mengunggah file.
