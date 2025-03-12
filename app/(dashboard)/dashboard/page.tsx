@@ -12,6 +12,7 @@ import { FileIcon, UploadIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react
 import { dataTimeline } from '@/modules/data/timeline';
 // import { uploadToDrive, createFolder, deleteFile } from '@/utils/google/action';
 import { uploadToDrive, createFolder, deleteFile } from '@/lib/driveApi';
+import DriveUploader from '@/components/Backend/drive-uploader';
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -30,6 +31,7 @@ export default function Dashboard() {
   const [originals, setOriginals] = useState<any[]>([]);
   const [isVerified, setIsVerified] = useState(false);
   const [submissionFolderId, setSubmissionFolderId] = useState<string | null>(null);
+  const [submissionFileId, setSubmissionFileId] = useState<string | null>(null);
 
   const originalityFolderId = process.env.NEXT_PUBLIC_ORIGINALITY_SUBMISSION_FOLDER_ID;
 
@@ -462,145 +464,6 @@ export default function Dashboard() {
           </div>
         </TabsContent>
 
-        {/* {registrationData?.verified && teamData?.competition !== 'Scientific Debate' && (
-          <TabsContent value="submission">
-            <Card>
-              <CardHeader>
-                <CardTitle>Upload Submission</CardTitle>
-                <CardDescription>
-                  Upload berkas submission lomba {teamData?.competition}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    <div className="rounded-lg border border-dashed border-gray-300 p-6">
-                      <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                        <UploadIcon className="h-8 w-8 text-gray-400" />
-                        <p className="text-sm text-gray-500">
-                          {teamData.competition === 'Poster Competition 1 Karya' ||
-                          teamData.competition === 'Poster Competition 2 Karya'
-                            ? 'Upload file gambar poster'
-                            : 'Upload file PDF karya lomba'}
-                        </p>
-                        <input
-                          id="submission-file"
-                          type="file"
-                          accept={
-                            teamData.competition === 'Poster Competition 1 Karya' ||
-                            teamData.competition === 'Poster Competition 2 Karya'
-                              ? 'image/*,.zip,.rar'
-                              : '.pdf'
-                          }
-                          onChange={handleFileUpload}
-                          className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
-                        />
-                      </div>
-                      <Button
-                        onClick={handleSubmission}
-                        disabled={!submissionFile || uploadStatus === 'loading'}
-                        className="w-full"
-                      >
-                        {uploadStatus === 'loading' ? 'Uploading...' : 'Submit Karya'}
-                      </Button>
-                    </div>
-
-                    {teamData.competition === 'Poster Competition 2 Karya' && (
-                      <div className="mt-4 rounded-lg border border-dashed border-gray-300 p-6">
-                        <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                          <UploadIcon className="h-8 w-8 text-gray-400" />
-                          <p className="text-sm text-gray-500">Upload file poster kedua</p>
-                          <input
-                            id="second-submission-file"
-                            type="file"
-                            accept="image/*,.zip,.rar"
-                            onChange={handleSecondFileUpload}
-                            className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
-                          />
-                        </div>
-                        <Button
-                          onClick={handleSecondSubmission}
-                          disabled={!secondSubmissionFile || secondUploadStatus === 'loading'}
-                          className="mt-2 w-full"
-                        >
-                          {secondUploadStatus === 'loading' ? 'Uploading...' : 'Submit Karya Kedua'}
-                        </Button>
-                      </div>
-                    )}
-
-                    {(teamData.competition === 'Poster Competition 1 Karya' ||
-                      teamData.competition === 'Poster Competition 2 Karya') && (
-                      <>
-                        <div className="rounded-lg border border-dashed border-gray-300 p-6">
-                          <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                            <UploadIcon className="h-8 w-8 text-gray-400" />
-                            <p className="text-sm text-gray-500">
-                              Upload surat pernyataan orisinalitas karya
-                            </p>
-                            <input
-                              id="originality-file"
-                              type="file"
-                              accept=".pdf"
-                              onChange={(e) => {
-                                if (e.target.files && e.target.files[0]) {
-                                  setOriginalityFile(e.target.files[0]);
-                                }
-                              }}
-                              className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
-                            />
-                          </div>
-                          <Button
-                            onClick={handleOriginalitySubmission}
-                            disabled={!originalityFile || originalityUploadStatus === 'loading'}
-                            className="mt-2 w-full"
-                          >
-                            {originalityUploadStatus === 'loading'
-                              ? 'Uploading...'
-                              : 'Submit Pernyataan Orisinalitas'}
-                          </Button>
-                        </div>
-
-                        <div className="mt-4">
-                          <h3 className="mb-2 font-medium">Pernyataan Orisinalitas</h3>
-                          {originals.length > 0 ? (
-                            <div className="flex items-center justify-between rounded-md border p-3">
-                              <div>
-                                <p className="font-medium">Pernyataan Orisinalitas</p>
-                                <p className="text-sm text-gray-500">
-                                  {new Date(originals[0].submitted_at).toLocaleString()}
-                                </p>
-                              </div>
-                              <Badge variant="success" className="flex items-center gap-1">
-                                <CheckCircleIcon size={14} />
-                                <span>Terupload</span>
-                              </Badge>
-                            </div>
-                          ) : (
-                            <p className="text-sm text-amber-600">
-                              *Harap upload surat pernyataan orisinalitas karya
-                            </p>
-                          )}
-                        </div>
-                      </>
-                    )}
-
-                    {uploadStatus === 'error' && (
-                      <div className="rounded-md bg-red-50 p-3 text-sm text-red-800">
-                        Terjadi kesalahan saat upload. Silakan coba lagi.
-                      </div>
-                    )}
-
-                    {uploadStatus === 'success' && (
-                      <div className="rounded-md bg-green-50 p-3 text-sm text-green-800">
-                        Submission berhasil diupload!
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        )} */}
         <TabsContent value="submission">
           <Card>
             <CardHeader>
@@ -703,6 +566,16 @@ export default function Dashboard() {
                         >
                           {uploadStatus === 'loading' ? 'Uploading...' : 'Submit Karya'}
                         </Button>
+                        <DriveUploader
+                          folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
+                          userEmail={user?.email || ''}
+                          onSuccess={(fileId) => {
+                            setSubmissionFileId(fileId);
+                          }}
+                          onError={(errorMsg) => {
+                            setSubmissionFileId(null);
+                          }}
+                        />
                       </div>
                     )}
 

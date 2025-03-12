@@ -6,6 +6,7 @@ import { User } from '@supabase/supabase-js';
 import { uploadToDrive, createFolder, deleteFolder } from '@/lib/driveApi';
 import ParticlesContainer from '@/components/UI/ParticlesContainer';
 import Cookies from 'js-cookie';
+// import DriveUploader from '@/components/Backend/drive-uploader';
 
 export default function RegisterPage() {
   const [teamName, setTeamName] = useState('');
@@ -27,6 +28,11 @@ export default function RegisterPage() {
   const [confirmation, setConfirmation] = useState<string>('');
   const [openRegistration, setOpenRegistration] = useState<boolean>(false);
   const [announcementOpen, setAnnouncementOpen] = useState<boolean>(true);
+  const [photoId, setPhotoId] = useState<string | null>(null);
+  const [studentCardId, setStudentCardId] = useState<string | null>(null);
+  const [proofIGId, setProofIGId] = useState<string | null>(null);
+  const [twibbonId, setTwibbonId] = useState<string | null>(null);
+  const [paymentProofId, setPaymentProofId] = useState<string | null>(null);
 
   const handleAddMember = () => {
     setMembers([...members, '']);
@@ -339,6 +345,7 @@ export default function RegisterPage() {
       setPaymentProof(null);
       setCompetition('');
       setLeader('');
+      Cookies.remove('formData');
       router.push('/dashboard');
     } catch (err: any) {
       await supabase.from('logs').insert({
@@ -379,25 +386,6 @@ export default function RegisterPage() {
   return (
     // <div className="min-h-screen bg-gray-50 px-4 pb-12 pt-[10%] sm:px-6 lg:px-8">
     <div className="relative flex min-h-screen w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2] py-[10%]">
-      {/* <ParticlesContainer className="absolute top-0 z-0 h-[93svh] min-h-screen w-full md:h-[97svh] lg:h-[180svh]" /> */}
-      {/* <div className="relative flex h-[50svh] w-full items-start justify-center lg:h-[80svh]">
-        <div className="absolute flex h-full w-full flex-col items-center justify-center">
-          <Image
-            src="/prize/moon.png"
-            width={69}
-            height={69}
-            alt="moon"
-            className="absolute top-[20vw] z-[50] h-auto w-[15vw] sm:top-[20vw] sm:w-[15vw] md:top-[10vw] md:w-[13vw] lg:top-[5vw] lg:w-[9vw] xl:w-[9vw] 2xl:w-[9vw]"
-          />
-          <Image
-            src="/prize/comets.png"
-            width={810}
-            height={456}
-            alt="comets"
-            className="absolute top-[60%] z-[50] h-auto w-[75vw] sm:top-[45vw] sm:w-[75vw] md:top-[20vw] md:w-[90vw] lg:top-[18vw] lg:w-[90vw] xl:top-[25vw] xl:w-[90vw] 2xl:top-[25vw] 2xl:w-[90vw]"
-          />
-        </div>
-      </div> */}
       <div className="z-[10] mx-auto max-w-[90%] rounded-lg bg-white p-8 shadow-md md:max-w-[80%]">
         <h1 className="mb-8 text-center text-3xl font-bold text-gray-800">
           Pendaftaran Tim Perlombaan
@@ -604,6 +592,19 @@ export default function RegisterPage() {
               {photo?.size && !validateFileSize(photo) && (
                 <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
+
+              {/* <DriveUploader
+                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
+                userEmail={user?.email || ''}
+                onSuccess={(fileId) => {
+                  setPhotoId(fileId);
+                  setError(null);
+                }}
+                onError={(errorMsg) => {
+                  setError(errorMsg);
+                  setPhotoId(null);
+                }}
+              /> */}
             </div>
 
             <div>
@@ -624,6 +625,18 @@ export default function RegisterPage() {
               {studentCard?.size && !validateFileSize(studentCard) && (
                 <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
+              {/* <DriveUploader
+                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
+                userEmail={user?.email || ''}
+                onSuccess={(fileId) => {
+                  setStudentCardId(fileId);
+                  setError(null);
+                }}
+                onError={(errorMsg) => {
+                  setError(errorMsg);
+                  setStudentCardId(null);
+                }}
+              /> */}
             </div>
 
             <div>
@@ -644,6 +657,18 @@ export default function RegisterPage() {
               {proofIG?.size && !validateFileSize(proofIG) && (
                 <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
+              {/* <DriveUploader
+                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
+                userEmail={user?.email || ''}
+                onSuccess={(fileId) => {
+                  setProofIGId(fileId);
+                  setError(null);
+                }}
+                onError={(errorMsg) => {
+                  setError(errorMsg);
+                  setProofIGId(null);
+                }}
+              /> */}
             </div>
 
             <div>
@@ -664,6 +689,18 @@ export default function RegisterPage() {
               {twibbon?.size && !validateFileSize(twibbon) && (
                 <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
+              {/* <DriveUploader
+                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
+                userEmail={user?.email || ''}
+                onSuccess={(fileId) => {
+                  setTwibbonId(fileId);
+                  setError(null);
+                }}
+                onError={(errorMsg) => {
+                  setError(errorMsg);
+                  setTwibbonId(null);
+                }}
+              /> */}
             </div>
 
             <div className="md:col-span-2">
@@ -688,6 +725,19 @@ export default function RegisterPage() {
               {paymentProof?.size && !validateFileSize(paymentProof) && (
                 <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
               )}
+
+              {/* <DriveUploader
+                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
+                userEmail={user?.email || ''}
+                onSuccess={(fileId) => {
+                  setPaymentProofId(fileId);
+                  setError(null);
+                }}
+                onError={(errorMsg) => {
+                  setError(errorMsg);
+                  setPaymentProofId(null);
+                }}
+              /> */}
             </div>
           </div>
 
@@ -790,20 +840,6 @@ export default function RegisterPage() {
           {announcementOpen && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
               <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
-                <div className="flex-shrink-0">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
                 <div className="ml-3 flex-1">
                   <div className="flex items-center justify-between">
                     <h3 className="text-sm font-medium text-amber-800">Perhatian!</h3>
@@ -826,7 +862,7 @@ export default function RegisterPage() {
                       </svg>
                     </button>
                   </div>
-                  <div className="mt-2 text-sm text-amber-700">
+                  {/* <div className="mt-2 text-sm text-amber-700">
                     <p>
                       Kami telah menerima laporan kendala saat mengunggah data menggunakan provider
                       internet tertentu. Provider yang dilaporkan bermasalah antara lain:
@@ -841,7 +877,7 @@ export default function RegisterPage() {
                       dengan koneksi internet lain atau gunakan <b>VPN</b> atau <b>DNS Service</b>{' '}
                       untuk menyelesaikan pendaftaran.
                     </p>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
