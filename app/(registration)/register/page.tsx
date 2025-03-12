@@ -28,11 +28,8 @@ export default function RegisterPage() {
   const [confirmation, setConfirmation] = useState<string>('');
   const [openRegistration, setOpenRegistration] = useState<boolean>(false);
   const [announcementOpen, setAnnouncementOpen] = useState<boolean>(true);
-  const [photoId, setPhotoId] = useState<string | null>(null);
-  const [studentCardId, setStudentCardId] = useState<string | null>(null);
-  const [proofIGId, setProofIGId] = useState<string | null>(null);
-  const [twibbonId, setTwibbonId] = useState<string | null>(null);
-  const [paymentProofId, setPaymentProofId] = useState<string | null>(null);
+  const [alternateMode, setAlternateMode] = useState<boolean>(false);
+  const [driveLink, setDriveLink] = useState<string>('');
 
   const handleAddMember = () => {
     setMembers([...members, '']);
@@ -155,91 +152,105 @@ export default function RegisterPage() {
       setError(null);
 
       // Validasi form
-      if (
-        !teamName ||
-        !leader ||
-        !instance ||
-        !contact ||
-        !photo ||
-        !studentCard ||
-        !proofIG ||
-        !twibbon ||
-        !paymentProof
-      ) {
-        setError('Semua field harus diisi');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Validate file sizes
-      const files = [
-        { name: 'Foto 3x4', file: photo },
-        { name: 'Kartu Pelajar/Mahasiswa', file: studentCard },
-        { name: 'Bukti Follow Instagram', file: proofIG },
-        { name: 'Bukti Upload Twibbon', file: twibbon },
-        { name: 'Bukti Pembayaran', file: paymentProof },
-      ];
-
-      for (const { name, file } of files) {
-        if (!validateFileSize(file)) {
-          setError(`File ${name} melebihi ukuran maksimum 4,5MB`);
+      if (!alternateMode) {
+        if (
+          !teamName ||
+          !leader ||
+          !instance ||
+          !contact ||
+          !photo ||
+          !studentCard ||
+          !proofIG ||
+          !twibbon ||
+          !paymentProof
+        ) {
+          setError('Semua field harus diisi');
+          setIsSubmitting(false);
+          return;
+        }
+      } else {
+        if (!teamName || !leader || !instance || !contact || !driveLink) {
+          setError('Semua field harus diisi');
           setIsSubmitting(false);
           return;
         }
       }
 
-      // Buat folder baru dengan format namatim_timestamp
-      const timestamp = new Date().getTime();
-      const folderName = `${teamName.replace(/\s+/g, '_')}_${timestamp}`;
+      var results: string[] = [];
+      var newFolderId: string = '';
+      if (!alternateMode) {
+        // Validate file sizes
+        const files = [
+          { name: 'Foto 3x4', file: photo },
+          { name: 'Kartu Pelajar/Mahasiswa', file: studentCard },
+          { name: 'Bukti Follow Instagram', file: proofIG },
+          { name: 'Bukti Upload Twibbon', file: twibbon },
+          { name: 'Bukti Pembayaran', file: paymentProof },
+        ];
 
-      const newFolderId = await createFolder(folderName);
-
-      if (!newFolderId) {
-        setError('Gagal membuat folder');
-        setIsSubmitting(false);
-        return;
-      }
-
-      // Upload semua file dengan prefix
-      // Function to retry upload with specified number of attempts
-      const retryUpload = async (
-        file: File,
-        folderId: string,
-        prefix: string,
-        userEmail: string,
-        maxAttempts = 3,
-      ): Promise<string | null> => {
-        let attempts = 0;
-        while (attempts < maxAttempts) {
-          attempts++;
-          const result = await uploadToDrive(file, folderId, prefix, userEmail);
-          if (result !== null) {
-            return result;
+        for (const { name, file } of files) {
+          if (!validateFileSize(file)) {
+            setError(`File ${name} melebihi ukuran maksimum 4,5MB`);
+            setIsSubmitting(false);
+            return;
           }
-          console.log(`Upload attempt ${attempts} for ${prefix} failed. Retrying...`);
-          // Wait a short time before retrying
-          await new Promise((resolve) => setTimeout(resolve, 1000));
         }
-        setError(`Failed to upload ${prefix} after ${maxAttempts} attempts`);
-        return null;
-      };
 
-      const uploads = [
-        await retryUpload(photo, newFolderId, 'photo', user!.email!),
-        await retryUpload(studentCard, newFolderId, 'studentCard', user!.email!),
-        await retryUpload(proofIG, newFolderId, 'proofIG', user!.email!),
-        await retryUpload(twibbon, newFolderId, 'twibbon', user!.email!),
-        await retryUpload(paymentProof, newFolderId, 'paymentProof', user!.email!),
-      ];
+        // Buat folder baru dengan format namatim_timestamp
+        const timestamp = new Date().getTime();
+        const folderName = `${teamName.replace(/\s+/g, '_')}_${timestamp}`;
 
-      const results = await Promise.all(uploads);
-      console.log('Upload results:', results);
+        newFolderId = await createFolder(folderName);
 
-      if (results.some((r) => r === null)) {
-        setError('Beberapa file gagal diupload');
-        await deleteFolder(newFolderId);
-        setIsSubmitting(false);
-        return;
+        if (!newFolderId) {
+          setError('Gagal membuat folder');
+          setIsSubmitting(false);
+          return;
+        }
+
+        // Upload semua file dengan prefix
+        // Function to retry upload with specified number of attempts
+        const retryUpload = async (
+          file: File,
+          folderId: string,
+          prefix: string,
+          userEmail: string,
+          maxAttempts = 3,
+        ): Promise<string | null> => {
+          let attempts = 0;
+          while (attempts < maxAttempts) {
+            attempts++;
+            const result = await uploadToDrive(file, folderId, prefix, userEmail);
+            if (result !== null) {
+              return result;
+            }
+            console.log(`Upload attempt ${attempts} for ${prefix} failed. Retrying...`);
+            // Wait a short time before retrying
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+          }
+          setError(`Failed to upload ${prefix} after ${maxAttempts} attempts`);
+          return null;
+        };
+
+        const uploads = [
+          await retryUpload(photo!, newFolderId, 'photo', user!.email!),
+          await retryUpload(studentCard!, newFolderId, 'studentCard', user!.email!),
+          await retryUpload(proofIG!, newFolderId, 'proofIG', user!.email!),
+          await retryUpload(twibbon!, newFolderId, 'twibbon', user!.email!),
+          await retryUpload(paymentProof!, newFolderId, 'paymentProof', user!.email!),
+        ];
+
+        results = (await Promise.all(uploads)).filter(
+          (result): result is string => result !== null,
+        );
+        console.log('Upload results:', results);
+
+        if (results.some((r) => r === null)) {
+          setError('Beberapa file gagal diupload');
+          await deleteFolder(newFolderId);
+          setIsSubmitting(false);
+          return;
+        }
       }
 
       // Simpan data tim ke database (Supabase)
@@ -256,15 +267,36 @@ export default function RegisterPage() {
         })
         .select();
 
-      const { error: dbFilesError } = await supabase.from('team_files').insert({
-        team_id: teamsData?.[0].id,
-        photo: results[0],
-        student_card: results[1],
-        instagram_follow: results[2],
-        twibbon: results[3],
-        payment: results[4],
-        folder_id: newFolderId,
-      });
+      if (!alternateMode) {
+        const { error: dbFilesError } = await supabase.from('team_files').insert({
+          team_id: teamsData?.[0].id,
+          photo: results[0],
+          student_card: results[1],
+          instagram_follow: results[2],
+          twibbon: results[3],
+          payment: results[4],
+          folder_id: newFolderId,
+        });
+
+        if (dbFilesError) {
+          setError('Terjadi masalah saat mengirim file: ' + dbFilesError.message);
+          await supabase.from('logs').insert({
+            flag: 'error',
+            message: dbFilesError?.message,
+            details: dbFilesError?.details,
+            hint: dbFilesError?.hint,
+            code: dbFilesError?.code,
+            raw: dbFilesError,
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      } else {
+        const { error: dbFilesError } = await supabase.from('team_links').insert({
+          team_id: teamsData?.[0].id,
+          drive_link: driveLink,
+        });
+      }
 
       await supabase.from('team_members').insert({
         team_id: teamsData?.[0].id,
@@ -285,12 +317,6 @@ export default function RegisterPage() {
         );
       }
 
-      // const { error: dbRegistrationError } = await supabase.from('registrations').insert({
-      //   team_id: teamsData?.[0].id,
-      //   competition,
-      //   payment_proof: results[4],
-      // });
-
       if (dbError) {
         setError('Terjadi masalah saat membuat tim ke database: ' + dbError.message);
         await supabase.from('logs').insert({
@@ -304,33 +330,6 @@ export default function RegisterPage() {
         setIsSubmitting(false);
         return;
       }
-
-      if (dbFilesError) {
-        setError('Terjadi masalah saat mengirim file: ' + dbFilesError.message);
-        await supabase.from('logs').insert({
-          flag: 'error',
-          message: dbFilesError?.message,
-          details: dbFilesError?.details,
-          hint: dbFilesError?.hint,
-          code: dbFilesError?.code,
-          raw: dbFilesError,
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      // if (dbRegistrationError) {
-      //   setError('Terjadi masalah saat menghubungkan ke database: ' + dbRegistrationError.message);
-      //   await supabase.from('logs').insert({
-      //     flag: 'error',
-      //     message: dbRegistrationError?.message,
-      //     details: dbRegistrationError?.details,
-      //     hint: dbRegistrationError?.hint,
-      //     code: dbRegistrationError?.code,
-      //   });
-      //   setIsSubmitting(false);
-      //   return;
-      // }
 
       setSuccess(true);
       // Reset form setelah sukses
@@ -573,173 +572,150 @@ export default function RegisterPage() {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div>
-              <label htmlFor="photo" className="mb-1 block text-sm font-medium text-gray-700">
-                Foto 3x4 (PDF, merged maks 4,5MB):
-              </label>
-              <div className="flex items-center">
-                <input
-                  id="photo"
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => setPhoto(e.target.files?.[0] || null)}
-                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
-                  required
-                />
-                {photo && <span className="ml-2 text-sm text-green-600">✓</span>}
-              </div>
-              {photo?.size && !validateFileSize(photo) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
-              )}
-
-              {/* <DriveUploader
-                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
-                userEmail={user?.email || ''}
-                onSuccess={(fileId) => {
-                  setPhotoId(fileId);
-                  setError(null);
-                }}
-                onError={(errorMsg) => {
-                  setError(errorMsg);
-                  setPhotoId(null);
-                }}
-              /> */}
-            </div>
-
-            <div>
-              <label htmlFor="studentCard" className="mb-1 block text-sm font-medium text-gray-700">
-                Kartu Pelajar/Mahasiswa (PDF, merged maks 4,5MB):
-              </label>
-              <div className="flex items-center">
-                <input
-                  id="studentCard"
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => setStudentCard(e.target.files?.[0] || null)}
-                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
-                  required
-                />
-                {studentCard && <span className="ml-2 text-sm text-green-600">✓</span>}
-              </div>
-              {studentCard?.size && !validateFileSize(studentCard) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
-              )}
-              {/* <DriveUploader
-                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
-                userEmail={user?.email || ''}
-                onSuccess={(fileId) => {
-                  setStudentCardId(fileId);
-                  setError(null);
-                }}
-                onError={(errorMsg) => {
-                  setError(errorMsg);
-                  setStudentCardId(null);
-                }}
-              /> */}
-            </div>
-
-            <div>
-              <label htmlFor="proofIG" className="mb-1 block text-sm font-medium text-gray-700">
-                Bukti Follow Instagram (PDF, merged maks 4,5MB):
-              </label>
-              <div className="flex items-center">
-                <input
-                  id="proofIG"
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => setProofIG(e.target.files?.[0] || null)}
-                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
-                  required
-                />
-                {proofIG && <span className="ml-2 text-sm text-green-600">✓</span>}
-              </div>
-              {proofIG?.size && !validateFileSize(proofIG) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
-              )}
-              {/* <DriveUploader
-                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
-                userEmail={user?.email || ''}
-                onSuccess={(fileId) => {
-                  setProofIGId(fileId);
-                  setError(null);
-                }}
-                onError={(errorMsg) => {
-                  setError(errorMsg);
-                  setProofIGId(null);
-                }}
-              /> */}
-            </div>
-
-            <div>
-              <label htmlFor="twibbon" className="mb-1 block text-sm font-medium text-gray-700">
-                Bukti Upload Twibbon (PDF, merged maks 4,5MB):
-              </label>
-              <div className="flex items-center">
-                <input
-                  id="twibbon"
-                  type="file"
-                  accept=".pdf"
-                  onChange={(e) => setTwibbon(e.target.files?.[0] || null)}
-                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
-                  required
-                />
-                {twibbon && <span className="ml-2 text-sm text-green-600">✓</span>}
-              </div>
-              {twibbon?.size && !validateFileSize(twibbon) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
-              )}
-              {/* <DriveUploader
-                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
-                userEmail={user?.email || ''}
-                onSuccess={(fileId) => {
-                  setTwibbonId(fileId);
-                  setError(null);
-                }}
-                onError={(errorMsg) => {
-                  setError(errorMsg);
-                  setTwibbonId(null);
-                }}
-              /> */}
-            </div>
-
-            <div className="md:col-span-2">
-              <label
-                htmlFor="paymentProof"
-                className="mb-1 block text-sm font-medium text-gray-700"
-              >
-                Bukti Pembayaran (PDF atau Gambar, maks 4,5MB):
-              </label>
-              <div className="flex items-center">
-                <input
-                  id="paymentProof"
-                  type="file"
-                  accept=".pdf,image/*"
-                  onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
-                  className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
-                  required
-                />
-                {paymentProof && <span className="ml-2 text-sm text-green-600">✓</span>}
-              </div>
-
-              {paymentProof?.size && !validateFileSize(paymentProof) && (
-                <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
-              )}
-
-              {/* <DriveUploader
-                folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
-                userEmail={user?.email || ''}
-                onSuccess={(fileId) => {
-                  setPaymentProofId(fileId);
-                  setError(null);
-                }}
-                onError={(errorMsg) => {
-                  setError(errorMsg);
-                  setPaymentProofId(null);
-                }}
-              /> */}
-            </div>
+          <div className="flex items-center">
+            <input
+              id="alternateMode"
+              type="checkbox"
+              checked={alternateMode}
+              onChange={(e) => setAlternateMode(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="alternateMode" className="text-sm font-medium text-gray-700">
+              Gunakan Mode Alternatif (Google Drive Link)
+            </label>
           </div>
+
+          {!alternateMode && (
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              <div>
+                <label htmlFor="photo" className="mb-1 block text-sm font-medium text-gray-700">
+                  Foto 3x4 (PDF, merged maks 4,5MB):
+                </label>
+                <div className="flex items-center">
+                  <input
+                    id="photo"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => setPhoto(e.target.files?.[0] || null)}
+                    className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                    required
+                  />
+                  {photo && <span className="ml-2 text-sm text-green-600">✓</span>}
+                </div>
+                {photo?.size && !validateFileSize(photo) && (
+                  <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
+                )}
+              </div>
+
+              <div>
+                <label
+                  htmlFor="studentCard"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
+                  Kartu Pelajar/Mahasiswa (PDF, merged maks 4,5MB):
+                </label>
+                <div className="flex items-center">
+                  <input
+                    id="studentCard"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => setStudentCard(e.target.files?.[0] || null)}
+                    className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                    required
+                  />
+                  {studentCard && <span className="ml-2 text-sm text-green-600">✓</span>}
+                </div>
+                {studentCard?.size && !validateFileSize(studentCard) && (
+                  <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="proofIG" className="mb-1 block text-sm font-medium text-gray-700">
+                  Bukti Follow Instagram (PDF, merged maks 4,5MB):
+                </label>
+                <div className="flex items-center">
+                  <input
+                    id="proofIG"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => setProofIG(e.target.files?.[0] || null)}
+                    className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                    required
+                  />
+                  {proofIG && <span className="ml-2 text-sm text-green-600">✓</span>}
+                </div>
+                {proofIG?.size && !validateFileSize(proofIG) && (
+                  <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="twibbon" className="mb-1 block text-sm font-medium text-gray-700">
+                  Bukti Upload Twibbon (PDF, merged maks 4,5MB):
+                </label>
+                <div className="flex items-center">
+                  <input
+                    id="twibbon"
+                    type="file"
+                    accept=".pdf"
+                    onChange={(e) => setTwibbon(e.target.files?.[0] || null)}
+                    className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                    required
+                  />
+                  {twibbon && <span className="ml-2 text-sm text-green-600">✓</span>}
+                </div>
+                {twibbon?.size && !validateFileSize(twibbon) && (
+                  <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
+                )}
+              </div>
+
+              <div className="md:col-span-2">
+                <label
+                  htmlFor="paymentProof"
+                  className="mb-1 block text-sm font-medium text-gray-700"
+                >
+                  Bukti Pembayaran (PDF atau Gambar, maks 4,5MB):
+                </label>
+                <div className="flex items-center">
+                  <input
+                    id="paymentProof"
+                    type="file"
+                    accept=".pdf,image/*"
+                    onChange={(e) => setPaymentProof(e.target.files?.[0] || null)}
+                    className="max-w-[100%] flex-1 rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                    required
+                  />
+                  {paymentProof && <span className="ml-2 text-sm text-green-600">✓</span>}
+                </div>
+
+                {paymentProof?.size && !validateFileSize(paymentProof) && (
+                  <span className="ml-2 text-sm text-red-500">Ukuran melebihi 4,5MB</span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {alternateMode && (
+            <div>
+              <label htmlFor="driveLink" className="mb-1 block text-sm font-medium text-gray-700">
+                Google Drive Link:
+              </label>
+              <input
+                id="driveLink"
+                type="url"
+                value={driveLink}
+                onChange={(e) => setDriveLink(e.target.value)}
+                className="w-full rounded-md border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue"
+                required
+                placeholder="Masukkan link Google Drive"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Pastikan link Google Drive dapat diakses oleh siapa saja yang memiliki link atau
+                dapat diakses oleh nescougm2025@gmail.com.
+              </p>
+            </div>
+          )}
 
           <div className="mt-8 flex items-center justify-end">
             <button
@@ -762,9 +738,6 @@ export default function RegisterPage() {
               <li>Semua file harus dalam format yang ditentukan (PDF/Image)</li>
               <li>
                 Pastikan kondisi jaringan internet Anda <b>stabil</b> saat mengunggah file.
-                {/*  Beberapa{' '}
-                <i>Internet Service Provider</i> yang dilaporkan mungkin terjadi masalah adalah{' '}
-                <b>Telkomsel, By.U</b>. */}
               </li>
             </ul>
           </div>
@@ -862,22 +835,14 @@ export default function RegisterPage() {
                       </svg>
                     </button>
                   </div>
-                  {/* <div className="mt-2 text-sm text-amber-700">
+                  <div className="mt-2 text-sm text-amber-700">
                     <p>
-                      Kami telah menerima laporan kendala saat mengunggah data menggunakan provider
-                      internet tertentu. Provider yang dilaporkan bermasalah antara lain:
+                      Jika anda mengalami kendala dalam pengiriman file, silahkan mencoba{' '}
+                      <b>mode alternatif</b> dengan mempersiapkan tautan Google Drive yang berisi
+                      file-file yang diperlukan dan pastikan dapat diakses oleh semua orang atau{' '}
+                      <b>nescougm2025@gmail.com</b>!
                     </p>
-                    <ul className="mt-1 list-disc pl-5">
-                      <li>Telkomsel</li>
-                      <li>by.U</li>
-                      <li>Indihome (Telkom Group)</li>
-                    </ul>
-                    <p className="mt-2">
-                      Jika Anda menggunakan provider di atas dan mengalami kendala, silakan coba
-                      dengan koneksi internet lain atau gunakan <b>VPN</b> atau <b>DNS Service</b>{' '}
-                      untuk menyelesaikan pendaftaran.
-                    </p>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             </div>

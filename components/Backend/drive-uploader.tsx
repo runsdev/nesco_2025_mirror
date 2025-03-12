@@ -1,15 +1,87 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 interface UploadProps {
   folderId: string;
   userEmail?: string;
   onSuccess?: (fileId: string) => void;
   onError?: (error: string) => void;
+  chunkSize?: number; // in bytes
 }
 
-export default function DriveUploader({ folderId, userEmail, onSuccess, onError }: UploadProps) {
+export default function DriveUploader({
+  folderId,
+  userEmail,
+  onSuccess,
+  onError,
+  chunkSize = 3 * 1024 * 1024, // Default 3MB chunks (under Vercel's 4MB limit)
+}: UploadProps) {
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [uploadUrl, setUploadUrl] = useState<string | null>(null); // For resumable uploads
+  const abortControllerRef = useRef<AbortController | null>(null);
+
+  const uploadChunk = async (
+    file: File,
+    start: number,
+    fileId: string | null = null,
+  ): Promise<{ fileId: string; completed: boolean }> => {
+    const end = Math.min(start + chunkSize, file.size);
+    const chunk = file.slice(start, end);
+
+    // Create a FormData object to send the chunk
+    const formData = new FormData();
+    formData.append('file', chunk, file.name);
+    formData.append('folderId', folderId);
+    formData.append('fileName', file.name);
+    formData.append('fileSize', file.size.toString());
+
+    if (userEmail) {
+      formData.append('userEmail', userEmail);
+    }
+
+    if (fileId) {
+      formData.append('fileId', fileId);
+    }
+
+    if (uploadUrl) {
+      formData.append('uploadUrl', uploadUrl);
+    }
+
+    const headers: HeadersInit = {
+      'Content-Range': `bytes ${start}-${end - 1}/${file.size}`,
+    };
+
+    // Create a new AbortController for this request
+    abortControllerRef.current = new AbortController();
+
+    const response = await fetch('/api/drive/upload-to-drive-signed', {
+      method: 'POST',
+      headers,
+      body: formData,
+      signal: abortControllerRef.current.signal,
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || 'Upload failed');
+    }
+
+    const data = await response.json();
+    console.log(data);
+
+    // If this is the first chunk, store the upload URL for resumable uploads
+    if (data.uploadUrl && !uploadUrl) {
+      setUploadUrl(data.uploadUrl);
+    }
+
+    // Check if the upload is complete
+    const completed = data.status === 'completed' || end >= file.size;
+
+    return {
+      fileId: data.fileId,
+      completed,
+    };
+  };
 
   const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -17,81 +89,70 @@ export default function DriveUploader({ folderId, userEmail, onSuccess, onError 
 
     setUploading(true);
     setProgress(0);
+    setUploadUrl(null); // Reset upload URL for new uploads
+
+    let currentChunk = 0;
+    let fileId: string | null = null;
 
     try {
-      // Step 1: Get upload URL from our server
-      const tokenResponse = await fetch('/api/drive/get-upload-url', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileName: file.name,
-          folderId,
-          userEmail,
-        }),
-      });
+      // Upload the file in chunks
+      while (currentChunk < file.size) {
+        const result = await uploadChunk(file, currentChunk, fileId);
+        fileId = result.fileId;
 
-      if (!tokenResponse.ok) {
-        throw new Error('Failed to get upload token');
+        // Update progress
+        currentChunk += chunkSize;
+        const progressPercent = Math.min(Math.round((currentChunk / file.size) * 100), 100);
+        setProgress(progressPercent);
+
+        // If upload is completed, break out of the loop
+        if (result.completed || currentChunk >= file.size) {
+          break;
+        }
       }
 
-      const { uploadUrl, fileId } = await tokenResponse.json();
-
-      // Step 2: Upload directly to Google Drive using the resumable upload URL
-      const xhr = new XMLHttpRequest();
-      xhr.open('PUT', uploadUrl, true);
-      xhr.setRequestHeader('Content-Type', file.type);
-
-      // Track upload progress
-      xhr.upload.onprogress = (event) => {
-        if (event.lengthComputable) {
-          const percentComplete = Math.round((event.loaded / event.total) * 100);
-          setProgress(percentComplete);
-        }
-      };
-
-      // Handle completion
-      xhr.onload = async () => {
-        if (xhr.status === 200 || xhr.status === 201) {
-          // Step 3: Notify our server that upload is complete (to set permissions)
-          const completeResponse = await fetch('/api/drive/complete-drive-upload', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ fileId, userEmail }),
-          });
-
-          if (!completeResponse.ok) {
-            throw new Error('Failed to complete upload process');
-          }
-
-          setUploading(false);
-          if (onSuccess) onSuccess(fileId);
-        } else {
-          throw new Error(`Upload failed with status: ${xhr.status}`);
-        }
-      };
-
-      xhr.onerror = () => {
-        throw new Error('Network error during upload');
-      };
-
-      // Start the upload
-      xhr.send(file);
+      setUploading(false);
+      if (onSuccess && fileId) {
+        onSuccess(fileId);
+      }
     } catch (error: any) {
       setUploading(false);
-      if (onError) onError(error.message);
+      if (onError) {
+        onError(error.message);
+      }
       console.error('Upload error:', error);
+    }
+  };
+
+  const handleCancel = () => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      setUploading(false);
+      setProgress(0);
+      setUploadUrl(null); // Reset upload URL
     }
   };
 
   return (
     <div className="drive-uploader">
-      <input type="file" onChange={handleFileSelect} disabled={uploading} className="file-input" />
+      <input
+        type="file"
+        onChange={handleFileSelect}
+        disabled={uploading}
+        className="file-input"
+        accept="*" // Allow all file types
+      />
 
       {uploading && (
-        <div className="progress-container">
-          <div className="progress-bar" style={{ width: `${progress}%` }}>
-            {progress}%
+        <div className="upload-status">
+          <div className="progress-container">
+            <div className="progress-bar" style={{ width: `${progress}%` }}>
+              {progress}%
+            </div>
           </div>
+          <button onClick={handleCancel} className="cancel-button">
+            Cancel Upload
+          </button>
         </div>
       )}
 
@@ -102,11 +163,14 @@ export default function DriveUploader({ folderId, userEmail, onSuccess, onError 
         .file-input {
           margin-bottom: 10px;
         }
+        .upload-status {
+          margin-top: 10px;
+        }
         .progress-container {
           width: 100%;
           background-color: #f0f0f0;
           border-radius: 4px;
-          margin-top: 10px;
+          margin-bottom: 10px;
         }
         .progress-bar {
           height: 20px;
@@ -116,6 +180,17 @@ export default function DriveUploader({ folderId, userEmail, onSuccess, onError 
           text-align: center;
           line-height: 20px;
           transition: width 0.3s ease;
+        }
+        .cancel-button {
+          padding: 5px 10px;
+          background-color: #f44336;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .cancel-button:hover {
+          background-color: #d32f2f;
         }
       `}</style>
     </div>

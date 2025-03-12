@@ -1,3 +1,4 @@
+// api/drive/get-upload-url/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { google } from 'googleapis';
 import { getAuth } from '@/utils/google/action';

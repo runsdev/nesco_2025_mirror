@@ -22,6 +22,7 @@ export default function AdminDashboard() {
   const [teams, setTeams] = useState<any[]>([]);
   const [filteredTeams, setFilteredTeams] = useState<any[]>([]);
   const [teamFiles, setTeamFiles] = useState<{ [key: string]: any }>({});
+  const [teamLink, setTeamLink] = useState<{ [key: string]: any }>({}); // Team link for sharing
   const [teamMembers, setTeamMembers] = useState<{ [key: string]: any[] }>({});
   const [submissions, setSubmissions] = useState<{ [key: string]: any[] }>({});
   const [registrations, setRegistrations] = useState<{ [key: string]: any[] }>({});
@@ -96,6 +97,16 @@ export default function AdminDashboard() {
           return acc;
         }, {});
         setTeamFiles(filesMap);
+      }
+
+      const { data: linksData, error: linksError } = await supabase.from('team_links').select('*');
+
+      if (!linksError && linksData) {
+        const linksMap = linksData.reduce((acc: any, link: any) => {
+          acc[link.team_id] = link.drive_link;
+          return acc;
+        }, {});
+        setTeamLink(linksMap);
       }
 
       // Fetch all team members
@@ -260,266 +271,282 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="mb-4">
-        <Button
-          onClick={() => router.push('/')}
-          variant="secondary"
-          className="flex items-center gap-2"
-        >
-          <span>&#8592;</span> Kembali ke Beranda
-        </Button>
-      </div>
-
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-3">
-          <div className="flex items-center gap-2 rounded-md border p-2">
-            <Filter size={18} />
-            <select
-              className="bg-transparent outline-none"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <option value="all">All Teams</option>
-              <option value="verified">Verified</option>
-              <option value="pending">Pending</option>
-            </select>
-          </div>
-
-          <div className="flex items-center gap-2 rounded-md border p-2">
-            <FileText size={18} />
-            <select
-              className="bg-transparent outline-none"
-              value={competitionFilter}
-              onChange={(e) => setCompetitionFilter(e.target.value)}
-            >
-              <option value="all">All Competitions</option>
-              <option value="Paper Competition">Paper</option>
-              <option value="Poster Competition 1 Karya">Poster 1 Karya</option>
-              <option value="Poster Competition 2 Karya">Poster 2 Karya</option>
-              <option value="Scientific Debate">Scientific Debate</option>
-              <option value="Innovation Challenge">Innovation Challenge</option>
-            </select>
-          </div>
+    <div className="min-h-[100svh] w-full bg-gradient-to-b from-[#61CCC2] to-[#FFE08D] md:min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-4">
+          <Button
+            onClick={() => router.push('/')}
+            variant="secondary"
+            className="flex items-center gap-2"
+          >
+            <span>&#8592;</span> Kembali ke Beranda
+          </Button>
         </div>
 
-        <Button onClick={exportToCSV} className="flex items-center gap-2">
-          <Download size={16} />
-          Export to CSV
-        </Button>
-      </div>
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="flex items-center gap-2 rounded-md border p-2">
+              <Filter size={18} />
+              <select
+                className="bg-transparent outline-none"
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+              >
+                <option value="all">All Teams</option>
+                <option value="verified">Verified</option>
+                <option value="pending">Pending</option>
+              </select>
+            </div>
 
-      <Tabs defaultValue="teams" className="w-full">
-        <TabsList className="mb-4 grid w-full grid-cols-2 data-[state=active]:text-white">
-          <TabsTrigger value="teams">Teams ({filteredTeams.length})</TabsTrigger>
-          <TabsTrigger value="submissions">Submissions</TabsTrigger>
-        </TabsList>
+            <div className="flex items-center gap-2 rounded-md border p-2">
+              <FileText size={18} />
+              <select
+                className="bg-transparent outline-none"
+                value={competitionFilter}
+                onChange={(e) => setCompetitionFilter(e.target.value)}
+              >
+                <option value="all">All Competitions</option>
+                <option value="Paper Competition">Paper</option>
+                <option value="Poster Competition 1 Karya">Poster 1 Karya</option>
+                <option value="Poster Competition 2 Karya">Poster 2 Karya</option>
+                <option value="Scientific Debate">Scientific Debate</option>
+                <option value="Innovation Challenge">Innovation Challenge</option>
+              </select>
+            </div>
+          </div>
 
-        <TabsContent value="teams">
-          <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
-            {filteredTeams.length > 0 ? (
-              filteredTeams.map((team) => (
-                <Card key={team.id} className="overflow-hidden">
-                  <CardHeader className="flex flex-row items-start justify-between">
-                    <div>
-                      <CardTitle className="flex items-center gap-2">
-                        {team.team_name}
-                        <Badge>{team.competition}</Badge>
-                      </CardTitle>
-                      <CardDescription>{team.institution}</CardDescription>
-                    </div>
-                    <Badge variant={team.verified ? 'success' : 'outline'}>
-                      {team.verified ? 'Verified' : 'Pending'}
-                    </Badge>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
+          <Button onClick={exportToCSV} className="flex items-center gap-2">
+            <Download size={16} />
+            Export to CSV
+          </Button>
+        </div>
+
+        <Tabs defaultValue="teams" className="w-full">
+          <TabsList className="mb-4 grid w-full grid-cols-2 data-[state=active]:text-white">
+            <TabsTrigger value="teams">Teams ({filteredTeams.length})</TabsTrigger>
+            <TabsTrigger value="submissions">Submissions</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="teams">
+            <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-2">
+              {filteredTeams.length > 0 ? (
+                filteredTeams.map((team) => (
+                  <Card key={team.id} className="overflow-hidden">
+                    <CardHeader className="flex flex-row items-start justify-between">
                       <div>
-                        <p className="text-sm text-gray-500">Contact</p>
-                        <p>{team.contact}</p>
+                        <CardTitle className="flex items-center gap-2">
+                          {team.team_name}
+                          <Badge>{team.competition}</Badge>
+                        </CardTitle>
+                        <CardDescription>{team.institution}</CardDescription>
                       </div>
-
-                      <div>
-                        <p className="text-sm text-gray-500">Email</p>
-                        <p>{team.email}</p>
-                      </div>
-
-                      <div>
-                        <p className="text-sm text-gray-500">Team Members</p>
-                        <ul className="ml-5 list-disc">
-                          {teamMembers[team.id]?.map((member, idx) => (
-                            <li key={member.id}>
-                              {member.name} {idx === 0 ? '(Leader)' : ''}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      {teamFiles[team.id] && (
+                      <Badge variant={team.verified ? 'success' : 'outline'}>
+                        {team.verified ? 'Verified' : 'Pending'}
+                      </Badge>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-4">
                         <div>
-                          <p className="mb-2 text-sm text-gray-500">Files</p>
-                          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                            {Object.entries(teamFiles[team.id])
-                              .filter(([key]) =>
-                                [
-                                  'photo',
-                                  'student_card',
-                                  'instagram_follow',
-                                  'twibbon',
-                                  'payment',
-                                ].includes(key),
-                              )
-                              .filter(([_, value]) => !!value) // Filter out falsy values before mapping
-                              .map(([key, value]) => (
-                                <a
-                                  key={key}
-                                  href={`https://drive.google.com/file/d/${value}/view`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="flex items-center gap-2 rounded-md border p-2 text-sm hover:bg-gray-50"
-                                >
-                                  <FileIcon size={16} />
-                                  <span>{key.replace(/_/g, ' ')}</span>
-                                  <Eye size={14} className="ml-auto" />
-                                </a>
-                              ))}
-                          </div>
+                          <p className="text-sm text-gray-500">Contact</p>
+                          <p>{team.contact}</p>
                         </div>
-                      )}
 
-                      <div className="flex justify-end gap-2">
-                        {!team.verified ? (
-                          <Button
-                            onClick={() => setVerifyModalOpen(true)}
-                            className="flex items-center gap-1"
-                          >
-                            <CheckCircleIcon size={16} />
-                            Verify
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outline"
-                            onClick={() => setRevokeModalOpen(true)}
-                            className="flex items-center gap-1"
-                          >
-                            <XCircleIcon size={16} />
-                            Revoke
-                          </Button>
+                        <div>
+                          <p className="text-sm text-gray-500">Email</p>
+                          <p>{team.email}</p>
+                        </div>
+
+                        <div>
+                          <p className="text-sm text-gray-500">Team Members</p>
+                          <ul className="ml-5 list-disc">
+                            {teamMembers[team.id]?.map((member, idx) => (
+                              <li key={member.id}>
+                                {member.name} {idx === 0 ? '(Leader)' : ''}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {teamFiles[team.id] && (
+                          <div>
+                            <p className="mb-2 text-sm text-gray-500">Files</p>
+                            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                              {Object.entries(teamFiles[team.id])
+                                .filter(([key]) =>
+                                  [
+                                    'photo',
+                                    'student_card',
+                                    'instagram_follow',
+                                    'twibbon',
+                                    'payment',
+                                  ].includes(key),
+                                )
+                                .filter(([_, value]) => !!value) // Filter out falsy values before mapping
+                                .map(([key, value]) => (
+                                  <a
+                                    key={key}
+                                    href={`https://drive.google.com/file/d/${value}/view`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-2 rounded-md border p-2 text-sm hover:bg-gray-50"
+                                  >
+                                    <FileIcon size={16} />
+                                    <span>{key.replace(/_/g, ' ')}</span>
+                                    <Eye size={14} className="ml-auto" />
+                                  </a>
+                                ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {teamLink[team.id] && (
+                          <div>
+                            <p className="mb-2 text-sm text-gray-500">Team Link</p>
+                            <div className="flex items-center gap-2 rounded-md border p-2 text-sm">
+                              <Link href={teamLink[team.id]} passHref>
+                                <a className="flex items-center gap-2">
+                                  <Eye size={16} />
+                                  <span>View Team Link</span>
+                                </a>
+                              </Link>
+                            </div>
+                          </div>
+                        )}
+
+                        <div className="flex justify-end gap-2">
+                          {!team.verified ? (
+                            <Button
+                              onClick={() => handleVerifyTeam(team.id, true)}
+                              className="flex items-center gap-1"
+                            >
+                              <CheckCircleIcon size={16} />
+                              Verify
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              onClick={() => handleVerifyTeam(team.id, false)}
+                              className="flex items-center gap-1"
+                            >
+                              <XCircleIcon size={16} />
+                              Revoke
+                            </Button>
+                          )}
+                        </div>
+
+                        {/* Verification Confirmation Modal */}
+                        {verifyModalOpen && (
+                          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10">
+                            <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+                              <h3 className="mb-4 text-lg font-bold">Confirm Verification</h3>
+                              <p className="mb-6">
+                                Are you sure you want to verify team &quot;{team.team_name}&quot;?
+                                This will mark them as having completed all registration
+                                requirements.
+                              </p>
+                              <div className="flex justify-end gap-2">
+                                <Button variant="outline" onClick={() => setVerifyModalOpen(false)}>
+                                  Cancel
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    handleVerifyTeam(team.id, true);
+                                    setVerifyModalOpen(false);
+                                  }}
+                                >
+                                  Verify Team
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Revoke Verification Confirmation Modal */}
+                        {revokeModalOpen && (
+                          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                            <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
+                              <h3 className="mb-4 text-lg font-bold">Confirm Revocation</h3>
+                              <p className="mb-6">
+                                Are you sure you want to revoke verification for team &quot;
+                                {team.team_name}&quot;? This will mark them as having incomplete
+                                registration requirements.
+                              </p>
+                              <div className="flex justify-end gap-2">
+                                <Button variant="outline" onClick={() => setRevokeModalOpen(false)}>
+                                  Cancel
+                                </Button>
+                                <Button
+                                  onClick={() => {
+                                    handleVerifyTeam(team.id, false);
+                                    setRevokeModalOpen(false);
+                                  }}
+                                >
+                                  Revoke Verification
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
                         )}
                       </div>
+                    </CardContent>
+                  </Card>
+                ))
+              ) : (
+                <div className="col-span-2 rounded-md border border-dashed p-8 text-center">
+                  <p className="text-gray-500">No teams found matching your filters.</p>
+                </div>
+              )}
+            </div>
+          </TabsContent>
 
-                      {/* Verification Confirmation Modal */}
-                      {verifyModalOpen && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10">
-                          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-                            <h3 className="mb-4 text-lg font-bold">Confirm Verification</h3>
-                            <p className="mb-6">
-                              Are you sure you want to verify team &quot;{team.team_name}&quot;?
-                              This will mark them as having completed all registration requirements.
-                            </p>
-                            <div className="flex justify-end gap-2">
-                              <Button variant="outline" onClick={() => setVerifyModalOpen(false)}>
-                                Cancel
-                              </Button>
-                              <Button
-                                onClick={() => {
-                                  handleVerifyTeam(team.id, true);
-                                  setVerifyModalOpen(false);
-                                }}
-                              >
-                                Verify Team
-                              </Button>
+          <TabsContent value="submissions">
+            <Card>
+              <CardHeader>
+                <CardTitle>Team Submissions</CardTitle>
+                <CardDescription>Review and manage submitted works from teams</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {Object.entries(submissions).length > 0 ? (
+                    filteredTeams.map((team) => {
+                      const teamSubmissions = submissions[team.id] || [];
+                      if (teamSubmissions.length === 0) return null;
+
+                      // Skip if there are no actual submission files
+                      const hasSubmission = teamSubmissions.some(
+                        (s) => s.submission || s.submission_2 || s.originality,
+                      );
+                      if (!hasSubmission) return null;
+
+                      return (
+                        <div key={team.id} className="rounded-lg border">
+                          <div className="border-b bg-muted/40 p-4">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h3 className="font-medium">{team.team_name}</h3>
+                                <p className="text-sm text-gray-500">{team.competition}</p>
+                              </div>
+                              <Badge variant={team.verified ? 'success' : 'outline'}>
+                                {team.verified ? 'Verified' : 'Pending'}
+                              </Badge>
                             </div>
                           </div>
-                        </div>
-                      )}
 
-                      {/* Revoke Verification Confirmation Modal */}
-                      {revokeModalOpen && (
-                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-                          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-lg">
-                            <h3 className="mb-4 text-lg font-bold">Confirm Revocation</h3>
-                            <p className="mb-6">
-                              Are you sure you want to revoke verification for team &quot;
-                              {team.team_name}&quot;? This will mark them as having incomplete
-                              registration requirements.
-                            </p>
-                            <div className="flex justify-end gap-2">
-                              <Button variant="outline" onClick={() => setRevokeModalOpen(false)}>
-                                Cancel
-                              </Button>
-                              <Button
-                                onClick={() => {
-                                  handleVerifyTeam(team.id, false);
-                                  setRevokeModalOpen(false);
-                                }}
-                              >
-                                Revoke Verification
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <div className="col-span-2 rounded-md border border-dashed p-8 text-center">
-                <p className="text-gray-500">No teams found matching your filters.</p>
-              </div>
-            )}
-          </div>
-        </TabsContent>
+                          <div className="divide-y">
+                            {teamSubmissions.map((submission) => (
+                              <React.Fragment key={submission.id}>
+                                {submission.submission && (
+                                  <div className="flex flex-wrap items-center justify-between gap-4 p-4">
+                                    <div className="flex-1">
+                                      <p className="font-medium">Primary Submission</p>
+                                      <p className="text-sm text-gray-500">
+                                        {submission.submitted_at_1 &&
+                                          new Date(submission.submitted_at_1).toLocaleString()}
+                                      </p>
+                                    </div>
 
-        <TabsContent value="submissions">
-          <Card>
-            <CardHeader>
-              <CardTitle>Team Submissions</CardTitle>
-              <CardDescription>Review and manage submitted works from teams</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {Object.entries(submissions).length > 0 ? (
-                  filteredTeams.map((team) => {
-                    const teamSubmissions = submissions[team.id] || [];
-                    if (teamSubmissions.length === 0) return null;
-
-                    // Skip if there are no actual submission files
-                    const hasSubmission = teamSubmissions.some(
-                      (s) => s.submission || s.submission_2 || s.originality,
-                    );
-                    if (!hasSubmission) return null;
-
-                    return (
-                      <div key={team.id} className="rounded-lg border">
-                        <div className="border-b bg-muted/40 p-4">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <h3 className="font-medium">{team.team_name}</h3>
-                              <p className="text-sm text-gray-500">{team.competition}</p>
-                            </div>
-                            <Badge variant={team.verified ? 'success' : 'outline'}>
-                              {team.verified ? 'Verified' : 'Pending'}
-                            </Badge>
-                          </div>
-                        </div>
-
-                        <div className="divide-y">
-                          {teamSubmissions.map((submission) => (
-                            <React.Fragment key={submission.id}>
-                              {submission.submission && (
-                                <div className="flex flex-wrap items-center justify-between gap-4 p-4">
-                                  <div className="flex-1">
-                                    <p className="font-medium">Primary Submission</p>
-                                    <p className="text-sm text-gray-500">
-                                      {submission.submitted_at_1 &&
-                                        new Date(submission.submitted_at_1).toLocaleString()}
-                                    </p>
-                                  </div>
-
-                                  <div className="flex items-center gap-2">
-                                    {/* <Badge
+                                    <div className="flex items-center gap-2">
+                                      {/* <Badge
                                       variant={
                                         submission.status === 'accepted'
                                           ? 'success'
@@ -535,132 +562,104 @@ export default function AdminDashboard() {
                                           : 'Pending'}
                                     </Badge> */}
 
-                                    <a
-                                      href={`https://drive.google.com/file/d/${submission.submission}/view`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="flex items-center gap-1"
+                                      <a
+                                        href={`https://drive.google.com/file/d/${submission.submission}/view`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                       >
-                                        <Eye size={14} />
-                                        View
-                                      </Button>
-                                    </a>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          className="flex items-center gap-1"
+                                        >
+                                          <Eye size={14} />
+                                          View
+                                        </Button>
+                                      </a>
+                                    </div>
                                   </div>
+                                )}
 
-                                  {/* <div className="flex items-center gap-2">
-                                    <Button
-                                      size="sm"
-                                      onClick={() =>
-                                        handleUpdateSubmissionStatus(submission.id, 'accepted')
-                                      }
-                                      variant={
-                                        submission.status === 'accepted' ? 'default' : 'outline'
-                                      }
-                                      className="flex items-center gap-1"
-                                    >
-                                      <CheckCircleIcon size={14} />
-                                      Accept
-                                    </Button>
-                                    <Button
-                                      size="sm"
-                                      onClick={() =>
-                                        handleUpdateSubmissionStatus(submission.id, 'rejected')
-                                      }
-                                      variant={
-                                        submission.status === 'rejected' ? 'destructive' : 'outline'
-                                      }
-                                      className="flex items-center gap-1"
-                                    >
-                                      <XCircleIcon size={14} />
-                                      Reject
-                                    </Button>
-                                  </div> */}
-                                </div>
-                              )}
+                                {submission.submission_2 && (
+                                  <div className="flex flex-wrap items-center justify-between gap-4 border-t p-4">
+                                    <div className="flex-1">
+                                      <p className="font-medium">Second Submission</p>
+                                      <p className="text-sm text-gray-500">
+                                        {submission.submitted_at_2 &&
+                                          new Date(submission.submitted_at_2).toLocaleString()}
+                                      </p>
+                                    </div>
 
-                              {submission.submission_2 && (
-                                <div className="flex flex-wrap items-center justify-between gap-4 border-t p-4">
-                                  <div className="flex-1">
-                                    <p className="font-medium">Second Submission</p>
-                                    <p className="text-sm text-gray-500">
-                                      {submission.submitted_at_2 &&
-                                        new Date(submission.submitted_at_2).toLocaleString()}
-                                    </p>
-                                  </div>
+                                    <div className="flex items-center gap-2">
+                                      <Badge variant="outline">Second Work</Badge>
 
-                                  <div className="flex items-center gap-2">
-                                    <Badge variant="outline">Second Work</Badge>
-
-                                    <a
-                                      href={`https://drive.google.com/file/d/${submission.submission_2}/view`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="flex items-center gap-1"
+                                      <a
+                                        href={`https://drive.google.com/file/d/${submission.submission_2}/view`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                       >
-                                        <Eye size={14} />
-                                        View
-                                      </Button>
-                                    </a>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          className="flex items-center gap-1"
+                                        >
+                                          <Eye size={14} />
+                                          View
+                                        </Button>
+                                      </a>
+                                    </div>
                                   </div>
-                                </div>
-                              )}
+                                )}
 
-                              {submission.originality && (
-                                <div className="flex flex-wrap items-center justify-between gap-4 border-t p-4">
-                                  <div className="flex-1">
-                                    <p className="font-medium">Originality Statement</p>
-                                    <p className="text-sm text-gray-500">
-                                      {submission.submitted_at_3 &&
-                                        new Date(submission.submitted_at_3).toLocaleString()}
-                                    </p>
-                                  </div>
+                                {submission.originality && (
+                                  <div className="flex flex-wrap items-center justify-between gap-4 border-t p-4">
+                                    <div className="flex-1">
+                                      <p className="font-medium">Originality Statement</p>
+                                      <p className="text-sm text-gray-500">
+                                        {submission.submitted_at_3 &&
+                                          new Date(submission.submitted_at_3).toLocaleString()}
+                                      </p>
+                                    </div>
 
-                                  <div className="flex items-center gap-2">
-                                    <Badge variant="outline" className="bg-green-50">
-                                      Originality
-                                    </Badge>
+                                    <div className="flex items-center gap-2">
+                                      <Badge variant="outline" className="bg-green-50">
+                                        Originality
+                                      </Badge>
 
-                                    <a
-                                      href={`https://drive.google.com/file/d/${submission.originality}/view`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      <Button
-                                        size="sm"
-                                        variant="outline"
-                                        className="flex items-center gap-1"
+                                      <a
+                                        href={`https://drive.google.com/file/d/${submission.originality}/view`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
                                       >
-                                        <Eye size={14} />
-                                        View
-                                      </Button>
-                                    </a>
+                                        <Button
+                                          size="sm"
+                                          variant="outline"
+                                          className="flex items-center gap-1"
+                                        >
+                                          <Eye size={14} />
+                                          View
+                                        </Button>
+                                      </a>
+                                    </div>
                                   </div>
-                                </div>
-                              )}
-                            </React.Fragment>
-                          ))}
+                                )}
+                              </React.Fragment>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="rounded-md border border-dashed p-8 text-center">
-                    <p className="text-gray-500">No submissions found.</p>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                      );
+                    })
+                  ) : (
+                    <div className="rounded-md border border-dashed p-8 text-center">
+                      <p className="text-gray-500">No submissions found.</p>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }

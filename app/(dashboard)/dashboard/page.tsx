@@ -20,6 +20,7 @@ export default function Dashboard() {
   const [registrationData, setRegistrationData] = useState<any>(null);
   const [teamMembers, setTeamMembers] = useState<any[]>([]);
   const [teamFiles, setTeamFiles] = useState<any>(null);
+  const [teamLink, setTeamLink] = useState<string>('');
   const [submissions, setSubmissions] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [submissionFile, setSubmissionFile] = useState<File | null>(null);
@@ -90,6 +91,17 @@ export default function Dashboard() {
 
         if (filesData) {
           setTeamFiles(filesData);
+        }
+
+        // Fetch team links
+        const { data: linksData } = await supabase
+          .from('team_links')
+          .select('*')
+          .eq('team_id', teamsData.id)
+          .single();
+
+        if (linksData) {
+          setTeamLink(linksData.drive_link);
         }
 
         // Fetch submissions
@@ -337,6 +349,31 @@ export default function Dashboard() {
     }
   };
 
+  const handleUploadSuccess = async (fileId: string) => {
+    try {
+      // Finalize the upload and get additional file details
+      const response = await fetch('/api/drive/finalize-drive-upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileId,
+          userEmail: user?.email,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to finalize upload');
+      }
+
+      const data = await response.json();
+
+      console.log(fileId);
+      console.log('Upload success:', data);
+    } catch (err: any) {
+      console.log('Error finalizing upload:', err.message);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="flex h-[80vh] items-center justify-center">
@@ -347,109 +384,124 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* <div className="mb-8">
-        <h1 className="mb-2 text-3xl font-bold">Dashboard Peserta</h1>
-        <p className="text-gray-600">Selamat datang, {teamData?.leader}</p>
-      </div> */}
+    <div className="min-h-[100svh] w-full bg-gradient-to-b from-[#61CCC2] to-[#FFE08D] md:min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        <div className="mb-4">
+          <Button
+            onClick={() => router.push('/')}
+            variant="secondary"
+            className="flex items-center gap-2"
+          >
+            <span>&#8592;</span> Kembali ke Beranda
+          </Button>
+        </div>
 
-      <div className="mb-4">
-        <Button
-          onClick={() => router.push('/')}
-          variant="secondary"
-          className="flex items-center gap-2"
-        >
-          <span>&#8592;</span> Kembali ke Beranda
-        </Button>
-      </div>
+        <div className="mb-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                <span>{teamData?.competition}</span>
+                <Badge variant={registrationData?.verified ? 'success' : 'secondary'}>
+                  {registrationData?.verified ? 'Terverifikasi' : 'Menunggu Verifikasi'}
+                </Badge>
+              </CardTitle>
+              <CardDescription>Status Pendaftaran dan Informasi Tim</CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
 
-      <div className="mb-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>{teamData?.competition}</span>
-              <Badge variant={registrationData?.verified ? 'success' : 'secondary'}>
-                {registrationData?.verified ? 'Terverifikasi' : 'Menunggu Verifikasi'}
-              </Badge>
-            </CardTitle>
-            <CardDescription>Status Pendaftaran dan Informasi Tim</CardDescription>
-          </CardHeader>
-        </Card>
-      </div>
-
-      <Tabs defaultValue="data" className="w-full">
-        <TabsList
-          className={`mb-4 grid w-full ${registrationData?.verified && teamData?.competition !== 'Scientific Debate' ? 'grid-cols-3' : 'grid-cols-2'}`}
-        >
-          <TabsTrigger value="data" className="data-[state=active]:text-white">
-            Data
-          </TabsTrigger>
-          {/* <TabsTrigger value="timeline">Timeline</TabsTrigger> */}
-          {registrationData?.verified && teamData?.competition !== 'Scientific Debate' && (
-            <TabsTrigger value="submission" className="data-[state=active]:text-white">
-              Submission
+        <Tabs defaultValue="data" className="w-full">
+          <TabsList
+            className={`mb-4 grid w-full ${registrationData?.verified && teamData?.competition !== 'Scientific Debate' ? 'grid-cols-3' : 'grid-cols-2'}`}
+          >
+            <TabsTrigger value="data" className="data-[state=active]:text-white">
+              Data
             </TabsTrigger>
-          )}
-          <TabsTrigger value="timeline" className="data-[state=active]:text-white">
-            Timeline
-          </TabsTrigger>
-        </TabsList>
+            {/* <TabsTrigger value="timeline">Timeline</TabsTrigger> */}
+            {registrationData?.verified && teamData?.competition !== 'Scientific Debate' && (
+              <TabsTrigger value="submission" className="data-[state=active]:text-white">
+                Submission
+              </TabsTrigger>
+            )}
+            <TabsTrigger value="timeline" className="data-[state=active]:text-white">
+              Timeline
+            </TabsTrigger>
+          </TabsList>
 
-        <TabsContent value="data">
-          <div className="grid gap-6 md:grid-cols-2">
-            <Card>
-              <CardHeader>
-                <CardTitle>Data Tim</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold">Nama Tim</h3>
-                    <p>{teamData?.team_name}</p>
+          <TabsContent value="data">
+            <div className="grid gap-6 md:grid-cols-2">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Data Tim</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="font-semibold">Nama Tim</h3>
+                      <p>{teamData?.team_name}</p>
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">Institusi</h3>
+                      <p>{teamData?.institution}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-semibold">Institusi</h3>
-                    <p>{teamData?.institution}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Data Anggota</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {teamMembers.map((member, index) => (
-                    <li key={member.id} className="flex items-center justify-between border-b pb-2">
-                      <span>{member.name}</span>
-                      <Badge variant="outline">{index === 0 ? 'Ketua' : `Anggota ${index}`}</Badge>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Data Anggota</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {teamMembers.map((member, index) => (
+                      <li
+                        key={member.id}
+                        className="flex items-center justify-between border-b pb-2"
+                      >
+                        <span>{member.name}</span>
+                        <Badge variant="outline">
+                          {index === 0 ? 'Ketua' : `Anggota ${index}`}
+                        </Badge>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
 
-            <Card className="md:col-span-2">
-              <CardHeader>
-                <CardTitle>Data Registrasi</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-                  {teamFiles &&
-                    [
-                      { label: 'Foto 3x4', fileId: teamFiles.photo },
-                      { label: 'Kartu Pelajar/Mahasiswa', fileId: teamFiles.student_card },
-                      { label: 'Bukti Follow Instagram', fileId: teamFiles.instagram_follow },
-                      { label: 'Bukti Upload Twibbon', fileId: teamFiles.twibbon },
-                      { label: 'Bukti Pembayaran', fileId: teamFiles.payment },
-                    ].map((file, index) => (
-                      <div key={index} className="flex items-center gap-2 rounded-md border p-3">
+              <Card className="md:col-span-2">
+                <CardHeader>
+                  <CardTitle>Data Registrasi</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    {teamFiles &&
+                      [
+                        { label: 'Foto 3x4', fileId: teamFiles.photo },
+                        { label: 'Kartu Pelajar/Mahasiswa', fileId: teamFiles.student_card },
+                        { label: 'Bukti Follow Instagram', fileId: teamFiles.instagram_follow },
+                        { label: 'Bukti Upload Twibbon', fileId: teamFiles.twibbon },
+                        { label: 'Bukti Pembayaran', fileId: teamFiles.payment },
+                      ].map((file, index) => (
+                        <div key={index} className="flex items-center gap-2 rounded-md border p-3">
+                          <FileIcon size={18} />
+                          <span>{file.label}</span>
+                          <a
+                            href={`https://drive.google.com/file/d/${file.fileId}/view`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-500 ml-auto hover:underline"
+                          >
+                            Lihat
+                          </a>
+                        </div>
+                      ))}
+                    {teamLink && (
+                      <div className="flex items-center gap-2 rounded-md border p-3">
                         <FileIcon size={18} />
-                        <span>{file.label}</span>
+                        <span>Link Google Drive</span>
                         <a
-                          href={`https://drive.google.com/file/d/${file.fileId}/view`}
+                          href={teamLink}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-500 ml-auto hover:underline"
@@ -457,404 +509,409 @@ export default function Dashboard() {
                           Lihat
                         </a>
                       </div>
-                    ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="submission">
-          <Card>
-            <CardHeader>
-              <CardTitle>Upload Submission</CardTitle>
-              <CardDescription>
-                Upload berkas submission lomba {teamData?.competition}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {teamData?.competition === 'Scientific Debate' ? (
-                  <div className="rounded-md bg-amber-50 p-4 text-amber-800">
-                    Lomba Scientific Debate tidak memerlukan submission karya.
+                    )}
                   </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                    {/* Main Submission */}
-                    {submissions.find((s) => s.submission) ? (
-                      <div className="flex flex-col rounded-lg border p-4">
-                        <h3 className="mb-2 font-medium">Karya Lomba</h3>
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <FileIcon size={18} className="text-blue-500" />
-                            <strong>Submission</strong> submitted at{' '}
-                            {new Date(
-                              submissions.find((s) => s.submitted_at_1)?.submitted_at_1,
-                            ).toLocaleString()}
-                          </div>
-                          <div className="flex gap-2">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="text-blue-600 flex items-center gap-1"
-                              asChild
-                            >
-                              <a
-                                href={`https://drive.google.com/file/d/${submissions.find((s) => s.submission)?.submission}/view`}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="submission">
+            <Card>
+              <CardHeader>
+                <CardTitle>Upload Submission</CardTitle>
+                <CardDescription>
+                  Upload berkas submission lomba {teamData?.competition}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  {teamData?.competition === 'Scientific Debate' ? (
+                    <div className="rounded-md bg-amber-50 p-4 text-amber-800">
+                      Lomba Scientific Debate tidak memerlukan submission karya.
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      {/* Main Submission */}
+                      {submissions.find((s) => s.submission) ? (
+                        <div className="flex flex-col rounded-lg border p-4">
+                          <h3 className="mb-2 font-medium">Karya Lomba</h3>
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <FileIcon size={18} className="text-blue-500" />
+                              <strong>Submission</strong> submitted at{' '}
+                              {new Date(
+                                submissions.find((s) => s.submitted_at_1)?.submitted_at_1,
+                              ).toLocaleString()}
+                            </div>
+                            <div className="flex gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="text-blue-600 flex items-center gap-1"
+                                asChild
                               >
-                                Lihat File
-                              </a>
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={async () => {
-                                if (confirm('Yakin ingin menghapus submission ini?')) {
-                                  const submissionId = submissions.find((s) => s.submission)?.id;
-                                  await deleteFile(
-                                    submissions.find((s) => s.submission)?.submission!,
-                                  );
-                                  const { error } = await supabase
-                                    .from('submissions')
-                                    .update({ submission: null })
-                                    .eq('id', submissionId);
-
-                                  if (!error) {
-                                    // Refresh submissions
-                                    const { data } = await supabase
+                                <a
+                                  href={`https://drive.google.com/file/d/${submissions.find((s) => s.submission)?.submission}/view`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  Lihat File
+                                </a>
+                              </Button>
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                onClick={async () => {
+                                  if (confirm('Yakin ingin menghapus submission ini?')) {
+                                    const submissionId = submissions.find((s) => s.submission)?.id;
+                                    await deleteFile(
+                                      submissions.find((s) => s.submission)?.submission!,
+                                    );
+                                    const { error } = await supabase
                                       .from('submissions')
-                                      .select('*')
-                                      .eq('team_id', teamData.id);
+                                      .update({ submission: null })
+                                      .eq('id', submissionId);
 
-                                    if (data) setSubmissions(data);
+                                    if (!error) {
+                                      // Refresh submissions
+                                      const { data } = await supabase
+                                        .from('submissions')
+                                        .select('*')
+                                        .eq('team_id', teamData.id);
+
+                                      if (data) setSubmissions(data);
+                                    }
                                   }
-                                }
-                              }}
-                            >
-                              Hapus
-                            </Button>
+                                }}
+                              >
+                                Hapus
+                              </Button>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div className="rounded-lg border border-dashed border-gray-300 p-6">
-                        <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                          {/* <UploadIcon className="h-8 w-8 text-gray-400" />
+                      ) : (
+                        <div className="rounded-lg border border-dashed border-gray-300 p-6">
+                          <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                            {/* <UploadIcon className="h-8 w-8 text-gray-400" />
                           <p className="text-sm text-gray-500">
                             {teamData.competition.includes('Poster')
                               ? 'Upload file gambar poster'
                               : 'Upload file PDF karya lomba'}
                           </p> */}
-                          <input
-                            id="submission-file"
-                            type="file"
-                            accept={
-                              teamData?.competition.includes('Poster')
-                                ? 'image/*,.zip,.rar'
-                                : '.pdf'
-                            }
-                            onChange={handleFileUpload}
-                            className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
-                          />
-                        </div>
-                        <Button
-                          onClick={handleSubmission}
-                          disabled={!submissionFile || uploadStatus === 'loading'}
-                          className="mt-4 w-full"
-                        >
-                          {uploadStatus === 'loading' ? 'Uploading...' : 'Submit Karya'}
-                        </Button>
-                        <DriveUploader
-                          folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
-                          userEmail={user?.email || ''}
-                          onSuccess={(fileId) => {
-                            setSubmissionFileId(fileId);
-                          }}
-                          onError={(errorMsg) => {
-                            setSubmissionFileId(null);
-                          }}
-                        />
-                      </div>
-                    )}
-
-                    {/* Second submission (only for Poster 2 Karya) */}
-                    {teamData?.competition === 'Poster Competition 2 Karya' &&
-                      (submissions.find((s) => s.submission_2) ? (
-                        <div className="flex flex-col rounded-lg border p-4">
-                          <h3 className="mb-2 font-medium">Karya Kedua</h3>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <FileIcon size={18} className="text-blue-500" />
-                              <strong>Submission Kedua</strong> submitted at{' '}
-                              {new Date(
-                                submissions.find((s) => s.submitted_at_2)?.submitted_at_2,
-                              ).toLocaleString()}
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-blue-600 flex items-center gap-1"
-                                asChild
-                              >
-                                <a
-                                  href={`https://drive.google.com/file/d/${submissions.find((s) => s.submission_2)?.submission_2}/view`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  Lihat File
-                                </a>
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={async () => {
-                                  if (
-                                    confirm('Yakin ingin menghapus submission karya kedua ini?')
-                                  ) {
-                                    const submissionId = submissions.find(
-                                      (s) => s.submission_2,
-                                    )?.id;
-                                    await deleteFile(
-                                      submissions.find((s) => s.submission_2)?.submission_2!,
-                                    );
-                                    const { error } = await supabase
-                                      .from('submissions')
-                                      .update({ submission_2: null })
-                                      .eq('id', submissionId);
-
-                                    if (!error) {
-                                      // Refresh submissions
-                                      const { data } = await supabase
-                                        .from('submissions')
-                                        .select('*')
-                                        .eq('team_id', teamData.id);
-
-                                      if (data) setSubmissions(data);
-                                    }
-                                  }
-                                }}
-                              >
-                                Hapus
-                              </Button>
-                            </div>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="rounded-lg border border-dashed border-gray-300 p-6">
-                          <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                            {/* <UploadIcon className="h-8 w-8 text-gray-400" />
-                            <p className="text-sm text-gray-500">Upload file poster kedua</p> */}
                             <input
-                              id="second-submission-file"
+                              id="submission-file"
                               type="file"
-                              accept="image/*,.zip,.rar"
-                              onChange={handleSecondFileUpload}
+                              accept={
+                                teamData?.competition.includes('Poster')
+                                  ? 'image/*,.zip,.rar'
+                                  : '.pdf'
+                              }
+                              onChange={handleFileUpload}
                               className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
                             />
                           </div>
                           <Button
-                            onClick={handleSecondSubmission}
-                            disabled={!secondSubmissionFile || secondUploadStatus === 'loading'}
+                            onClick={handleSubmission}
+                            disabled={!submissionFile || uploadStatus === 'loading'}
                             className="mt-4 w-full"
                           >
-                            {secondUploadStatus === 'loading'
-                              ? 'Uploading...'
-                              : 'Submit Karya Kedua'}
+                            {uploadStatus === 'loading' ? 'Uploading...' : 'Submit Karya'}
                           </Button>
+                          <DriveUploader
+                            folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
+                            userEmail={user?.email!}
+                            onSuccess={handleUploadSuccess}
+                            onError={(errorMsg) => {
+                              console.log('Error uploading:', errorMsg);
+                              setSubmissionFileId(null);
+                            }}
+                            chunkSize={3 * 1024 * 1024} // 3MB chunks
+                          />
                         </div>
-                      ))}
+                      )}
 
-                    {/* Originality file (only for Poster competitions) */}
-                    {teamData?.competition.includes('Poster') &&
-                      (submissions.find((s) => s.originality) ? (
-                        <div className="flex flex-col rounded-lg border p-4">
-                          <h3 className="mb-2 font-medium">Surat Pernyataan Orisinalitas</h3>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <FileIcon size={18} className="text-blue-500" />
-                              <strong>Pernyataan Orisinalitas</strong> submitted at{' '}
-                              {new Date(
-                                submissions.find((s) => s.submitted_at_3)?.submitted_at_3,
-                              ).toLocaleString()}
-                            </div>
-                            <div className="flex gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="text-blue-600 flex items-center gap-1"
-                                asChild
-                              >
-                                <a
-                                  href={`https://drive.google.com/file/d/${submissions.find((s) => s.originality)?.originality}/view`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-500 text-sm hover:underline"
+                      {/* Second submission (only for Poster 2 Karya) */}
+                      {teamData?.competition === 'Poster Competition 2 Karya' &&
+                        (submissions.find((s) => s.submission_2) ? (
+                          <div className="flex flex-col rounded-lg border p-4">
+                            <h3 className="mb-2 font-medium">Karya Kedua</h3>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <FileIcon size={18} className="text-blue-500" />
+                                <strong>Submission Kedua</strong> submitted at{' '}
+                                {new Date(
+                                  submissions.find((s) => s.submitted_at_2)?.submitted_at_2,
+                                ).toLocaleString()}
+                              </div>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-blue-600 flex items-center gap-1"
+                                  asChild
                                 >
-                                  Lihat File
-                                </a>
-                              </Button>
-                              <Button
-                                variant="destructive"
-                                size="sm"
-                                onClick={async () => {
-                                  if (
-                                    confirm('Yakin ingin menghapus pernyataan orisinalitas ini?')
-                                  ) {
-                                    const submissionId = submissions.find((s) => s.originality)?.id;
-                                    await deleteFile(
-                                      submissions.find((s) => s.originality)?.originality!,
-                                    );
-                                    const { error } = await supabase
-                                      .from('submissions')
-                                      .update({ originality: null })
-                                      .eq('id', submissionId);
-
-                                    if (!error) {
-                                      // Refresh submissions
-                                      const { data } = await supabase
+                                  <a
+                                    href={`https://drive.google.com/file/d/${submissions.find((s) => s.submission_2)?.submission_2}/view`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                  >
+                                    Lihat File
+                                  </a>
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={async () => {
+                                    if (
+                                      confirm('Yakin ingin menghapus submission karya kedua ini?')
+                                    ) {
+                                      const submissionId = submissions.find(
+                                        (s) => s.submission_2,
+                                      )?.id;
+                                      await deleteFile(
+                                        submissions.find((s) => s.submission_2)?.submission_2!,
+                                      );
+                                      const { error } = await supabase
                                         .from('submissions')
-                                        .select('*')
-                                        .eq('team_id', teamData.id);
+                                        .update({ submission_2: null })
+                                        .eq('id', submissionId);
 
-                                      if (data) setSubmissions(data);
+                                      if (!error) {
+                                        // Refresh submissions
+                                        const { data } = await supabase
+                                          .from('submissions')
+                                          .select('*')
+                                          .eq('team_id', teamData.id);
+
+                                        if (data) setSubmissions(data);
+                                      }
                                     }
-                                  }
-                                }}
-                              >
-                                Hapus
-                              </Button>
+                                  }}
+                                >
+                                  Hapus
+                                </Button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ) : (
-                        <div className="rounded-lg border border-dashed border-gray-300 p-6">
-                          <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                            {/* <UploadIcon className="h-8 w-8 text-gray-400" />
+                        ) : (
+                          <div className="rounded-lg border border-dashed border-gray-300 p-6">
+                            <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                              {/* <UploadIcon className="h-8 w-8 text-gray-400" />
+                            <p className="text-sm text-gray-500">Upload file poster kedua</p> */}
+                              <input
+                                id="second-submission-file"
+                                type="file"
+                                accept="image/*,.zip,.rar"
+                                onChange={handleSecondFileUpload}
+                                className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
+                              />
+                            </div>
+                            <Button
+                              onClick={handleSecondSubmission}
+                              disabled={!secondSubmissionFile || secondUploadStatus === 'loading'}
+                              className="mt-4 w-full"
+                            >
+                              {secondUploadStatus === 'loading'
+                                ? 'Uploading...'
+                                : 'Submit Karya Kedua'}
+                            </Button>
+                          </div>
+                        ))}
+
+                      {/* Originality file (only for Poster competitions) */}
+                      {teamData?.competition.includes('Poster') &&
+                        (submissions.find((s) => s.originality) ? (
+                          <div className="flex flex-col rounded-lg border p-4">
+                            <h3 className="mb-2 font-medium">Surat Pernyataan Orisinalitas</h3>
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <FileIcon size={18} className="text-blue-500" />
+                                <strong>Pernyataan Orisinalitas</strong> submitted at{' '}
+                                {new Date(
+                                  submissions.find((s) => s.submitted_at_3)?.submitted_at_3,
+                                ).toLocaleString()}
+                              </div>
+                              <div className="flex gap-2">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="text-blue-600 flex items-center gap-1"
+                                  asChild
+                                >
+                                  <a
+                                    href={`https://drive.google.com/file/d/${submissions.find((s) => s.originality)?.originality}/view`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-blue-500 text-sm hover:underline"
+                                  >
+                                    Lihat File
+                                  </a>
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={async () => {
+                                    if (
+                                      confirm('Yakin ingin menghapus pernyataan orisinalitas ini?')
+                                    ) {
+                                      const submissionId = submissions.find(
+                                        (s) => s.originality,
+                                      )?.id;
+                                      await deleteFile(
+                                        submissions.find((s) => s.originality)?.originality!,
+                                      );
+                                      const { error } = await supabase
+                                        .from('submissions')
+                                        .update({ originality: null })
+                                        .eq('id', submissionId);
+
+                                      if (!error) {
+                                        // Refresh submissions
+                                        const { data } = await supabase
+                                          .from('submissions')
+                                          .select('*')
+                                          .eq('team_id', teamData.id);
+
+                                        if (data) setSubmissions(data);
+                                      }
+                                    }
+                                  }}
+                                >
+                                  Hapus
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="rounded-lg border border-dashed border-gray-300 p-6">
+                            <div className="flex flex-col items-center justify-center space-y-2 text-center">
+                              {/* <UploadIcon className="h-8 w-8 text-gray-400" />
                             <p className="text-sm text-gray-500">
                               Upload surat pernyataan orisinalitas karya
                             </p> */}
-                            <input
-                              id="originality-file"
-                              type="file"
-                              accept=".pdf"
-                              onChange={handleOriginalityFileUpload}
-                              className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
-                            />
+                              <input
+                                id="originality-file"
+                                type="file"
+                                accept=".pdf"
+                                onChange={handleOriginalityFileUpload}
+                                className="file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 w-full cursor-pointer text-sm file:mr-4 file:cursor-pointer file:rounded-md file:border-0 file:px-4 file:py-2 file:text-sm file:font-medium"
+                              />
+                            </div>
+                            <Button
+                              onClick={handleOriginalitySubmission}
+                              disabled={!originalityFile || originalityUploadStatus === 'loading'}
+                              className="mt-4 w-full"
+                            >
+                              {originalityUploadStatus === 'loading'
+                                ? 'Uploading...'
+                                : 'Submit Pernyataan Orisinalitas'}
+                            </Button>
                           </div>
-                          <Button
-                            onClick={handleOriginalitySubmission}
-                            disabled={!originalityFile || originalityUploadStatus === 'loading'}
-                            className="mt-4 w-full"
-                          >
-                            {originalityUploadStatus === 'loading'
-                              ? 'Uploading...'
-                              : 'Submit Pernyataan Orisinalitas'}
-                          </Button>
+                        ))}
+
+                      {/* Status messages */}
+                      {uploadStatus === 'error' && (
+                        <div className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">
+                          Terjadi kesalahan saat upload. Silakan coba lagi.
                         </div>
-                      ))}
-
-                    {/* Status messages */}
-                    {uploadStatus === 'error' && (
-                      <div className="rounded-md bg-red-50 p-3 text-sm text-red-800 md:col-span-2">
-                        Terjadi kesalahan saat upload. Silakan coba lagi.
-                      </div>
-                    )}
-
-                    {uploadStatus === 'success' && (
-                      <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 md:col-span-2">
-                        Submission berhasil diupload!
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {teamData?.competition !== 'Scientific Debate' && (
-                  <div className="bg-blue-50 text-blue-800 rounded-md p-4 text-sm">
-                    <p className="font-medium">Petunjuk Submission:</p>
-                    <ul className="ml-5 mt-2 list-disc space-y-1">
-                      {teamData?.competition.includes('Poster') && (
-                        <>
-                          <li>
-                            Poster harus diunggah dalam format gambar (JPG/PNG) atau file
-                            terkompresi (ZIP/RAR)
-                          </li>
-                          <li>Surat pernyataan orisinalitas wajib diunggah dalam format PDF</li>
-                        </>
                       )}
-                      {!teamData?.competition.includes('Poster') &&
-                        !teamData?.competition.includes('Scientific Debate') && (
-                          <li>Karya harus diunggah dalam format PDF</li>
+
+                      {uploadStatus === 'success' && (
+                        <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 md:col-span-2">
+                          Submission berhasil diupload!
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {teamData?.competition !== 'Scientific Debate' && (
+                    <div className="bg-blue-50 text-blue-800 rounded-md p-4 text-sm">
+                      <p className="font-medium">Petunjuk Submission:</p>
+                      <ul className="ml-5 mt-2 list-disc space-y-1">
+                        {teamData?.competition.includes('Poster') && (
+                          <>
+                            <li>
+                              Poster harus diunggah dalam format gambar (JPG/PNG) atau file
+                              terkompresi (ZIP/RAR)
+                            </li>
+                            <li>Surat pernyataan orisinalitas wajib diunggah dalam format PDF</li>
+                          </>
                         )}
-                      <li>Deadline submission sesuai dengan timeline yang telah ditentukan</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
+                        {!teamData?.competition.includes('Poster') &&
+                          !teamData?.competition.includes('Scientific Debate') && (
+                            <li>Karya harus diunggah dalam format PDF</li>
+                          )}
+                        <li>Deadline submission sesuai dengan timeline yang telah ditentukan</li>
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
 
-        <TabsContent value="timeline">
-          <Card>
-            <CardHeader>
-              <CardTitle>Timeline Lomba</CardTitle>
-              <CardDescription>Jadwal kegiatan untuk lomba {teamData?.competition}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              {teamData && (
-                <div className="space-y-6">
-                  <div className="relative">
-                    <div className="absolute bottom-0 left-4 top-0 w-0.5 bg-gray-200"></div>
-                    <div className="space-y-6">
-                      {(() => {
-                        const competitionKey =
-                          teamData?.competition === 'Scientific Debate'
-                            ? 'debate'
-                            : teamData?.competition === 'Technology Innovation'
-                              ? 'innovation'
-                              : teamData?.competition === 'Poster Competition 1 Karya' ||
-                                  teamData?.competition === 'Poster Competition 2 Karya'
-                                ? 'poster'
-                                : 'paper';
+          <TabsContent value="timeline">
+            <Card>
+              <CardHeader>
+                <CardTitle>Timeline Lomba</CardTitle>
+                <CardDescription>
+                  Jadwal kegiatan untuk lomba {teamData?.competition}
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                {teamData && (
+                  <div className="space-y-6">
+                    <div className="relative">
+                      <div className="absolute bottom-0 left-4 top-0 w-0.5 bg-gray-200"></div>
+                      <div className="space-y-6">
+                        {(() => {
+                          const competitionKey =
+                            teamData?.competition === 'Scientific Debate'
+                              ? 'debate'
+                              : teamData?.competition === 'Technology Innovation'
+                                ? 'innovation'
+                                : teamData?.competition === 'Poster Competition 1 Karya' ||
+                                    teamData?.competition === 'Poster Competition 2 Karya'
+                                  ? 'poster'
+                                  : 'paper';
 
-                        // Import this at the top of your component when implementing
+                          // Import this at the top of your component when implementing
 
-                        return dataTimeline[competitionKey].map((item, index) => (
-                          <div key={index} className="flex">
-                            <div className="mr-4 mt-1 flex-none">
-                              <div className="bg-blue-500 flex h-8 w-8 items-center justify-center rounded-full text-white">
-                                {index + 1}
+                          return dataTimeline[competitionKey].map((item, index) => (
+                            <div key={index} className="flex">
+                              <div className="mr-4 mt-1 flex-none">
+                                <div className="bg-blue-500 flex h-8 w-8 items-center justify-center rounded-full text-white">
+                                  {index + 1}
+                                </div>
+                              </div>
+                              <div className="flex-1">
+                                <h3 className="text-lg font-medium">{item.kegiatan}</h3>
+                                <div className="text-sm text-gray-600">
+                                  {item.start === item.end
+                                    ? item.start
+                                    : `${item.start} - ${item.end}`}
+                                </div>
+                                <div className="bg-blue-50 mt-2 rounded-md px-3 py-2 text-sm">
+                                  {index === 0
+                                    ? 'Masa pendaftaran lomba'
+                                    : index === dataTimeline[competitionKey].length - 1
+                                      ? 'Pengumuman pemenang'
+                                      : `Tahap ${index}`}
+                                </div>
                               </div>
                             </div>
-                            <div className="flex-1">
-                              <h3 className="text-lg font-medium">{item.kegiatan}</h3>
-                              <div className="text-sm text-gray-600">
-                                {item.start === item.end
-                                  ? item.start
-                                  : `${item.start} - ${item.end}`}
-                              </div>
-                              <div className="bg-blue-50 mt-2 rounded-md px-3 py-2 text-sm">
-                                {index === 0
-                                  ? 'Masa pendaftaran lomba'
-                                  : index === dataTimeline[competitionKey].length - 1
-                                    ? 'Pengumuman pemenang'
-                                    : `Tahap ${index}`}
-                              </div>
-                            </div>
-                          </div>
-                        ));
-                      })()}
+                          ));
+                        })()}
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   );
 }
