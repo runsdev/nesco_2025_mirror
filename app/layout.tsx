@@ -39,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <meta property="twitter:image" content="https://nesco.id/opengraph/main.png" />
-      <meta property="twitter:card" content="https://nesco.id/opengraph/main.png" />
+      <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:title" content="National Electrical Power System Competition 2025" />
       <meta
         property="twitter:description"
@@ -52,7 +52,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         property="og:description"
         content="NESCO adalah kompetisi nasional yang mengambil tema terkait power system dan tenaga kelistrikan."
       />
-      <meta property="og:url" content={metadata.metadataBase.href} />
+      <meta property="og:url" content="https://nesco.id/" />
+      <meta property="og:type" content="website" />
       <body className={`${kodeMono.className} ${montserrat.className}`}>
         <LocomotiveProvider>
           <GSAPProvider>
