@@ -38,6 +38,21 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <meta property="twitter:image" content="/public/opengraph/main.png" />
+      <meta property="twitter:card" content="/public/opengraph/main.png" />
+      <meta property="twitter:title" content="National Electrical Power System Competition 2025" />
+      <meta
+        property="twitter:description"
+        content="NESCO adalah kompetisi nasional yang mengambil tema terkait power system dan tenaga kelistrikan."
+      />
+      <meta property="og:image" content="/public/opengraph/main.png" />
+      <meta property="og:site_name" content="NESCO UGM" />
+      <meta property="og:title" content="National Electrical Power System Competition 2025" />
+      <meta
+        property="og:description"
+        content="NESCO adalah kompetisi nasional yang mengambil tema terkait power system dan tenaga kelistrikan."
+      />
+      <meta property="og:url" content={metadata.metadataBase.href} />
       <body className={`${kodeMono.className} ${montserrat.className}`}>
         <LocomotiveProvider>
           <GSAPProvider>
