@@ -572,7 +572,7 @@ export default function Dashboard() {
                           <div>
                             <h4 className="font-medium text-amber-800">Deadline Submission</h4>
                             <p className="text-amber-700">
-                              {new Date('2025-04-15').toLocaleDateString('id-ID', {
+                              {new Date('2025-04-05').toLocaleDateString('id-ID', {
                                 weekday: 'long',
                                 day: 'numeric',
                                 month: 'long',
