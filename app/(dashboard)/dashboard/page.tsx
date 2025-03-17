@@ -548,6 +548,51 @@ export default function Dashboard() {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                      {/* Submission Deadline Alert */}
+                      <div className="col-span-full mb-6">
+                        <div className="flex items-center rounded-lg border border-amber-200 bg-amber-50 p-4">
+                          <div className="mr-4 rounded-full bg-amber-100 p-2">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              className="text-amber-600"
+                            >
+                              <circle cx="12" cy="12" r="10" />
+                              <line x1="12" y1="8" x2="12" y2="12" />
+                              <line x1="12" y1="16" x2="12.01" y2="16" />
+                            </svg>
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-amber-800">Deadline Submission</h4>
+                            <p className="text-amber-700">
+                              {new Date('2025-04-15').toLocaleDateString('id-ID', {
+                                weekday: 'long',
+                                day: 'numeric',
+                                month: 'long',
+                                year: 'numeric',
+                              })}
+                            </p>
+                            <div className="mt-1 text-sm text-amber-600">
+                              Tersisa{' '}
+                              {Math.max(
+                                0,
+                                Math.ceil(
+                                  (new Date('2025-04-15').getTime() - new Date().getTime()) /
+                                    (1000 * 60 * 60 * 24),
+                                ),
+                              )}{' '}
+                              hari lagi
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                       {/* Main Submission */}
                       {submissions.find((s) => s.submission) ? (
                         <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
