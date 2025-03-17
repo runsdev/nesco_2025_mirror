@@ -8,11 +8,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/UI/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
 import { Badge } from '@/components/UI/badge';
 import { Button } from '@/components/UI/button';
-import { FileIcon, UploadIcon, CheckCircleIcon, XCircleIcon } from 'lucide-react';
+import { FileIcon, XCircleIcon } from 'lucide-react';
 import { dataTimeline } from '@/modules/data/timeline';
-// import { uploadToDrive, createFolder, deleteFile } from '@/utils/google/action';
-import { uploadToDrive, createFolder, deleteFile } from '@/lib/driveApi';
-import DriveUploader from '@/components/Backend/drive-uploader';
+import DashboardSkeleton from '@/components/Skeleton/DashboardSkeleton';
 
 export default function Dashboard() {
   const [user, setUser] = useState<User | null>(null);
@@ -149,135 +147,9 @@ export default function Dashboard() {
     setSubmissionFile(e.target.files[0]);
   };
 
-  const handleSubmission = async () => {
-    if (!submissionFile || !teamData) return;
-
-    setUploadStatus('loading');
-
-    try {
-      // Create unique filename
-      const fileExt = submissionFile.name.split('.').pop();
-      const fileName = `${teamData.competition}_${teamData.team_name}_${Date.now()}.${fileExt}`;
-
-      // Upload file to Google Drive in the team's folder
-      const uploadResult = await uploadToDrive(
-        submissionFile,
-        submissionFolderId!,
-        fileName,
-        user!.email,
-      );
-
-      // Find existing submission record
-      const { data: existingSubmission } = await supabase
-        .from('submissions')
-        .select('id')
-        .eq('team_id', teamData.id)
-        .single();
-
-      // Update the existing record or create a new one if it doesn't exist
-      const { error: submissionError } = existingSubmission
-        ? await supabase
-            .from('submissions')
-            .update({ submission: uploadResult, submitted_at_1: new Date().toISOString() })
-            .eq('id', existingSubmission.id)
-        : await supabase.from('submissions').insert({
-            team_id: teamData.id,
-            submission: uploadResult,
-            submitted_at_1: new Date().toISOString(),
-            created_at: new Date().toISOString(),
-          });
-
-      if (submissionError) throw submissionError;
-
-      // Refresh submissions
-      const { data: submissionData } = await supabase
-        .from('submissions')
-        .select('*')
-        .eq('team_id', teamData.id);
-
-      if (submissionData) {
-        setSubmissions(submissionData);
-      }
-
-      setUploadStatus('success');
-      setSubmissionFile(null);
-
-      // Reset file input
-      const fileInput = document.getElementById('submission-file') as HTMLInputElement;
-      if (fileInput) fileInput.value = '';
-    } catch (error) {
-      console.error('Submission error:', error);
-      setUploadStatus('error');
-    }
-  };
-
   const handleSecondFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || !e.target.files[0]) return;
     setSecondSubmissionFile(e.target.files[0]);
-  };
-
-  const handleSecondSubmission = async () => {
-    if (!secondSubmissionFile || !teamData) return;
-
-    // setUploadStatus('loading');
-    setSecondUploadStatus('loading');
-
-    try {
-      // Create unique filename
-      const fileExt = secondSubmissionFile.name.split('.').pop();
-      const fileName = `${teamData.competition}_${teamData.team_name}_${Date.now()}.${fileExt}`;
-
-      // Upload file to Google Drive in the team's folder
-      const uploadResult = await uploadToDrive(
-        secondSubmissionFile,
-        submissionFolderId!,
-        fileName,
-        user!.email,
-      );
-
-      // Find existing submission record
-      const { data: existingSubmission } = await supabase
-        .from('submissions')
-        .select('id')
-        .eq('team_id', teamData.id)
-        .single();
-
-      // Update the existing record or create a new one if it doesn't exist
-      const { error: submissionError } = existingSubmission
-        ? await supabase
-            .from('submissions')
-            .update({ submission_2: uploadResult, submitted_at_2: new Date().toISOString() })
-            .eq('id', existingSubmission.id)
-        : await supabase.from('submissions').insert({
-            team_id: teamData.id,
-            submission_2: uploadResult,
-            submitted_at_2: new Date().toISOString(),
-            created_at: new Date().toISOString(),
-          });
-
-      if (submissionError) throw submissionError;
-
-      // Refresh submissions
-      const { data: submissionData } = await supabase
-        .from('submissions')
-        .select('*')
-        .eq('team_id', teamData.id);
-
-      if (submissionData) {
-        setSubmissions(submissionData);
-      }
-
-      // setUploadStatus('success');
-      setSecondUploadStatus('success');
-      setSecondSubmissionFile(null);
-
-      // Reset file input
-      const fileInput = document.getElementById('second-submission-file') as HTMLInputElement;
-      if (fileInput) fileInput.value = '';
-    } catch (error) {
-      console.error('Submission error:', error);
-      setUploadStatus('error');
-    }
   };
 
   const handleOriginalityFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -285,102 +157,233 @@ export default function Dashboard() {
     setOriginalityFile(e.target.files[0]);
   };
 
-  const handleOriginalitySubmission = async () => {
-    if (!originalityFile || !teamData) return;
+  const uploadSubmissionToSupabase = async (
+    fileName: string,
+    competitionCode: string,
+    file: File,
+    type: number,
+    team_id: string,
+  ) => {
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('submission')
+      .upload(`${competitionCode}/${team_id}/${fileName}`, file);
 
-    // setUploadStatus('loading');
-    setOriginalityUploadStatus('loading');
+    if (uploadError) {
+      console.error('Error uploading to Supabase:', uploadError);
+      return;
+    }
 
-    try {
-      // Create unique filename
-      const fileExt = originalityFile.name.split('.').pop();
-      const fileName = `${teamData.competition}_${teamData.team_name}_Originality_${Date.now()}.${fileExt}`;
+    if (type === 1) {
+      if (!submissionFile || !teamData) return;
 
-      // Upload file to Google Drive in the team's folder
-      const uploadResult = await uploadToDrive(
-        originalityFile,
-        originalityFolderId!,
-        fileName,
-        user!.email,
-      );
+      setUploadStatus('loading');
+      try {
+        // Find existing submission record
+        const { data: existingSubmission } = await supabase
+          .from('submissions')
+          .select('id')
+          .eq('team_id', teamData.id)
+          .single();
 
-      // Find existing submission record
-      const { data: existingSubmission } = await supabase
-        .from('submissions')
-        .select('id')
-        .eq('team_id', teamData.id)
-        .single();
+        // Update the existing record or create a new one if it doesn't exist
+        const { error: submissionError } = existingSubmission
+          ? await supabase
+              .from('submissions')
+              .update({ submission: uploadData.path, submitted_at_1: new Date().toISOString() })
+              .eq('id', existingSubmission.id)
+          : await supabase.from('submissions').insert({
+              team_id: teamData.id,
+              submission: uploadData.path,
+              submitted_at_1: new Date().toISOString(),
+              created_at: new Date().toISOString(),
+            });
 
-      // Update the existing record or create a new one if it doesn't exist
-      const { error } = existingSubmission
-        ? await supabase
-            .from('submissions')
-            .update({ originality: uploadResult, submitted_at_3: new Date().toISOString() })
-            .eq('id', existingSubmission.id)
-        : await supabase.from('submissions').insert({
-            team_id: teamData.id,
-            originality: uploadResult,
-            submitted_at_3: new Date().toISOString(),
-            created_at: new Date().toISOString(),
-          });
+        if (submissionError) throw submissionError;
 
-      if (error) throw error;
+        // Refresh submissions
+        const { data: submissionData } = await supabase
+          .from('submissions')
+          .select('*')
+          .eq('team_id', teamData.id);
 
-      // Refresh submissions
-      const { data: originalsData } = await supabase
-        .from('submissions')
-        .select('*')
-        .eq('team_id', teamData.id);
+        if (submissionData) {
+          setSubmissions(submissionData);
+        }
 
-      if (originalsData) {
-        setOriginals(originalsData);
+        setUploadStatus('success');
+        setSubmissionFile(null);
+      } catch (error) {
+        console.error('Submission error:', error);
+        setUploadStatus('error');
       }
+    } else if (type === 2) {
+      if (!secondSubmissionFile || !teamData) return;
 
-      setIsVerified(true);
-      setOriginalityUploadStatus('success');
-      setOriginalityFile(null);
+      setSecondUploadStatus('loading');
+      try {
+        // Find existing submission record
+        const { data: existingSubmission } = await supabase
+          .from('submissions')
+          .select('id')
+          .eq('team_id', teamData.id)
+          .single();
 
-      // Reset file input
-      const fileInput = document.getElementById('originality-file') as HTMLInputElement;
-      if (fileInput) fileInput.value = '';
-    } catch (error) {
-      console.error('Originality upload error:', error);
-      setUploadStatus('error');
+        // Update the existing record or create a new one if it doesn't exist
+        const { error: submissionError } = existingSubmission
+          ? await supabase
+              .from('submissions')
+              .update({ submission_2: uploadData.path, submitted_at_2: new Date().toISOString() })
+              .eq('id', existingSubmission.id)
+          : await supabase.from('submissions').insert({
+              team_id: teamData.id,
+              submission_2: uploadData.path,
+              submitted_at_2: new Date().toISOString(),
+              created_at: new Date().toISOString(),
+            });
+
+        if (submissionError) throw submissionError;
+
+        // Refresh submissions
+        const { data: submissionData } = await supabase
+          .from('submissions')
+          .select('*')
+          .eq('team_id', teamData.id);
+
+        if (submissionData) {
+          setSubmissions(submissionData);
+        }
+
+        setSecondUploadStatus('success');
+        setSecondSubmissionFile(null);
+      } catch (error) {
+        console.error('Submission error:', error);
+        setSecondUploadStatus('error');
+      }
+    } else {
+      if (!originalityFile || !teamData) return;
+
+      setOriginalityUploadStatus('loading');
+      try {
+        // Find existing submission record
+        const { data: existingSubmission } = await supabase
+          .from('submissions')
+          .select('id')
+          .eq('team_id', teamData.id)
+          .single();
+
+        // Update the existing record or create a new one if it doesn't exist
+        const { error: submissionError } = existingSubmission
+          ? await supabase
+              .from('submissions')
+              .update({ originality: uploadData.path, submitted_at_3: new Date().toISOString() })
+              .eq('id', existingSubmission.id)
+          : await supabase.from('submissions').insert({
+              team_id: teamData.id,
+              originality: uploadData.path,
+              submitted_at_3: new Date().toISOString(),
+              created_at: new Date().toISOString(),
+            });
+
+        if (submissionError) throw submissionError;
+
+        // Refresh submissions
+        const { data: submissionData } = await supabase
+          .from('submissions')
+          .select('*')
+          .eq('team_id', teamData.id);
+
+        if (submissionData) {
+          setSubmissions(submissionData);
+        }
+
+        setOriginalityUploadStatus('success');
+        setOriginalityFile(null);
+      } catch (error) {
+        console.error('Submission error:', error);
+        setOriginalityUploadStatus('error');
+      }
     }
   };
 
-  const handleUploadSuccess = async (fileId: string) => {
-    try {
-      // Finalize the upload and get additional file details
-      const response = await fetch('/api/drive/finalize-drive-upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileId,
-          userEmail: user?.email,
-        }),
-      });
+  const viewSupabaseBucketFile = async (path: string) => {
+    const { data, error } = await supabase.storage.from('submission').createSignedUrl(path, 60, {
+      download: true,
+    });
 
-      if (!response.ok) {
-        throw new Error('Failed to finalize upload');
+    if (error) {
+      console.error('Error fetching signed URL:', error);
+      return;
+    }
+
+    window.open(data?.signedUrl, '_blank');
+  };
+
+  const deleteSupabaseBucketFile = async (path: string, type: number) => {
+    const { error } = await supabase.storage.from('submission').remove([path]);
+
+    if (error) {
+      console.error('Error deleting file:', error);
+      return;
+    }
+
+    if (type === 1) {
+      const { data, error } = await supabase
+        .from('submissions')
+        .update({ submission: null })
+        .eq('team_id', teamData.id)
+        .select();
+
+      if (error) {
+        console.error('Error deleting submission:', error);
+        return;
       }
 
-      const data = await response.json();
+      if (data) {
+        setSubmissions(data);
+      }
+    } else if (type === 2) {
+      const { data, error } = await supabase
+        .from('submissions')
+        .update({ submission_2: null })
+        .eq('team_id', teamData.id)
+        .select();
 
-      console.log(fileId);
-      console.log('Upload success:', data);
-    } catch (err: any) {
-      console.log('Error finalizing upload:', err.message);
+      if (error) {
+        console.error('Error deleting submission:', error);
+        return;
+      }
+
+      if (data) {
+        setSubmissions(data);
+      }
+    } else {
+      const { data, error } = await supabase
+        .from('submissions')
+        .update({ originality: null })
+        .eq('team_id', teamData.id)
+        .select();
+
+      if (error) {
+        console.error('Error deleting submission:', error);
+        return;
+      }
+
+      if (data) {
+        setSubmissions(data);
+      }
     }
+  };
+
+  const convertCompetitionCode = (competition: string) => {
+    if (competition === 'Innovation Challenge') return 'innovation';
+    if (competition === 'Poster Competition 1 Karya') return 'poster';
+    if (competition === 'Poster Competition 2 Karya') return 'poster';
+    if (competition === 'Paper Competition') return 'paper';
+    return 'originality';
   };
 
   if (isLoading) {
-    return (
-      <div className="flex h-[80vh] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-b-transparent"></div>
-        <span className="ml-2">Loading...</span>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
   return (
@@ -534,58 +537,57 @@ export default function Dashboard() {
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                       {/* Main Submission */}
                       {submissions.find((s) => s.submission) ? (
-                        <div className="flex flex-col rounded-lg border p-4">
-                          <h3 className="mb-2 font-medium">Karya Lomba</h3>
-                          <div className="flex items-center justify-between">
-                            <div className="flex items-center gap-2">
-                              <FileIcon size={18} className="text-blue-500" />
-                              <strong>Submission</strong> submitted at{' '}
-                              {new Date(
-                                submissions.find((s) => s.submitted_at_1)?.submitted_at_1,
-                              ).toLocaleString()}
+                        <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                          <div className="mb-3 flex items-center justify-between">
+                            <h3 className="text-base font-semibold text-gray-800">Karya Lomba</h3>
+                            <Badge variant="success" className="px-2 py-1 text-xs">
+                              Submitted
+                            </Badge>
+                          </div>
+                          <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                            <div className="flex items-center gap-3">
+                              <div className="bg-blue-100 flex h-10 w-10 items-center justify-center rounded-full">
+                                <FileIcon size={20} className="text-blue-600" />
+                              </div>
+                              <div className="space-y-1">
+                                <p className="font-medium text-gray-700">Submission File</p>
+                                <p className="text-xs text-gray-500">
+                                  Submitted on{' '}
+                                  {new Date(
+                                    submissions.find((s) => s.submitted_at_1)?.submitted_at_1,
+                                  ).toLocaleDateString()}{' '}
+                                  at{' '}
+                                  {new Date(
+                                    submissions.find((s) => s.submitted_at_1)?.submitted_at_1,
+                                  ).toLocaleTimeString()}
+                                </p>
+                              </div>
                             </div>
                             <div className="flex gap-2">
                               <Button
                                 variant="outline"
                                 size="sm"
-                                className="text-blue-600 flex items-center gap-1"
-                                asChild
+                                className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
+                                onClick={() =>
+                                  viewSupabaseBucketFile(
+                                    submissions.find((s) => s.submission)?.submission!,
+                                  )
+                                }
                               >
-                                <a
-                                  href={`https://drive.google.com/file/d/${submissions.find((s) => s.submission)?.submission}/view`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                >
-                                  Lihat File
-                                </a>
+                                <FileIcon size={16} className="mr-1" /> View File
                               </Button>
                               <Button
-                                variant="destructive"
+                                variant="outline"
                                 size="sm"
-                                onClick={async () => {
-                                  if (confirm('Yakin ingin menghapus submission ini?')) {
-                                    const submissionId = submissions.find((s) => s.submission)?.id;
-                                    await deleteFile(
-                                      submissions.find((s) => s.submission)?.submission!,
-                                    );
-                                    const { error } = await supabase
-                                      .from('submissions')
-                                      .update({ submission: null })
-                                      .eq('id', submissionId);
-
-                                    if (!error) {
-                                      // Refresh submissions
-                                      const { data } = await supabase
-                                        .from('submissions')
-                                        .select('*')
-                                        .eq('team_id', teamData.id);
-
-                                      if (data) setSubmissions(data);
-                                    }
-                                  }
+                                className="border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                                onClick={() => {
+                                  deleteSupabaseBucketFile(
+                                    submissions.find((s) => s.submission)?.submission!,
+                                    1,
+                                  );
                                 }}
                               >
-                                Hapus
+                                <XCircleIcon size={16} className="mr-1" /> Remove
                               </Button>
                             </div>
                           </div>
@@ -593,12 +595,6 @@ export default function Dashboard() {
                       ) : (
                         <div className="rounded-lg border border-dashed border-gray-300 p-6">
                           <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                            {/* <UploadIcon className="h-8 w-8 text-gray-400" />
-                          <p className="text-sm text-gray-500">
-                            {teamData.competition.includes('Poster')
-                              ? 'Upload file gambar poster'
-                              : 'Upload file PDF karya lomba'}
-                          </p> */}
                             <input
                               id="submission-file"
                               type="file"
@@ -612,84 +608,77 @@ export default function Dashboard() {
                             />
                           </div>
                           <Button
-                            onClick={handleSubmission}
+                            onClick={async () =>
+                              uploadSubmissionToSupabase(
+                                `${teamData.id}-${Date.now()}.${submissionFile?.name.split('.').pop()}`,
+                                convertCompetitionCode(teamData.competition),
+                                submissionFile!,
+                                1,
+                                teamData.id,
+                              )
+                            }
                             disabled={!submissionFile || uploadStatus === 'loading'}
                             className="mt-4 w-full"
                           >
                             {uploadStatus === 'loading' ? 'Uploading...' : 'Submit Karya'}
                           </Button>
-                          <DriveUploader
-                            folderId={process.env.NEXT_PUBLIC_GOOGLE_REGISTRATION_FOLDER_ID!}
-                            userEmail={user?.email!}
-                            onSuccess={handleUploadSuccess}
-                            onError={(errorMsg) => {
-                              console.log('Error uploading:', errorMsg);
-                              setSubmissionFileId(null);
-                            }}
-                            chunkSize={3 * 1024 * 1024} // 3MB chunks
-                          />
                         </div>
                       )}
 
                       {/* Second submission (only for Poster 2 Karya) */}
                       {teamData?.competition === 'Poster Competition 2 Karya' &&
                         (submissions.find((s) => s.submission_2) ? (
-                          <div className="flex flex-col rounded-lg border p-4">
-                            <h3 className="mb-2 font-medium">Karya Kedua</h3>
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <FileIcon size={18} className="text-blue-500" />
-                                <strong>Submission Kedua</strong> submitted at{' '}
-                                {new Date(
-                                  submissions.find((s) => s.submitted_at_2)?.submitted_at_2,
-                                ).toLocaleString()}
+                          <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                            <div className="mb-3 flex items-center justify-between">
+                              <h3 className="text-base font-semibold text-gray-800">Karya Kedua</h3>
+                              <Badge variant="success" className="px-2 py-1 text-xs">
+                                Submitted
+                              </Badge>
+                            </div>
+                            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                              <div className="flex items-center gap-3">
+                                <div className="bg-blue-100 flex h-10 w-10 items-center justify-center rounded-full">
+                                  <FileIcon size={20} className="text-blue-600" />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className="font-medium text-gray-700">Submission File</p>
+                                  <p className="text-xs text-gray-500">
+                                    Submitted on{' '}
+                                    {new Date(
+                                      submissions.find((s) => s.submitted_at_2)?.submitted_at_2,
+                                    ).toLocaleDateString()}{' '}
+                                    at{' '}
+                                    {new Date(
+                                      submissions.find((s) => s.submitted_at_2)?.submitted_at_2,
+                                    ).toLocaleTimeString()}
+                                  </p>
+                                </div>
                               </div>
                               <div className="flex gap-2">
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className="text-blue-600 flex items-center gap-1"
-                                  asChild
+                                  className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
+                                  onClick={() =>
+                                    viewSupabaseBucketFile(
+                                      submissions.find((s) => s.submission_2)?.submission_2!,
+                                    )
+                                  }
                                 >
-                                  <a
-                                    href={`https://drive.google.com/file/d/${submissions.find((s) => s.submission_2)?.submission_2}/view`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                  >
-                                    Lihat File
-                                  </a>
+                                  <FileIcon size={16} className="mr-1" /> View File
                                 </Button>
                                 <Button
-                                  variant="destructive"
+                                  variant="outline"
                                   size="sm"
-                                  onClick={async () => {
-                                    if (
-                                      confirm('Yakin ingin menghapus submission karya kedua ini?')
-                                    ) {
-                                      const submissionId = submissions.find(
-                                        (s) => s.submission_2,
-                                      )?.id;
-                                      await deleteFile(
-                                        submissions.find((s) => s.submission_2)?.submission_2!,
-                                      );
-                                      const { error } = await supabase
-                                        .from('submissions')
-                                        .update({ submission_2: null })
-                                        .eq('id', submissionId);
-
-                                      if (!error) {
-                                        // Refresh submissions
-                                        const { data } = await supabase
-                                          .from('submissions')
-                                          .select('*')
-                                          .eq('team_id', teamData.id);
-
-                                        if (data) setSubmissions(data);
-                                      }
-                                    }
+                                  className="border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                                  onClick={() => {
+                                    deleteSupabaseBucketFile(
+                                      submissions.find((s) => s.submission_2)?.submission_2!,
+                                      2,
+                                    );
                                   }}
                                 >
-                                  Hapus
+                                  <XCircleIcon size={16} className="mr-1" /> Remove
                                 </Button>
                               </div>
                             </div>
@@ -708,7 +697,15 @@ export default function Dashboard() {
                               />
                             </div>
                             <Button
-                              onClick={handleSecondSubmission}
+                              onClick={async () =>
+                                uploadSubmissionToSupabase(
+                                  `${teamData.id}-${Date.now()}.${secondSubmissionFile?.name.split('.').pop()}`,
+                                  convertCompetitionCode(teamData.competition),
+                                  secondSubmissionFile!,
+                                  2,
+                                  teamData.id,
+                                )
+                              }
                               disabled={!secondSubmissionFile || secondUploadStatus === 'loading'}
                               className="mt-4 w-full"
                             >
@@ -722,63 +719,59 @@ export default function Dashboard() {
                       {/* Originality file (only for Poster competitions) */}
                       {teamData?.competition.includes('Poster') &&
                         (submissions.find((s) => s.originality) ? (
-                          <div className="flex flex-col rounded-lg border p-4">
-                            <h3 className="mb-2 font-medium">Surat Pernyataan Orisinalitas</h3>
-                            <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-2">
-                                <FileIcon size={18} className="text-blue-500" />
-                                <strong>Pernyataan Orisinalitas</strong> submitted at{' '}
-                                {new Date(
-                                  submissions.find((s) => s.submitted_at_3)?.submitted_at_3,
-                                ).toLocaleString()}
+                          <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
+                            <div className="mb-3 flex items-center justify-between">
+                              <h3 className="text-base font-semibold text-gray-800">
+                                Pernyataan Orisinalitas
+                              </h3>
+                              <Badge variant="success" className="px-2 py-1 text-xs">
+                                Submitted
+                              </Badge>
+                            </div>
+                            <div className="flex flex-col space-y-4 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
+                              <div className="flex items-center gap-3">
+                                <div className="bg-blue-100 flex h-10 w-10 items-center justify-center rounded-full">
+                                  <FileIcon size={20} className="text-blue-600" />
+                                </div>
+                                <div className="space-y-1">
+                                  <p className="font-medium text-gray-700">Submission File</p>
+                                  <p className="text-xs text-gray-500">
+                                    Submitted on{' '}
+                                    {new Date(
+                                      submissions.find((s) => s.submitted_at_3)?.submitted_at_3,
+                                    ).toLocaleDateString()}{' '}
+                                    at{' '}
+                                    {new Date(
+                                      submissions.find((s) => s.submitted_at_3)?.submitted_at_3,
+                                    ).toLocaleTimeString()}
+                                  </p>
+                                </div>
                               </div>
                               <div className="flex gap-2">
                                 <Button
                                   variant="outline"
                                   size="sm"
-                                  className="text-blue-600 flex items-center gap-1"
-                                  asChild
+                                  className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
+                                  onClick={() =>
+                                    viewSupabaseBucketFile(
+                                      submissions.find((s) => s.originality)?.originality!,
+                                    )
+                                  }
                                 >
-                                  <a
-                                    href={`https://drive.google.com/file/d/${submissions.find((s) => s.originality)?.originality}/view`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="text-blue-500 text-sm hover:underline"
-                                  >
-                                    Lihat File
-                                  </a>
+                                  <FileIcon size={16} className="mr-1" /> View File
                                 </Button>
                                 <Button
-                                  variant="destructive"
+                                  variant="outline"
                                   size="sm"
-                                  onClick={async () => {
-                                    if (
-                                      confirm('Yakin ingin menghapus pernyataan orisinalitas ini?')
-                                    ) {
-                                      const submissionId = submissions.find(
-                                        (s) => s.originality,
-                                      )?.id;
-                                      await deleteFile(
-                                        submissions.find((s) => s.originality)?.originality!,
-                                      );
-                                      const { error } = await supabase
-                                        .from('submissions')
-                                        .update({ originality: null })
-                                        .eq('id', submissionId);
-
-                                      if (!error) {
-                                        // Refresh submissions
-                                        const { data } = await supabase
-                                          .from('submissions')
-                                          .select('*')
-                                          .eq('team_id', teamData.id);
-
-                                        if (data) setSubmissions(data);
-                                      }
-                                    }
+                                  className="border-red-200 bg-red-50 text-red-700 hover:bg-red-100"
+                                  onClick={() => {
+                                    deleteSupabaseBucketFile(
+                                      submissions.find((s) => s.originality)?.originality!,
+                                      3,
+                                    );
                                   }}
                                 >
-                                  Hapus
+                                  <XCircleIcon size={16} className="mr-1" /> Remove
                                 </Button>
                               </div>
                             </div>
@@ -786,10 +779,6 @@ export default function Dashboard() {
                         ) : (
                           <div className="rounded-lg border border-dashed border-gray-300 p-6">
                             <div className="flex flex-col items-center justify-center space-y-2 text-center">
-                              {/* <UploadIcon className="h-8 w-8 text-gray-400" />
-                            <p className="text-sm text-gray-500">
-                              Upload surat pernyataan orisinalitas karya
-                            </p> */}
                               <input
                                 id="originality-file"
                                 type="file"
@@ -799,7 +788,15 @@ export default function Dashboard() {
                               />
                             </div>
                             <Button
-                              onClick={handleOriginalitySubmission}
+                              onClick={async () =>
+                                uploadSubmissionToSupabase(
+                                  `${teamData.id}-${Date.now()}.${originalityFile?.name.split('.').pop()}`,
+                                  convertCompetitionCode(teamData.competition),
+                                  originalityFile!,
+                                  3,
+                                  teamData.id,
+                                )
+                              }
                               disabled={!originalityFile || originalityUploadStatus === 'loading'}
                               className="mt-4 w-full"
                             >
