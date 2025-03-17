@@ -261,6 +261,19 @@ export default function AdminDashboard() {
     document.body.removeChild(a);
   };
 
+  const viewSupabaseBucketFile = async (path: string) => {
+    const { data, error } = await supabase.storage.from('submission').createSignedUrl(path, 60, {
+      download: true,
+    });
+
+    if (error) {
+      console.error('Error fetching signed URL:', error);
+      return;
+    }
+
+    window.open(data?.signedUrl, '_blank');
+  };
+
   if (isLoading || !display) {
     return (
       <div className="flex h-[80vh] items-center justify-center">
@@ -546,36 +559,17 @@ export default function AdminDashboard() {
                                     </div>
 
                                     <div className="flex items-center gap-2">
-                                      {/* <Badge
-                                      variant={
-                                        submission.status === 'accepted'
-                                          ? 'success'
-                                          : submission.status === 'rejected'
-                                            ? 'destructive'
-                                            : 'outline'
-                                      }
-                                    >
-                                      {submission.status === 'accepted'
-                                        ? 'Accepted'
-                                        : submission.status === 'rejected'
-                                          ? 'Rejected'
-                                          : 'Pending'}
-                                    </Badge> */}
-
-                                      <a
-                                        href={`https://drive.google.com/file/d/${submission.submission}/view`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="flex items-center gap-1"
+                                        onClick={() =>
+                                          viewSupabaseBucketFile(submission.submission)
+                                        }
                                       >
-                                        <Button
-                                          size="sm"
-                                          variant="outline"
-                                          className="flex items-center gap-1"
-                                        >
-                                          <Eye size={14} />
-                                          View
-                                        </Button>
-                                      </a>
+                                        <Eye size={14} />
+                                        View
+                                      </Button>
                                     </div>
                                   </div>
                                 )}
@@ -593,20 +587,17 @@ export default function AdminDashboard() {
                                     <div className="flex items-center gap-2">
                                       <Badge variant="outline">Second Work</Badge>
 
-                                      <a
-                                        href={`https://drive.google.com/file/d/${submission.submission_2}/view`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="flex items-center gap-1"
+                                        onClick={() =>
+                                          viewSupabaseBucketFile(submission.submission_2)
+                                        }
                                       >
-                                        <Button
-                                          size="sm"
-                                          variant="outline"
-                                          className="flex items-center gap-1"
-                                        >
-                                          <Eye size={14} />
-                                          View
-                                        </Button>
-                                      </a>
+                                        <Eye size={14} />
+                                        View
+                                      </Button>
                                     </div>
                                   </div>
                                 )}
@@ -626,20 +617,17 @@ export default function AdminDashboard() {
                                         Originality
                                       </Badge>
 
-                                      <a
-                                        href={`https://drive.google.com/file/d/${submission.originality}/view`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        className="flex items-center gap-1"
+                                        onClick={() =>
+                                          viewSupabaseBucketFile(submission.originality)
+                                        }
                                       >
-                                        <Button
-                                          size="sm"
-                                          variant="outline"
-                                          className="flex items-center gap-1"
-                                        >
-                                          <Eye size={14} />
-                                          View
-                                        </Button>
-                                      </a>
+                                        <Eye size={14} />
+                                        View
+                                      </Button>
                                     </div>
                                   </div>
                                 )}

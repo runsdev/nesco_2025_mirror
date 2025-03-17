@@ -32,8 +32,6 @@ export default function Dashboard() {
   const [submissionFolderId, setSubmissionFolderId] = useState<string | null>(null);
   const [submissionFileId, setSubmissionFileId] = useState<string | null>(null);
 
-  const originalityFolderId = process.env.NEXT_PUBLIC_ORIGINALITY_SUBMISSION_FOLDER_ID;
-
   const supabase = createClient();
   const router = useRouter();
 
@@ -164,20 +162,19 @@ export default function Dashboard() {
     type: number,
     team_id: string,
   ) => {
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('submission')
-      .upload(`${competitionCode}/${team_id}/${fileName}`, file);
-
-    if (uploadError) {
-      console.error('Error uploading to Supabase:', uploadError);
-      return;
-    }
-
     if (type === 1) {
       if (!submissionFile || !teamData) return;
 
       setUploadStatus('loading');
       try {
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('submission')
+          .upload(`${competitionCode}/${team_id}/${fileName}`, file);
+
+        if (uploadError) {
+          console.error('Error uploading to Supabase:', uploadError);
+          return;
+        }
         // Find existing submission record
         const { data: existingSubmission } = await supabase
           .from('submissions')
@@ -221,6 +218,14 @@ export default function Dashboard() {
 
       setSecondUploadStatus('loading');
       try {
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('submission')
+          .upload(`${competitionCode}/${team_id}/${fileName}`, file);
+
+        if (uploadError) {
+          console.error('Error uploading to Supabase:', uploadError);
+          return;
+        }
         // Find existing submission record
         const { data: existingSubmission } = await supabase
           .from('submissions')
@@ -264,6 +269,14 @@ export default function Dashboard() {
 
       setOriginalityUploadStatus('loading');
       try {
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from('submission')
+          .upload(`${competitionCode}/${team_id}/${fileName}`, file);
+
+        if (uploadError) {
+          console.error('Error uploading to Supabase:', uploadError);
+          return;
+        }
         // Find existing submission record
         const { data: existingSubmission } = await supabase
           .from('submissions')
