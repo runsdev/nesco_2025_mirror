@@ -584,7 +584,7 @@ export default function Dashboard() {
                               {Math.max(
                                 0,
                                 Math.ceil(
-                                  (new Date('2025-04-15').getTime() - new Date().getTime()) /
+                                  (new Date('2025-04-05').getTime() - new Date().getTime()) /
                                     (1000 * 60 * 60 * 24),
                                 ),
                               )}{' '}
