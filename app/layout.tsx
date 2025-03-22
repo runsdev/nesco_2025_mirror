@@ -2,7 +2,6 @@ import { Kode_Mono, Montserrat } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import LocomotiveProvider from '@/providers/LocomotiveProvider';
 import GSAPProvider from '@/providers/GSAPProvider';
-import { Navbar, Footer } from '@/components/UI/index';
 import Script from 'next/script';
 import '@/styles/globals.css';
 import '@/styles/animasi.css';
@@ -72,9 +71,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className={`${kodeMono.className} ${montserrat.className}`}>
         <LocomotiveProvider>
           <GSAPProvider>
-            <Navbar />
             <main>{children}</main>
-            <Footer />
             <Analytics />
           </GSAPProvider>
         </LocomotiveProvider>
