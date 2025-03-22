@@ -2,7 +2,7 @@ import { Kode_Mono, Montserrat } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import LocomotiveProvider from '@/providers/LocomotiveProvider';
 import GSAPProvider from '@/providers/GSAPProvider';
-import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import '@/styles/globals.css';
 import '@/styles/animasi.css';
 
@@ -57,15 +57,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-M9T2Z18PXY" />
-        <Script id="google-analytics">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-M9T2Z18PXY');
-          `}
-        </Script>
         <link rel="canonical" href="https://nesco.id/" />
       </head>
       <body className={`${kodeMono.className} ${montserrat.className}`}>
@@ -76,6 +67,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </GSAPProvider>
         </LocomotiveProvider>
       </body>
+      <GoogleAnalytics gaId="G-M9T2Z18PXY" />
     </html>
   );
 }

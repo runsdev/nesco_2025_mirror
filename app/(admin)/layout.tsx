@@ -4,7 +4,7 @@ import { Kode_Mono } from 'next/font/google';
 import { Montserrat } from 'next/font/google';
 import '../../styles/globals.css';
 
-import Script from 'next/script';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 import { Analytics } from '@vercel/analytics/next';
 import { NextIntlClientProvider } from 'next-intl';
@@ -36,24 +36,12 @@ export default async function DashboardRootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} suppressHydrationWarning>
-      <head>
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-M9T2Z18PXY" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-M9T2Z18PXY');
-      `,
-          }}
-        />
-      </head>
       <body className="min-h-[100svh] bg-gradient-to-b from-[#61CCC2] to-[#FFE08D] md:min-h-screen">
         <NextIntlClientProvider messages={messages}>
           {children} <Analytics />
         </NextIntlClientProvider>
       </body>
+      <GoogleAnalytics gaId="G-M9T2Z18PXY" />
     </html>
   );
 }
