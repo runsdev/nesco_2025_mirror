@@ -22,6 +22,7 @@ const montserrat = Montserrat({
 import LocomotiveProvider from '@/providers/LocomotiveProvider';
 import GSAPProvider from '@/providers/GSAPProvider';
 import { Navbar, Footer } from '@/components/UI/index';
+import Script from 'next/script';
 import '@/styles/globals.css';
 import '@/styles/animasi.css';
 
@@ -54,6 +55,19 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       />
       <meta property="og:url" content="https://nesco.id/" />
       <meta property="og:type" content="website" />
+      <head>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-M9T2Z18PXY" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-M9T2Z18PXY');
+      `,
+          }}
+        />
+      </head>
       <body className={`${kodeMono.className} ${montserrat.className}`}>
         <LocomotiveProvider>
           <GSAPProvider>

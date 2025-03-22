@@ -9,6 +9,7 @@ import Link from 'next/link';
 import '../../styles/globals.css';
 import { cn } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/next';
+import Script from 'next/script';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -49,6 +50,19 @@ export default async function RootLayout({
   const messages = await getMessages();
   return (
     <html lang={locale} className={geistSans.className} suppressHydrationWarning>
+      <head>
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-M9T2Z18PXY" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-M9T2Z18PXY');
+      `,
+          }}
+        />
+      </head>
       <body
         className={cn(
           'bg-background text-foreground',
