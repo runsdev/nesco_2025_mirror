@@ -767,6 +767,8 @@ export default function RegisterPage() {
                       setConfirmation(e.target.value);
                     }}
                   />
+                  Pastikan bahwa data yang anda serahkan mencakup <b>seluruh data tim anda</b>,
+                  bukan hanya ketua tim saja.
                   {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
                 </div>
                 <div className="flex justify-end space-x-3">
