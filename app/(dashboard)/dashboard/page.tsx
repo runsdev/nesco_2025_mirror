@@ -572,7 +572,7 @@ export default function Dashboard() {
                           <div>
                             <h4 className="font-medium text-amber-800">Deadline Submission</h4>
                             <p className="text-amber-700">
-                              {new Date('2025-04-05').toLocaleDateString('id-ID', {
+                              {new Date('2025-04-23 23:59:59').toLocaleDateString('id-ID', {
                                 weekday: 'long',
                                 day: 'numeric',
                                 month: 'long',
@@ -584,7 +584,8 @@ export default function Dashboard() {
                               {Math.max(
                                 0,
                                 Math.ceil(
-                                  (new Date('2025-04-05').getTime() - new Date().getTime()) /
+                                  (new Date('2025-04-23 23:59:59').getTime() -
+                                    new Date().getTime()) /
                                     (1000 * 60 * 60 * 24),
                                 ),
                               )}{' '}
