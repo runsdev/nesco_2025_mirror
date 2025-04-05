@@ -1,22 +1,22 @@
 const details = {
-  debate: {
-    title: 'Scientific Debate',
-    description:
-      'Scientific Debate Competition NESCO 2025 adalah kompetisi yang dirancang untuk mengasah kemampuan berpikir kritis, analitis, dan argumentatif para peserta dalam menyikapi isu-isu terkini di bidang ketenagalistrikan dan keberlanjutan lingkungan.',
-    kategori: {
-      jenis: 'Mahasiswa',
-      tim: 'Beregu',
-      jumlah: 'Beranggotakan 3 orang',
-    },
-    contactPerson: {
-      wa: '82383466899',
-      wa2: '85540657063',
-      line: 'aafifahyunii',
-      line2: 'hazellut',
-    },
-    biaya: 'Rp 300.000',
-    guidebook: 'https://bit.ly/GuidebookScientificDebateNesco2025',
-  },
+  // debate: {
+  //   title: 'Scientific Debate',
+  //   description:
+  //     'Scientific Debate Competition NESCO 2025 adalah kompetisi yang dirancang untuk mengasah kemampuan berpikir kritis, analitis, dan argumentatif para peserta dalam menyikapi isu-isu terkini di bidang ketenagalistrikan dan keberlanjutan lingkungan.',
+  //   kategori: {
+  //     jenis: 'Mahasiswa',
+  //     tim: 'Beregu',
+  //     jumlah: 'Beranggotakan 3 orang',
+  //   },
+  //   contactPerson: {
+  //     wa: '82383466899',
+  //     wa2: '85540657063',
+  //     line: 'aafifahyunii',
+  //     line2: 'hazellut',
+  //   },
+  //   biaya: 'Rp 300.000',
+  //   guidebook: 'https://bit.ly/GuidebookScientificDebateNesco2025',
+  // },
   innovation: {
     title: 'Innovation Challenge',
     description:

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { LogoNesco } from '@/components/Element/index';
 
 const quickLinks = [
-  { href: '/competition/debate', label: 'Debate Competition' },
+  // { href: '/competition/debate', label: 'Debate Competition' },
   { href: '/competition/electricity', label: 'Electricity Innovation Competition' },
   { href: '/competition/paper', label: 'Paper Competition' },
   { href: '/competition/poster', label: 'Poster Competition' },

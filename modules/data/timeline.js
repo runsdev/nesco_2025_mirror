@@ -1,10 +1,10 @@
 const dataTimeline = {
-  debate: [
-    { kegiatan: 'Pendaftaran Karya', start: '10 Maret 2025', end: '5 April 2025' },
-    { kegiatan: 'Penyisihan', start: '26 April 2025', end: '27 April 2025' },
-    { kegiatan: 'TM Semifinal dan Final', start: '3 Mei 2025' },
-    { kegiatan: 'Semifinal, Final, dan Awarding', start: '10 Mei 2025' },
-  ],
+  // debate: [
+  //   { kegiatan: 'Pendaftaran Karya', start: '10 Maret 2025', end: '5 April 2025' },
+  //   { kegiatan: 'Penyisihan', start: '26 April 2025', end: '27 April 2025' },
+  //   { kegiatan: 'TM Semifinal dan Final', start: '3 Mei 2025' },
+  //   { kegiatan: 'Semifinal, Final, dan Awarding', start: '10 Mei 2025' },
+  // ],
   innovation: [
     { kegiatan: 'Pendaftaran Karya', start: '10 Maret 2025', end: '5 April 2025' },
     { kegiatan: 'Pengumuman Finalis', start: '3 Mei 2025' },

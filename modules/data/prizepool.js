@@ -1,23 +1,23 @@
 const dataPrizepool = {
-  debate: [
-    {
-      kategori: 'Mahasiswa',
-      juara: [
-        {
-          nama: 'First Place',
-          hadiah: 'Rp 5.000.000\nCertificate + Trophy',
-        },
-        {
-          nama: 'Runner Up',
-          hadiah: 'Rp 3.000.000\nCertificate + Trophy',
-        },
-        {
-          nama: 'Best Speaker',
-          hadiah: 'Rp 1.000.000\nCertificate + Trophy',
-        },
-      ],
-    },
-  ],
+  // debate: [
+  //   {
+  //     kategori: 'Mahasiswa',
+  //     juara: [
+  //       {
+  //         nama: 'First Place',
+  //         hadiah: 'Rp 5.000.000\nCertificate + Trophy',
+  //       },
+  //       {
+  //         nama: 'Runner Up',
+  //         hadiah: 'Rp 3.000.000\nCertificate + Trophy',
+  //       },
+  //       {
+  //         nama: 'Best Speaker',
+  //         hadiah: 'Rp 1.000.000\nCertificate + Trophy',
+  //       },
+  //     ],
+  //   },
+  // ],
   innovation: [
     {
       kategori: 'Mahasiswa',
