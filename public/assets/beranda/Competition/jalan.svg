@@ -1,14 +1,1 @@
-<svg width="270" height="13" viewBox="0 0 270 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect x="90" width="90.6764" height="12.1445" fill="url(#paint0_radial_1667_777)"/>
-<path d="M180.676 6.07227L90 6.07227" stroke="#F9EBD2" stroke-width="2.89157" stroke-dasharray="18.8 18.8"/>
-<rect x="179.029" width="90.6764" height="12.1445" fill="#564651"/>
-<path d="M269.705 6.07227L179.029 6.07227" stroke="#F9EBD2" stroke-width="2.89157" stroke-dasharray="18.8 18.8"/>
-<rect width="90.6764" height="12.1445" fill="#564651"/>
-<path d="M90.6764 6.07227L0 6.07227" stroke="#F9EBD2" stroke-width="2.89157" stroke-dasharray="18.8 18.8"/>
-<defs>
-<radialGradient id="paint0_radial_1667_777" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(135.338 6.07225) scale(45.3382 6.07225)">
-<stop stop-color="#FFE08D"/>
-<stop offset="1" stop-color="#564651"/>
-</radialGradient>
-</defs>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="270" height="13" fill="none" viewBox="0 0 270 13"><rect width="90.676" height="12.145" x="90" fill="url(#paint0_radial_1667_777)"/><path stroke="#F9EBD2" stroke-dasharray="18.8 18.8" stroke-width="2.892" d="M180.676 6.07227L90 6.07227"/><rect width="90.676" height="12.145" x="179.029" fill="#564651"/><path stroke="#F9EBD2" stroke-dasharray="18.8 18.8" stroke-width="2.892" d="M269.705 6.07227L179.029 6.07227"/><rect width="90.676" height="12.145" fill="#564651"/><path stroke="#F9EBD2" stroke-dasharray="18.8 18.8" stroke-width="2.892" d="M90.6764 6.07227L0 6.07227"/><defs><radialGradient id="paint0_radial_1667_777" cx="0" cy="0" r="1" gradientTransform="translate(135.338 6.07225) scale(45.3382 6.07225)" gradientUnits="userSpaceOnUse"><stop stop-color="#FFE08D"/><stop offset="1" stop-color="#564651"/></radialGradient></defs></svg>
