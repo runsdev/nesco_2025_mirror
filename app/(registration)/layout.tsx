@@ -6,6 +6,7 @@
 import { Kode_Mono } from 'next/font/google';
 import { Montserrat } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const kodeMono = Kode_Mono({
   display: 'swap',
@@ -48,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </GSAPProvider>
         </LocomotiveProvider>
       </body>
+      <GoogleAnalytics gaId="G-M9T2Z18PXY" />
     </html>
   );
 }

@@ -90,10 +90,10 @@ export const Footer = () => {
               </h3>
               <div className="flex flex-col space-y-[3%] text-[4vw] md:text-[0.9vw]">
                 <Link
-                  href="mailto:nesco@mail.ugm.ac.id"
+                  href="mailto:nescougm2025@gmail.com"
                   className="font-montserrat text-[4vw] text-[#69C7BF] transition-colors hover:text-white md:text-[0.9vw]"
                 >
-                  <p>nesco2025@gmail.com</p>
+                  <p>nescougm2025@gmail.com</p>
                 </Link>
               </div>
             </div>

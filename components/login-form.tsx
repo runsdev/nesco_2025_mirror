@@ -50,7 +50,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           {t('login_with_github')}
         </Button>
       </div>
-      <div className="w-full text-center text-sm text-[#F8D371]">
+      {/* <div className="w-full text-center text-sm text-[#F8D371]">
         <p className="whitespace-nowrap text-balance">
           {t('terms_and_privacy.text')}{' '}
           <Link className="text-[#69C7BF] underline underline-offset-4 hover:text-primary" href="#">
@@ -62,7 +62,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           </Link>
           .
         </p>
-      </div>
+      </div> */}
     </form>
   );
 }

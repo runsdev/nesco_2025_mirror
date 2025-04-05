@@ -29,7 +29,7 @@ const Hadiah = ({ kategori, dataPemenang }) => {
         {dataPemenang.map((_, index) => (
           <Image
             key={index}
-            src="/prizepoolCompt/kotak.png"
+            src={_.url}
             width={60}
             height={60}
             alt="prizepool"
