@@ -428,7 +428,6 @@ export default function RegisterPage() {
               <option value="Paper Competition">Paper Competition</option>
               <option value="Poster Competition 1 Karya">Poster Competition (1 karya)</option>
               <option value="Poster Competition 2 Karya">Poster Competition (2 karya)</option>
-              <option value="Scientific Debate">Scientific Debate</option>
               <option value="Innovation Challenge">Innovation Challenge</option>
             </select>
           </div>

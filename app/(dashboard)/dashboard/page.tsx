@@ -923,14 +923,12 @@ export default function Dashboard() {
                       <div className="space-y-6">
                         {(() => {
                           const competitionKey =
-                            teamData?.competition === 'Scientific Debate'
-                              ? 'debate'
-                              : teamData?.competition === 'Technology Innovation'
-                                ? 'innovation'
-                                : teamData?.competition === 'Poster Competition 1 Karya' ||
-                                    teamData?.competition === 'Poster Competition 2 Karya'
-                                  ? 'poster'
-                                  : 'paper';
+                            teamData?.competition === 'Technology Innovation'
+                              ? 'innovation'
+                              : teamData?.competition === 'Poster Competition 1 Karya' ||
+                                  teamData?.competition === 'Poster Competition 2 Karya'
+                                ? 'poster'
+                                : 'paper';
 
                           // Import this at the top of your component when implementing
 
