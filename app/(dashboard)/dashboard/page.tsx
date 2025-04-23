@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/UI/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/UI/card';
 import { Badge } from '@/components/UI/badge';
 import { Button } from '@/components/UI/button';
-import { FileIcon, XCircleIcon } from 'lucide-react';
+import { AlertCircle, FileIcon, XCircleIcon } from 'lucide-react';
 import { dataTimeline } from '@/modules/data/timeline';
 import DashboardSkeleton from '@/components/Skeleton/DashboardSkeleton';
 
@@ -32,6 +32,9 @@ export default function Dashboard() {
   const [submissionFolderId, setSubmissionFolderId] = useState<string | null>(null);
   const [submissionFileId, setSubmissionFileId] = useState<string | null>(null);
 
+  const [deadlineData, setDeadlineData] = useState<any>(null);
+  const [isPastDeadline, setIsPastDeadline] = useState(false);
+
   const supabase = createClient();
   const router = useRouter();
 
@@ -49,6 +52,24 @@ export default function Dashboard() {
       }
       setUser(user);
 
+      // Fetch deadline data from Supabase
+      const { data: deadline, error: deadlineError } = await supabase
+        .from('deadlines')
+        .select('*')
+        .eq('id', '1')
+        .single();
+
+      if (deadlineError) {
+        console.error('Error fetching deadline:', deadlineError);
+      } else if (deadline) {
+        setDeadlineData(deadline);
+
+        // Check if current time is past the deadline
+        const now = new Date();
+        const deadlineTime = new Date(deadline.deadline);
+        setIsPastDeadline(now > deadlineTime);
+      }
+
       // Fetch team data
       const { data: teamsData } = await supabase
         .from('teams')
@@ -56,6 +77,7 @@ export default function Dashboard() {
         .eq('email', user.email)
         .single();
 
+      // Rest of your existing code...
       if (teamsData) {
         if (teamsData.competition) {
           const FolderId =
@@ -138,6 +160,17 @@ export default function Dashboard() {
     }
 
     fetchUserAndTeamData();
+
+    // Set up a timer to check the deadline status every minute
+    const timer = setInterval(() => {
+      if (deadlineData) {
+        const now = new Date();
+        const deadlineTime = new Date(deadlineData.deadline);
+        setIsPastDeadline(now > deadlineTime);
+      }
+    }, 60000); // Check every minute
+
+    return () => clearInterval(timer);
   }, [router, supabase]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -572,28 +605,68 @@ export default function Dashboard() {
                           <div>
                             <h4 className="font-medium text-amber-800">Deadline Submission</h4>
                             <p className="text-amber-700">
-                              {new Date('2025-04-23 23:59:59').toLocaleDateString('id-ID', {
-                                weekday: 'long',
-                                day: 'numeric',
-                                month: 'long',
-                                year: 'numeric',
-                              })}
+                              {deadlineData
+                                ? new Date(deadlineData.deadline).toLocaleDateString('id-ID', {
+                                    weekday: 'long',
+                                    day: 'numeric',
+                                    month: 'long',
+                                    year: 'numeric',
+                                  })
+                                : ''}
+                              {deadlineData
+                                ? ' ' +
+                                  new Date(deadlineData.deadline).toLocaleTimeString('id-ID', {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    timeZoneName: 'short',
+                                  })
+                                : ''}
                             </p>
                             <div className="mt-1 text-sm text-amber-600">
-                              Tersisa{' '}
-                              {Math.max(
-                                0,
-                                Math.ceil(
-                                  (new Date('2025-04-23 23:59:59').getTime() -
-                                    new Date().getTime()) /
-                                    (1000 * 60 * 60 * 24),
-                                ),
-                              )}{' '}
-                              hari lagi
+                              {isPastDeadline ? (
+                                <span className="font-medium text-red-600">
+                                  Deadline telah berakhir
+                                </span>
+                              ) : deadlineData ? (
+                                <>
+                                  Tersisa{' '}
+                                  {Math.max(
+                                    0,
+                                    Math.ceil(
+                                      (new Date(deadlineData.deadline).getTime() -
+                                        new Date().getTime()) /
+                                        (1000 * 60 * 60 * 24),
+                                    ),
+                                  )}{' '}
+                                  hari lagi
+                                </>
+                              ) : (
+                                'Loading...'
+                              )}
                             </div>
                           </div>
                         </div>
                       </div>
+
+                      {isPastDeadline && (
+                        <div className="col-span-full mb-4 rounded-md bg-red-50 p-4 text-red-800">
+                          <div className="flex items-center">
+                            <AlertCircle className="mr-2 h-5 w-5" />
+                            <span className="font-medium">Periode submission telah berakhir.</span>
+                          </div>
+                          <p className="mt-1">
+                            Submission ditutup pada{' '}
+                            {deadlineData
+                              ? new Date(deadlineData.deadline).toLocaleDateString('id-ID')
+                              : ''}{' '}
+                            pukul{' '}
+                            {deadlineData
+                              ? new Date(deadlineData.deadline).toLocaleTimeString('id-ID')
+                              : ''}
+                            .
+                          </p>
+                        </div>
+                      )}
                       {/* Main Submission */}
                       {submissions.find((s) => s.submission) ? (
                         <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm">
@@ -645,6 +718,7 @@ export default function Dashboard() {
                                     1,
                                   );
                                 }}
+                                disabled={isPastDeadline}
                               >
                                 <XCircleIcon size={16} className="mr-1" /> Remove
                               </Button>
@@ -676,7 +750,9 @@ export default function Dashboard() {
                                 teamData.id,
                               )
                             }
-                            disabled={!submissionFile || uploadStatus === 'loading'}
+                            disabled={
+                              !submissionFile || uploadStatus === 'loading' || isPastDeadline
+                            }
                             className="mt-4 w-full"
                           >
                             {uploadStatus === 'loading' ? 'Uploading...' : 'Submit Karya'}
@@ -736,6 +812,7 @@ export default function Dashboard() {
                                       2,
                                     );
                                   }}
+                                  disabled={isPastDeadline}
                                 >
                                   <XCircleIcon size={16} className="mr-1" /> Remove
                                 </Button>
@@ -765,7 +842,11 @@ export default function Dashboard() {
                                   teamData.id,
                                 )
                               }
-                              disabled={!secondSubmissionFile || secondUploadStatus === 'loading'}
+                              disabled={
+                                !secondSubmissionFile ||
+                                secondUploadStatus === 'loading' ||
+                                isPastDeadline
+                              }
                               className="mt-4 w-full"
                             >
                               {secondUploadStatus === 'loading'
@@ -829,6 +910,7 @@ export default function Dashboard() {
                                       3,
                                     );
                                   }}
+                                  disabled={isPastDeadline}
                                 >
                                   <XCircleIcon size={16} className="mr-1" /> Remove
                                 </Button>
@@ -856,7 +938,11 @@ export default function Dashboard() {
                                   teamData.id,
                                 )
                               }
-                              disabled={!originalityFile || originalityUploadStatus === 'loading'}
+                              disabled={
+                                !originalityFile ||
+                                originalityUploadStatus === 'loading' ||
+                                isPastDeadline
+                              }
                               className="mt-4 w-full"
                             >
                               {originalityUploadStatus === 'loading'
