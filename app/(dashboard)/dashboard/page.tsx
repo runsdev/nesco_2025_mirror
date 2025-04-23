@@ -68,6 +68,11 @@ export default function Dashboard() {
         // Check if current time is past the deadline
         const now = new Date();
         const deadlineTime = new Date(deadline.deadline);
+        setTimeRemaining(
+          `${Math.floor((deadlineTime.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))}d ${Math.floor(
+            (deadlineTime.getTime() - now.getTime()) / (1000 * 60 * 60),
+          )}h ${Math.floor((deadlineTime.getTime() - now.getTime()) / (1000 * 60))}m ${Math.floor((deadlineTime.getTime() - now.getTime()) / 1000)}s`,
+        );
         setIsPastDeadline(now > deadlineTime);
       }
 
@@ -162,7 +167,7 @@ export default function Dashboard() {
 
     fetchUserAndTeamData();
 
-    // Set up a timer to check the deadline status every minute
+    // Set up a timer to check the deadline status every s
     const timer = setInterval(() => {
       if (deadlineData) {
         const now = new Date();
@@ -170,11 +175,11 @@ export default function Dashboard() {
         setTimeRemaining(
           `${Math.floor((deadlineTime.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))}d ${Math.floor(
             (deadlineTime.getTime() - now.getTime()) / (1000 * 60 * 60),
-          )}h ${Math.floor((deadlineTime.getTime() - now.getTime()) / (1000 * 60))}m`,
+          )}h ${Math.floor((deadlineTime.getTime() - now.getTime()) / (1000 * 60))}m ${Math.floor((deadlineTime.getTime() - now.getTime()) / 1000)}s`,
         );
         setIsPastDeadline(now > deadlineTime);
       }
-    }, 60000); // Check every minute
+    }, 1000); // Check every s
 
     return () => clearInterval(timer);
   }, [router, supabase]);
