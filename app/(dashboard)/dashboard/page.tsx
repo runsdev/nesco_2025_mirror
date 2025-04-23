@@ -34,6 +34,7 @@ export default function Dashboard() {
 
   const [deadlineData, setDeadlineData] = useState<any>(null);
   const [isPastDeadline, setIsPastDeadline] = useState(false);
+  const [timeRemaining, setTimeRemaining] = useState<string | null>(null);
 
   const supabase = createClient();
   const router = useRouter();
@@ -166,6 +167,11 @@ export default function Dashboard() {
       if (deadlineData) {
         const now = new Date();
         const deadlineTime = new Date(deadlineData.deadline);
+        setTimeRemaining(
+          `${Math.floor((deadlineTime.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))}d ${Math.floor(
+            (deadlineTime.getTime() - now.getTime()) / (1000 * 60 * 60),
+          )}h ${Math.floor((deadlineTime.getTime() - now.getTime()) / (1000 * 60))}m`,
+        );
         setIsPastDeadline(now > deadlineTime);
       }
     }, 60000); // Check every minute
@@ -629,22 +635,9 @@ export default function Dashboard() {
                                 </span>
                               ) : deadlineData ? (
                                 <>
-                                  {(() => {
-                                    const deadlineTime = new Date(deadlineData.deadline).getTime();
-                                    const now = new Date().getTime();
-                                    const diff = Math.max(0, deadlineTime - now);
-
-                                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                                    const hours = Math.floor(
-                                      (diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-                                    );
-                                    const minutes = Math.floor(
-                                      (diff % (1000 * 60 * 60)) / (1000 * 60),
-                                    );
-                                    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                                    return `Tersisa ${days}d:${hours.toString().padStart(2, '0')}h:${minutes.toString().padStart(2, '0')}m:${seconds.toString().padStart(2, '0')}s`;
-                                  })()}
+                                  <span className="font-medium text-green-600">
+                                    Tersisa {timeRemaining}
+                                  </span>
                                 </>
                               ) : (
                                 'Loading...'

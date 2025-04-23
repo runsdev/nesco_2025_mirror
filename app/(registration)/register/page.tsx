@@ -838,10 +838,12 @@ export default function RegisterPage() {
                   </div>
                   <div className="mt-2 text-sm text-amber-700">
                     <p>
-                      Jika anda mengalami kendala dalam pengiriman file, silahkan mencoba{' '}
-                      <b>mode alternatif</b> dengan mempersiapkan tautan Google Drive yang berisi
-                      file-file yang diperlukan dan pastikan dapat diakses oleh semua orang atau{' '}
-                      <b>nescougm2025@gmail.com</b>!
+                      Waktu batas pengumpulan karya lomba adalah{' '}
+                      <b>23 April 2025 pukul 23.59 WIB</b>. Pastikan semua file yang diperlukan
+                      sudah diunggah sebelum batas waktu tersebut. Jika anda mengalami kendala dalam
+                      pengiriman file, silahkan mencoba <b>mode alternatif</b> dengan mempersiapkan
+                      tautan Google Drive yang berisi file-file yang diperlukan dan pastikan dapat
+                      diakses oleh semua orang atau <b>nescougm2025@gmail.com</b>!
                     </p>
                   </div>
                 </div>
