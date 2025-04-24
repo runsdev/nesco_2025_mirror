@@ -274,7 +274,7 @@ export default function SeminarPage() {
                   d="M5 13l4 4L19 7"
                 />
               </svg>
-              <h2 className="mt-4 text-xl font-semibold text-gray-800">You're Registered!</h2>
+              <h2 className="mt-4 text-xl font-semibold text-gray-800">You&apos;re Registered!</h2>
               <p className="mt-2 text-gray-600">
                 You have successfully registered for this seminar. We look forward to seeing you
                 there!
