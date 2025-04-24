@@ -13,10 +13,10 @@ const routes = [
     name: 'COMPETITION',
     href: '/competition',
     child: [
-      {
-        name: 'Scientific Debate',
-        href: '/competition/debate',
-      },
+      // {
+      //   name: 'Scientific Debate',
+      //   href: '/competition/debate',
+      // },
       {
         name: 'Innovation Challenge',
         href: '/competition/innovation',

@@ -9,10 +9,12 @@ import {
 } from '@/modules/beranda/index';
 
 import ParticlesContainer from '@/components/UI/ParticlesContainer';
+import { Navbar, Footer } from '@/components/UI/index';
 
 export default async function Home() {
   return (
     <>
+      <Navbar />
       <Hero />
       <div className="relative flex w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2]">
         <ParticlesContainer className="absolute top-0 z-0 h-[93svh] min-h-screen w-full md:h-[97svh] lg:h-[180svh]" />
@@ -25,6 +27,7 @@ export default async function Home() {
         <Galeri />
       </div>
       {/* <Sponsor /> */}
+      <Footer />
     </>
   );
 }

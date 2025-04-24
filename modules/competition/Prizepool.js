@@ -16,7 +16,7 @@ const Hadiah = ({ kategori, dataPemenang }) => {
       </div>
       <div
         style={{ gridTemplateColumns: dataPemenang.length > 1 ? 'repeat(3, 1fr)' : '1fr' }}
-        className="relative z-20 mb-4 mt-[10vw] grid w-full place-items-center gap-y-2 text-[4vw] lg:mt-[5.5vw] lg:text-4xl xl:text-5xl"
+        className="relative z-20 mb-4 mt-[10vw] grid w-full place-items-center gap-y-2 text-[3.6vw] lg:mt-[5.5vw] lg:text-4xl xl:text-5xl"
       >
         {dataPemenang.map((item) => (
           <h3
@@ -29,7 +29,7 @@ const Hadiah = ({ kategori, dataPemenang }) => {
         {dataPemenang.map((_, index) => (
           <Image
             key={index}
-            src="/prizepoolCompt/kotak.png"
+            src={_.url}
             width={60}
             height={60}
             alt="prizepool"
@@ -40,7 +40,7 @@ const Hadiah = ({ kategori, dataPemenang }) => {
         {dataPemenang.map((item) => (
           <p
             key={JSON.stringify({ ...dataPemenang, hadiah: item.hadiah })}
-            className="w-full whitespace-pre pb-2 text-center text-[2.3vw] drop-shadow-offset-lg sm:text-[2vw] md:text-lg xl:text-3xl"
+            className="w-full whitespace-pre pb-2 text-center text-[2vw] drop-shadow-offset-lg md:text-lg xl:text-3xl"
           >
             {item.hadiah}
           </p>

@@ -9,6 +9,7 @@ import Link from 'next/link';
 import '../../styles/globals.css';
 import { cn } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -88,6 +89,7 @@ export default async function RootLayout({
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>
+      <GoogleAnalytics gaId="G-M9T2Z18PXY" />
     </html>
   );
 }

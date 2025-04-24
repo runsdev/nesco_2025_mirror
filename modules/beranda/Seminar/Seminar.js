@@ -26,14 +26,14 @@ const GunungAwanPohon = () => {
         alt="Gunung"
         width={2250}
         height={430}
-        className="absolute z-[11] mt-[2%] w-full md:mt-[4%]"
+        className="absolute z-[9] mt-[2%] w-full md:mt-[4%]"
       />
       <Image
         src="/seminar/Awan.png"
         alt="Awan"
         width={2034}
         height={115}
-        className="absolute z-[11] mt-[17%] w-full md:mt-[20%]"
+        className="absolute z-[9] mt-[17%] w-full md:mt-[20%]"
       />
     </div>
   );

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { LogoNesco } from '@/components/Element/index';
 
 const quickLinks = [
-  { href: '/competition/debate', label: 'Debate Competition' },
+  // { href: '/competition/debate', label: 'Debate Competition' },
   { href: '/competition/electricity', label: 'Electricity Innovation Competition' },
   { href: '/competition/paper', label: 'Paper Competition' },
   { href: '/competition/poster', label: 'Poster Competition' },
@@ -72,6 +72,7 @@ export const Footer = () => {
               <div className="flex flex-col space-y-[3%] text-[4vw] md:text-[0.9vw]">
                 {socialLinks.map((link) => (
                   <Link
+                    target="_blank"
                     key={link.href}
                     href={link.href}
                     className="font-montserrat text-[#69C7BF] transition-colors hover:text-white"
@@ -89,10 +90,10 @@ export const Footer = () => {
               </h3>
               <div className="flex flex-col space-y-[3%] text-[4vw] md:text-[0.9vw]">
                 <Link
-                  href="mailto:nesco@mail.ugm.ac.id"
+                  href="mailto:nescougm2025@gmail.com"
                   className="font-montserrat text-[4vw] text-[#69C7BF] transition-colors hover:text-white md:text-[0.9vw]"
                 >
-                  <p>nesco2025@gmail.com</p>
+                  <p>nescougm2025@gmail.com</p>
                 </Link>
               </div>
             </div>

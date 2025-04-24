@@ -23,14 +23,14 @@ const agendaData = [
     description:
       'Poster Competition NESCO 2025 adalah kompetisi yang dirancang untuk memberikan platform bagi siswa SMA (Junior) dan mahasiswa (Senior) untuk mengungkapkan ide dan pemikiran mereka mengenai berbagai isu dan inovasi di bidang ketenagalistrikan dan energi terbarukan melalui media visual digital.',
   },
-  {
-    title: 'Scientific Debate',
-    logo: '/assets/beranda/Competition/DebateCompetition.svg',
-    slug: 'debate',
-    href: '/competition/debate',
-    description:
-      'Scientific Debate Competition NESCO 2025 adalah kompetisi yang dirancang untuk mengasah kemampuan berpikir kritis, analitis, dan argumentatif para peserta dalam menyikapi isu-isu terkini di bidang ketenagalistrikan dan keberlanjutan lingkungan.',
-  },
+  // {
+  //   title: 'Scientific Debate',
+  //   logo: '/assets/beranda/Competition/DebateCompetition.svg',
+  //   slug: 'debate',
+  //   href: '/competition/debate',
+  //   description:
+  //     'Scientific Debate Competition NESCO 2025 adalah kompetisi yang dirancang untuk mengasah kemampuan berpikir kritis, analitis, dan argumentatif para peserta dalam menyikapi isu-isu terkini di bidang ketenagalistrikan dan keberlanjutan lingkungan.',
+  // },
   {
     title: 'Seminar',
     logo: '/assets/beranda/Competition/Seminar.svg',

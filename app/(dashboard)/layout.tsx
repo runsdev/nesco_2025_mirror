@@ -4,6 +4,8 @@ import { Kode_Mono } from 'next/font/google';
 import { Montserrat } from 'next/font/google';
 import '../../styles/globals.css';
 
+import { GoogleAnalytics } from '@next/third-parties/google';
+
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages } from 'next-intl/server';
 import { Analytics } from '@vercel/analytics/next';
@@ -49,6 +51,7 @@ export default async function DashboardRootLayout({
           {children} <Analytics />
         </NextIntlClientProvider>
       </body>
+      <GoogleAnalytics gaId="G-M9T2Z18PXY" />
     </html>
   );
 }

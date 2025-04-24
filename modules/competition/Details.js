@@ -163,15 +163,14 @@ export function Details({ slug }) {
               </div>
               <div className="relative flex h-full flex-row">
                 <div className="flex w-[85%] items-center justify-center rounded-l-[1vw] bg-[#0E5B54] p-[10%] text-center md:rounded-l-sm">
-                  <div
-                    // target="_blank"
-                    // aria-disabled={true}
-                    // href={detailsNow.guidebook}
-                    className="cursor-not-allowed text-[3vw] font-bold text-[#EABB37] duration-500 hover:text-white lg:text-xl xl:text-2xl"
+                  <Link
+                    target="_blank"
+                    href={detailsNow.guidebook}
+                    className="text-[3vw] font-bold text-[#EABB37] duration-500 hover:text-white lg:text-xl xl:text-2xl"
                   >
                     Guide <br />
                     Book
-                  </div>
+                  </Link>
                 </div>
                 <div className="ml-[-2%] w-[5%] rounded-l-[1vw] bg-[#61CCC2] md:rounded-l-sm" />
                 <div className="w-[5%] rounded-l-[1vw] bg-[#0F776E] md:rounded-l-sm" />
