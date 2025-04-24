@@ -54,20 +54,23 @@ export default function RegisterPage() {
 
   useEffect(() => {
     async function fetchUser() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      //   const {
+      //     data: { user },
+      //   } = await supabase.auth.getUser();
 
-      if (!user) {
-        // Redirect to login page
-        router.push('/auth/sign-in');
-      }
+      //   if (!user) {
+      //     // Redirect to login page
+      //     router.push('/auth/sign-in');
+      //   }
 
-      setUser(user);
+      //   setUser(user);
+      // }
+
+      router.push('/');
     }
 
     fetchUser();
-  }, [router, supabase.auth]);
+  }, [router]);
 
   // Check if registration is still open
   useEffect(() => {
