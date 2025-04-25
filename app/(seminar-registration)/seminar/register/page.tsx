@@ -164,6 +164,11 @@ export default function SeminarPage() {
       setSuccess(true);
       setFormData({ name: '', instance: '', wa_handle: '' });
       setAlreadyRegistered(true);
+      window.open(
+        'https://chat.whatsapp.com/KLILQRXmVJJ6C2WJHmSTvu',
+        '_blank',
+        'noopener,noreferrer',
+      );
     } catch (err: any) {
       console.error('Registration error:', err);
       setError(err.message || 'An error occurred during registration. Please try again.');
@@ -217,14 +222,14 @@ export default function SeminarPage() {
   return (
     <div className="relative flex min-h-screen w-full flex-col bg-gradient-to-b from-[#003C43] to-[#61CCC2] py-[5%]">
       {/* <ParticlesContainer className="absolute top-0 z-0 min-h-[100svh] w-full md:min-h-screen" /> */}
-      <div className="absolute left-4 top-4 z-20">
+      {/* <div className="absolute left-4 top-4 z-20">
         <button
           onClick={() => router.push('/')}
           className="rounded-md bg-blue px-3 py-2 text-white transition-colors hover:bg-yellow"
         >
           Kembali ke Beranda
         </button>
-      </div>
+      </div> */}
 
       <div className="z-[10] mx-auto w-[90%] max-w-4xl md:w-[80%]">
         <h1 className="mb-8 text-center text-4xl font-bold text-white">Seminar Registration</h1>
@@ -236,6 +241,9 @@ export default function SeminarPage() {
           </div>
           <div className="p-6">
             <div className="mb-6">
+              <p className="text-lg text-gray-700">
+                <span className="font-semibold">Theme:</span> {seminar?.theme}
+              </p>
               <p className="text-lg text-gray-700">
                 <span className="font-semibold">Speaker:</span> {seminar?.key_speaker}
               </p>
