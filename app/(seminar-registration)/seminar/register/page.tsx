@@ -39,7 +39,7 @@ export default function SeminarPage() {
       } = await supabase.auth.getUser();
 
       if (!user) {
-        router.push('/auth/sign-in?redirect=/seminar');
+        router.push('/auth/sign-in?redirectTo=/seminar/register');
         return;
       }
 
