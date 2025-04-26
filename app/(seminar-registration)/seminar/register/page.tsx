@@ -274,15 +274,11 @@ export default function SeminarPage() {
         </Link>
       </div>
 
-      <div className="mx-auto max-w-[60%] px-4">
+      <div className="mx-auto max-w-[90%] px-4 md:max-w-[60%]">
         {/* Google Form Style Header */}
-        <div className="mb-6 overflow-hidden rounded-t-xl bg-white">
-          <div className="h-40 w-full overflow-hidden sm:h-56">
-            <img
-              src="/seminar/registration/header.png"
-              alt="Seminar Header"
-              className="h-full w-full object-cover"
-            />
+        <div className="mb-6 overflow-hidden rounded-xl bg-white">
+          <div className="w-full overflow-hidden">
+            <img src="/seminar/registration/header.png" alt="Seminar Header" className="w-full" />
           </div>
           {/* <div className="border-l-8 border-blue p-6">
             <h1 className="mb-2 text-3xl font-bold text-gray-800">Seminar Registration</h1>
