@@ -387,7 +387,7 @@ export default function SeminarPage() {
                   />
                 </svg>
               </div>
-              <h2 className="mb-4 text-2xl font-bold text-gray-800">You're Registered!</h2>
+              <h2 className="mb-4 text-2xl font-bold text-gray-800">You&apos;re Registered!</h2>
               <p className="mb-8 text-lg text-gray-600">
                 You have successfully registered for this seminar. We look forward to seeing you
                 there!
