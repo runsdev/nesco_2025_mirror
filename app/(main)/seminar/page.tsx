@@ -1,7 +1,14 @@
 'use client';
 
-import ErrorPage from '@/components/ErrorPage';
+import ErrorPageWithCustomRedirect from '@/components/ErrorPageWithCustomRedirect';
 
 export default function Page() {
-  return <ErrorPage pesan="SOON" text1="Halaman Belum Tersedia :(" text2="Kembali ke Beranda" />;
+  return (
+    <ErrorPageWithCustomRedirect
+      pesan="SOON"
+      text1="Namun pendaftaran sudah dibuka!"
+      text2="Daftar seminar sekarang!"
+      redirect="/seminar/register"
+    />
+  );
 }
