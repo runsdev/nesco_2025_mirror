@@ -49,8 +49,9 @@ export default async function RootLayout({
   // side is the easiest way to get started
   const messages = await getMessages();
   return (
-    <html lang={locale} className={geistSans.className} suppressHydrationWarning>
-      <body
+    <>
+      {/* // <html lang={locale} className={geistSans.className} suppressHydrationWarning> */}
+      <div
         className={cn(
           'bg-background text-foreground',
           `${kodeMono.className} ${montserrat.className}`,
@@ -63,7 +64,7 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <NextIntlClientProvider messages={messages}>
-            <main className="flex min-h-screen flex-col items-center">
+            <div className="flex min-h-screen flex-col items-center">
               <div className="flex w-full flex-1 flex-col items-center">
                 {/* <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                   <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
@@ -85,11 +86,12 @@ export default async function RootLayout({
                   </div>
                 </footer> */}
               </div>
-            </main>
+            </div>
           </NextIntlClientProvider>
         </ThemeProvider>
-      </body>
+      </div>
       <GoogleAnalytics gaId="G-M9T2Z18PXY" />
-    </html>
+      {/* </div> */}
+    </>
   );
 }
