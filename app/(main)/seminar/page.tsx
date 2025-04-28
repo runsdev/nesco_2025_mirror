@@ -48,7 +48,7 @@ export default function Seminar() {
           type="button"
           className="mt-[10px] rounded-2xl bg-[#EABB37] px-3 py-[0.5vw] text-[3vw] font-semibold text-black duration-300 hover:bg-[#FFEDBD] md:text-[1.7vw] xl:bottom-[12vw] xl:text-[1.3vw]"
         >
-          <Link href="/auth/sign-in" className="flex h-full w-full items-center justify-center">
+          <Link href="/seminar/register" className="flex h-full w-full items-center justify-center">
             Register Here
           </Link>
         </button>
