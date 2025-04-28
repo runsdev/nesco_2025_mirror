@@ -38,18 +38,21 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${kodeMono.className} ${montserrat.className}`}>
-        <LocomotiveProvider>
-          <GSAPProvider>
-            <Navbar />
-            {children}
-            <Analytics />
-            <Footer />
-          </GSAPProvider>
-        </LocomotiveProvider>
-      </body>
+    <>
+      {/* <html lang="en" suppressHydrationWarning> */}
+      {/* <body className={`${kodeMono.className} ${montserrat.className}`}> */}
+      {/* <LocomotiveProvider> */}
+      {/* <GSAPProvider> */}
+
+      <Navbar />
+      {children}
+      <Analytics />
+      <Footer />
       <GoogleAnalytics gaId="G-M9T2Z18PXY" />
-    </html>
+      {/* </GSAPProvider> */}
+      {/* </LocomotiveProvider> */}
+      {/* </body> */}
+      {/* </html> */}
+    </>
   );
 }
