@@ -8,56 +8,38 @@ export default async function LoginPage(props: { searchParams: Promise<Message> 
   const { searchParams } = await props;
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col items-center justify-center gap-6 bg-darkblue p-6 sm:p-10">
+    <div className="relative flex min-h-screen w-full flex-col items-center justify-center bg-gradient-to-b from-darkblue to-[#0e1c28] p-6 sm:p-10">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="animate-float-slow absolute -right-10 top-10 h-40 w-40 rounded-full bg-[#61CCC2]/10 blur-3xl"></div>
+        <div className="animate-float absolute -left-20 bottom-40 h-60 w-60 rounded-full bg-[#F8D371]/10 blur-3xl"></div>
+      </div>
+
       <Link
         href="/"
-        className="group fixed left-6 top-6 z-10 flex cursor-pointer items-center space-x-1 2xl:space-x-4"
+        className="group fixed left-6 top-6 z-10 flex cursor-pointer items-center space-x-1 transition-transform duration-300 hover:scale-105 2xl:space-x-4"
       >
         <LogoNesco className="w-[10vw] max-w-[100px] transition-transform duration-500 group-hover:scale-110" />
-        <span className="font-kodeMono text-[6vw] font-bold text-[#61CCC2] transition-colors duration-500 group-hover:text-blue xl:text-[2.5vw]">
+        <span className="font-kodeMono text-[6vw] font-bold text-[#61CCC2] transition-colors duration-500 group-hover:text-[#F8D371] xl:text-[2.5vw]">
           NESCO
         </span>
       </Link>
 
-      <div className="flex w-full max-w-xl flex-col gap-6">
+      <div className="relative z-10 flex w-full max-w-md flex-col gap-8 rounded-2xl bg-white/10 p-8 shadow-lg backdrop-blur-md">
         <LoginFormPost />
         {/* <FormMessage message={searchParams} /> */}
       </div>
 
-      <Image
-        src="/assets/auth/Lantai.svg"
-        alt="Image"
-        width={1}
-        height={1}
-        className="absolute bottom-0 h-auto w-full object-cover"
-      />
+      <div className="absolute bottom-0 w-full">
+        <Image
+          src="/assets/auth/Lantai.svg"
+          alt="Background"
+          width={1920}
+          height={300}
+          className="h-auto w-full object-cover"
+          priority
+        />
+      </div>
     </div>
-
-    // <div className="grid min-h-svh lg:grid-cols-2">
-    // <div className="flex flex-col gap-4 p-6 md:p-10">
-    //   <div className="flex justify-center gap-2 md:justify-start">
-    //     <a href="#" className="flex items-center gap-2 font-medium">
-    //       {/* <div className="flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground">
-    //         <GalleryVerticalEnd className="size-4" />
-    //       </div> */}
-    //       NESCO 2025
-    //     </a>
-    //   </div>
-    //   <div className="flex flex-1 items-center justify-center">
-    //     <div className="w-full max-w-xs">
-    //       <LoginFormPost />
-    //       {/* <FormMessage message={searchParams} /> */}
-    //     </div>
-    //   </div>
-    // </div>
-    // <div className="relative hidden bg-muted lg:block">
-    //   <Image
-    //     src="/tsmemes.jpg"
-    //     alt="Image"
-    //     width={720}
-    //     height={1280}
-    //     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-    //   />
-    // </div>
   );
 }
