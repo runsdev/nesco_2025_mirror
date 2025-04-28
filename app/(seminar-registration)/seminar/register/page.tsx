@@ -180,6 +180,7 @@ export default function SeminarPage() {
             wa_handle: formData.wa_handle,
             seminar_id: seminar.id,
             user_id: user?.id,
+            email: user?.email,
           },
         ])
         .select();
