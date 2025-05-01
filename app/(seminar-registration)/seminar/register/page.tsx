@@ -5,7 +5,16 @@ import { useRouter } from 'next/navigation';
 import { Tables } from '@/types/database.types';
 import { User } from '@supabase/supabase-js';
 import Link from 'next/link';
-import { FiCalendar, FiClock, FiMapPin, FiUser, FiUsers, FiMic } from 'react-icons/fi';
+import {
+  FiCalendar,
+  FiClock,
+  FiMapPin,
+  FiUser,
+  FiUsers,
+  FiMic,
+  FiAlertTriangle,
+  FiFileText,
+} from 'react-icons/fi';
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoArrowBackOutline } from 'react-icons/io5';
 
@@ -27,9 +36,14 @@ export default function SeminarPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [alreadyRegistered, setAlreadyRegistered] = useState(false);
-
+  const [remainingQuota, setRemainingQuota] = useState(0);
+  const [totalQuota, setTotalQuota] = useState(0);
+  const [checkingQuota, setCheckingQuota] = useState(false);
   const supabase = createClient();
   const router = useRouter();
+
+  // Current date for displaying date information
+  const currentDate = new Date('2025-05-01T02:47:00Z');
 
   // Check authentication and fetch user
   useEffect(() => {
@@ -61,6 +75,20 @@ export default function SeminarPage() {
     getUser();
   }, [router, supabase]);
 
+  // Function to fetch seminar quota
+  const fetchRemainingQuota = async (seminarId: number) => {
+    const { data: seminarQuota, error: errorQuota } = await supabase.rpc('count_remaining_quota', {
+      idseminar: seminarId,
+    });
+
+    if (errorQuota) {
+      console.error('Error fetching seminar quota:', errorQuota);
+      return null;
+    }
+
+    return seminarQuota;
+  };
+
   // Fetch the seminar
   useEffect(() => {
     async function fetchSeminar() {
@@ -78,7 +106,18 @@ export default function SeminarPage() {
         setError('Failed to load seminar details. Please try again later.');
       } else {
         setSeminar(data);
+
+        if (data) {
+          // Store the total quota from the seminar data
+          setTotalQuota(data.quota || 100); // Default to 100 if not specified
+
+          const quota = await fetchRemainingQuota(data.id);
+          if (quota !== null) {
+            setRemainingQuota(quota);
+          }
+        }
       }
+
       setLoading(false);
     }
 
@@ -103,6 +142,13 @@ export default function SeminarPage() {
       minute: '2-digit',
       hour12: false,
     }).format(time);
+  };
+
+  // Check if seminar date is in the past
+  const isSeminarPassed = () => {
+    if (!seminar?.seminar_end) return false;
+    const endDate = new Date(seminar.seminar_end);
+    return currentDate > endDate;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -168,6 +214,24 @@ export default function SeminarPage() {
       return;
     }
 
+    // Check quota again before proceeding
+    setCheckingQuota(true);
+    const currentQuota = await fetchRemainingQuota(seminar.id);
+    setCheckingQuota(false);
+
+    if (currentQuota === null) {
+      setError('Unable to verify available quota. Please try again.');
+      return;
+    }
+
+    if (currentQuota <= 0) {
+      setError(
+        'We apologize, but the registration quota has been filled. Please try again for future events.',
+      );
+      setRemainingQuota(0);
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
@@ -180,7 +244,6 @@ export default function SeminarPage() {
             wa_handle: formData.wa_handle,
             seminar_id: seminar.id,
             user_id: user?.id,
-            email: user?.email,
           },
         ])
         .select();
@@ -192,6 +255,8 @@ export default function SeminarPage() {
       setSuccess(true);
       setFormData({ name: '', instance: '', wa_handle: '' });
       setAlreadyRegistered(true);
+      // Update remaining quota after successful registration
+      setRemainingQuota((prevQuota) => Math.max(0, prevQuota - 1));
       window.open(
         'https://chat.whatsapp.com/KLILQRXmVJJ6C2WJHmSTvu',
         '_blank',
@@ -263,6 +328,47 @@ export default function SeminarPage() {
     );
   }
 
+  // Calculate if the seminar is fully booked or has limited spots
+  const isFullyBooked = remainingQuota <= 0;
+  const hasLimitedSpots = remainingQuota < 30 && remainingQuota > 0;
+  const registrationDisabled = isFullyBooked || isSeminarPassed();
+
+  // Calculate the percentage filled for the progress bar
+  const filledPercentage =
+    totalQuota > 0 ? Math.min(100, ((totalQuota - remainingQuota) / totalQuota) * 100) : 0;
+
+  // Display quota information
+  const renderQuotaInfo = () => {
+    if (isSeminarPassed()) {
+      return (
+        <div className="mb-6 flex items-center rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-800">
+          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
+          <span>This seminar has already taken place. Registration is closed.</span>
+        </div>
+      );
+    } else if (isFullyBooked) {
+      return (
+        <div className="mb-6 flex items-center rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
+          <span>
+            Registration quota has been filled. No more registrations are possible at this time.
+          </span>
+        </div>
+      );
+    } else if (hasLimitedSpots) {
+      return (
+        <div className="mb-6 flex items-center rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
+          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
+          <span>
+            Only <span className="font-bold">{remainingQuota} spots</span> remaining! Register soon
+            to secure your place.
+          </span>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="relative min-h-screen w-full bg-gradient-to-b from-[#002A30] to-[#61CCC2] py-16">
       <div className="fixed left-4 top-4 z-30">
@@ -281,19 +387,13 @@ export default function SeminarPage() {
           <div className="w-full overflow-hidden">
             <img src="/seminar/registration/header.png" alt="Seminar Header" className="w-full" />
           </div>
-          {/* <div className="border-l-8 border-blue p-6">
-            <h1 className="mb-2 text-3xl font-bold text-gray-800">Seminar Registration</h1>
-            <p className="text-gray-600">
-              Register for our upcoming seminar and join us for an insightful discussion
-            </p>
-          </div> */}
         </div>
 
         {/* Seminar Details Card - Google Form Style */}
         <div className="mb-6 overflow-hidden rounded-xl bg-white p-6 shadow-md">
           <h2 className="mb-5 text-xl font-bold text-gray-800">Seminar Details</h2>
 
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-3">
               <div className="flex items-start gap-3">
                 <div className="bg-blue/10 mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-blue">
@@ -324,6 +424,16 @@ export default function SeminarPage() {
                   <p className="text-base text-gray-800">{seminar?.moderator || 'TBA'}</p>
                 </div>
               </div>
+
+              {/* <div className="flex items-start gap-3">
+                <div className="bg-blue/10 mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-blue">
+                  <FiFileText className="h-4 w-4" />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-500">Capacity</p>
+                  <p className="text-base text-gray-800">{totalQuota} participants</p>
+                </div>
+              </div> */}
             </div>
 
             <div className="space-y-3">
@@ -364,6 +474,34 @@ export default function SeminarPage() {
                   <p className="text-base text-gray-800">{seminar?.place || 'TBA'}</p>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Display capacity information */}
+          <div className="mt-6 border-t border-gray-100 pt-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-medium text-gray-500">Registration Status</span>
+              <span
+                className={`text-sm font-medium ${
+                  isFullyBooked
+                    ? 'text-red-600'
+                    : hasLimitedSpots
+                      ? 'text-amber-600'
+                      : 'text-green-600'
+                }`}
+              >
+                {isFullyBooked
+                  ? 'Fully Booked'
+                  : `${remainingQuota} of ${totalQuota} spots available`}
+              </span>
+            </div>
+            <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-gray-200">
+              <div
+                className={`h-full ${
+                  isFullyBooked ? 'bg-red-500' : hasLimitedSpots ? 'bg-amber-500' : 'bg-green-500'
+                }`}
+                style={{ width: `${filledPercentage}%` }}
+              ></div>
             </div>
           </div>
         </div>
@@ -429,6 +567,9 @@ export default function SeminarPage() {
               </div>
 
               <div className="px-6 pb-6">
+                {/* Show quota warnings */}
+                {renderQuotaInfo()}
+
                 {success && (
                   <div className="mb-6 flex items-center rounded-lg border border-green-200 bg-green-50 p-4 text-green-800">
                     <svg
@@ -480,7 +621,7 @@ export default function SeminarPage() {
                         formErrors.name ? 'border-red-300 bg-red-50' : 'border-gray-300 bg-white'
                       }`}
                       placeholder="Enter your full name"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || registrationDisabled}
                     />
                     {formErrors.name && (
                       <p className="mt-1 text-sm text-red-600">{formErrors.name}</p>
@@ -506,7 +647,7 @@ export default function SeminarPage() {
                           : 'border-gray-300 bg-white'
                       }`}
                       placeholder="Enter your institution or organization"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || registrationDisabled}
                     />
                     {formErrors.instance && (
                       <p className="mt-1 text-sm text-red-600">{formErrors.instance}</p>
@@ -534,7 +675,7 @@ export default function SeminarPage() {
                           formErrors.wa_handle ? 'border-red-300 bg-red-50' : 'border-gray-300'
                         }`}
                         placeholder="e.g., +62812345678"
-                        disabled={isSubmitting}
+                        disabled={isSubmitting || registrationDisabled}
                       />
                     </div>
                     {formErrors.wa_handle ? (
@@ -549,14 +690,14 @@ export default function SeminarPage() {
                   <div className="border-t pt-6">
                     <button
                       type="submit"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || checkingQuota || registrationDisabled}
                       className={`w-full rounded-lg px-6 py-3 font-medium text-white shadow-sm transition-all duration-300 ${
-                        isSubmitting
+                        isSubmitting || checkingQuota || registrationDisabled
                           ? 'cursor-not-allowed bg-gray-400'
                           : 'bg-gradient-to-r from-[#003C43] to-[#0A6C74] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#0A6C74] focus:ring-offset-2'
                       }`}
                     >
-                      {isSubmitting ? (
+                      {isSubmitting || checkingQuota ? (
                         <div className="flex items-center justify-center">
                           <svg
                             className="mr-2 h-5 w-5 animate-spin"
@@ -578,12 +719,24 @@ export default function SeminarPage() {
                               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                             ></path>
                           </svg>
-                          Registering...
+                          {checkingQuota ? 'Checking availability...' : 'Registering...'}
                         </div>
+                      ) : isSeminarPassed() ? (
+                        'Seminar Has Ended'
+                      ) : isFullyBooked ? (
+                        'Registration Closed'
                       ) : (
                         'Complete Registration'
                       )}
                     </button>
+
+                    {registrationDisabled && (
+                      <p className="mt-3 text-center text-sm text-gray-600">
+                        {isSeminarPassed()
+                          ? 'This seminar has already taken place. Registration is no longer available.'
+                          : 'Registration is no longer available as all spots have been filled.'}
+                      </p>
+                    )}
                   </div>
                 </form>
               </div>
