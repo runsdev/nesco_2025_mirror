@@ -1,7 +1,8 @@
 import { agendaData } from '@/modules/data/data';
 import Image from 'next/image';
-
+//
 export const Sponsor = () => {
+  const list = ['pln', 'pln-mobile', 'petrokimia', 'metafora', 'ourwear', 'paiton'];
   return (
     <div className="relative min-h-screen w-full bg-gradient-to-b from-[#61CCC2] to-[#FFE08D] text-center text-[50px] font-[700]">
       <div className="absolute h-full w-full overflow-x-clip overflow-y-clip">
@@ -63,14 +64,31 @@ export const Sponsor = () => {
       />
 
       <div
-        data-aos="fade-up"
-        className="relative flex h-[400px] w-full items-center justify-center"
+        // data-aos="fade-up"
+        className="relative flex w-full flex-col items-center justify-center gap-[5vw] lg:pt-[10vw] 2xl:pt-[5vw]"
       >
-        <h1 className="md:text-{5vw] absolute translate-y-[-10vw] font-kodeMono text-[6vw] font-bold md:translate-y-[12vw] lg:translate-y-[10vw] lg:text-[4vw] xl:translate-y-[1vw]">
+        <h1 className="md:text-{5vw] relative font-kodeMono text-[6vw] font-bold drop-shadow-lg lg:text-[4vw]">
           Sponsored By
         </h1>
 
-        <Image
+        <div className="flex w-[80%] flex-wrap justify-center gap-[4vw] rounded-xl backdrop-blur-xl lg:gap-[2vw] 2xl:w-[67%]">
+          {list.map((item) => {
+            return (
+              <div key={item} className="relative aspect-square w-[45%] md:w-[30%] lg:w-[20%]">
+                <Image
+                  key={item}
+                  alt={item}
+                  src={`/sponsor/${item}.png`}
+                  width={2000}
+                  height={2000}
+                  className="absolute bottom-0 left-0 right-0 top-0 m-auto w-full"
+                />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* <Image
           src="/assets/beranda/sponsor/Kotak.png"
           alt="Kotak"
           width={1535}
@@ -84,7 +102,7 @@ export const Sponsor = () => {
           width={348}
           height={400}
           className="absolute top-[50%] w-[220px] md:hidden"
-        />
+        /> */}
       </div>
     </div>
   );
