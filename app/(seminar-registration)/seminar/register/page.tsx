@@ -18,6 +18,94 @@ import {
 import { FaWhatsapp } from 'react-icons/fa';
 import { IoArrowBackOutline } from 'react-icons/io5';
 
+// Countdown component for the deadline timer
+const CountdownTimer = ({ deadline }: { deadline: Date }) => {
+  const [timeLeft, setTimeLeft] = useState<{
+    days: number;
+    hours: number;
+    minutes: number;
+    seconds: number;
+  }>({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
+  const [isExpired, setIsExpired] = useState(false);
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      const difference = deadline.getTime() - now.getTime();
+
+      if (difference <= 0) {
+        setIsExpired(true);
+        return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+      }
+
+      return {
+        days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((difference % (1000 * 60)) / 1000),
+      };
+    };
+
+    setTimeLeft(calculateTimeLeft());
+
+    const timer = setInterval(() => {
+      const remainingTime = calculateTimeLeft();
+      setTimeLeft(remainingTime);
+
+      if (
+        remainingTime.days === 0 &&
+        remainingTime.hours === 0 &&
+        remainingTime.minutes === 0 &&
+        remainingTime.seconds === 0
+      ) {
+        clearInterval(timer);
+        setIsExpired(true);
+      }
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [deadline]);
+
+  return (
+    <div className="flex flex-col items-center space-y-2">
+      <div className="flex items-center space-x-2">
+        <div className="flex flex-col items-center">
+          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-blue bg-opacity-10 text-lg font-bold text-yellow">
+            {timeLeft.days}
+          </div>
+          <span className="mt-1 text-xs text-gray-500">Days</span>
+        </div>
+        <span className="text-lg font-bold text-gray-500">:</span>
+        <div className="flex flex-col items-center">
+          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-blue bg-opacity-10 text-lg font-bold text-yellow">
+            {timeLeft.hours.toString().padStart(2, '0')}
+          </div>
+          <span className="mt-1 text-xs text-gray-500">Hours</span>
+        </div>
+        <span className="text-lg font-bold text-gray-500">:</span>
+        <div className="flex flex-col items-center">
+          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-blue bg-opacity-10 text-lg font-bold text-yellow">
+            {timeLeft.minutes.toString().padStart(2, '0')}
+          </div>
+          <span className="mt-1 text-xs text-gray-500">Minutes</span>
+        </div>
+        <span className="text-lg font-bold text-gray-500">:</span>
+        <div className="flex flex-col items-center">
+          <div className="flex h-10 w-10 items-center justify-center rounded-md bg-blue bg-opacity-10 text-lg font-bold text-yellow">
+            {timeLeft.seconds.toString().padStart(2, '0')}
+          </div>
+          <span className="mt-1 text-xs text-gray-500">Seconds</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function SeminarPage() {
   const [seminar, setSeminar] = useState<Tables<'seminars'> | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,8 +130,22 @@ export default function SeminarPage() {
   const supabase = createClient();
   const router = useRouter();
 
-  // Current date for displaying date information
-  const currentDate = new Date('2025-05-01T02:47:00Z');
+  // Current date for displaying date information - for testing we can use this
+  const currentDate = new Date();
+
+  // Registration deadline - May 9th, 2025 at 23:59 GMT+7
+  const registrationDeadline = new Date('2025-05-09T23:59:00+07:00');
+
+  // Check if registration deadline has passed
+  const isRegistrationClosed = currentDate > registrationDeadline;
+
+  // Calculate how many days are left until the deadline
+  const daysUntilDeadline = Math.ceil(
+    (registrationDeadline.getTime() - currentDate.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  // Check if the deadline is within 3 days
+  const isDeadlineApproaching = daysUntilDeadline <= 3 && daysUntilDeadline > 0;
 
   // Check authentication and fetch user
   useEffect(() => {
@@ -210,6 +312,11 @@ export default function SeminarPage() {
       return;
     }
 
+    if (isRegistrationClosed) {
+      setError('Registration period has ended. No more registrations are accepted.');
+      return;
+    }
+
     if (!validateForm()) {
       return;
     }
@@ -270,6 +377,114 @@ export default function SeminarPage() {
     }
   };
 
+  // Calculate if the seminar is fully booked or has limited spots
+  const isFullyBooked = remainingQuota <= 0;
+  const hasLimitedSpots = remainingQuota < 30 && remainingQuota > 0;
+
+  // Updated: Include registration deadline in the disabled state
+  const registrationDisabled = isFullyBooked || isSeminarPassed() || isRegistrationClosed;
+
+  // Calculate the percentage filled for the progress bar
+  const filledPercentage =
+    totalQuota > 0 ? Math.min(100, ((totalQuota - remainingQuota) / totalQuota) * 100) : 0;
+
+  // Display registration deadline information
+  const renderDeadlineInfo = () => {
+    if (isRegistrationClosed) {
+      return (
+        <div className="mb-6 flex items-center rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
+          <span>
+            Registration period has ended on{' '}
+            {registrationDeadline.toLocaleDateString('id-ID', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric',
+            })}{' '}
+            at{' '}
+            {registrationDeadline.toLocaleTimeString('id-ID', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}{' '}
+            WIB.
+          </span>
+        </div>
+      );
+    } else if (isDeadlineApproaching) {
+      return (
+        <div className="mb-6 flex flex-col rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
+          <div className="flex items-center">
+            <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
+            <span>
+              <span className="font-semibold">Hurry!</span> Registration ends in {daysUntilDeadline}{' '}
+              {daysUntilDeadline === 1 ? 'day' : 'days'}.
+            </span>
+          </div>
+          <div className="mt-3 flex justify-center">
+            <CountdownTimer deadline={registrationDeadline} />
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="border-blue-200 bg-blue-50 text-blue-800 mb-6 flex flex-col rounded-lg border p-4">
+          <div className="flex items-center">
+            <FiCalendar className="mr-2 h-5 w-5 flex-shrink-0" />
+            <span>
+              Registration closes on{' '}
+              {registrationDeadline.toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}{' '}
+              at{' '}
+              {registrationDeadline.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}{' '}
+              WIB.
+            </span>
+          </div>
+          <div className="mt-3 flex justify-center">
+            <CountdownTimer deadline={registrationDeadline} />
+          </div>
+        </div>
+      );
+    }
+  };
+
+  // Display quota information
+  const renderQuotaInfo = () => {
+    if (isSeminarPassed()) {
+      return (
+        <div className="mb-6 flex items-center rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-800">
+          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
+          <span>This seminar has already taken place. Registration is closed.</span>
+        </div>
+      );
+    } else if (isFullyBooked) {
+      return (
+        <div className="mb-6 flex items-center rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
+          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
+          <span>
+            Registration quota has been filled. No more registrations are possible at this time.
+          </span>
+        </div>
+      );
+    } else if (hasLimitedSpots) {
+      return (
+        <div className="mb-6 flex items-center rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
+          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
+          <span>
+            Only <span className="font-bold">{remainingQuota} spots</span> remaining! Register soon
+            to secure your place.
+          </span>
+        </div>
+      );
+    }
+    return null;
+  };
+
   // Loading state
   if (loading) {
     return (
@@ -328,47 +543,6 @@ export default function SeminarPage() {
     );
   }
 
-  // Calculate if the seminar is fully booked or has limited spots
-  const isFullyBooked = remainingQuota <= 0;
-  const hasLimitedSpots = remainingQuota < 30 && remainingQuota > 0;
-  const registrationDisabled = isFullyBooked || isSeminarPassed();
-
-  // Calculate the percentage filled for the progress bar
-  const filledPercentage =
-    totalQuota > 0 ? Math.min(100, ((totalQuota - remainingQuota) / totalQuota) * 100) : 0;
-
-  // Display quota information
-  const renderQuotaInfo = () => {
-    if (isSeminarPassed()) {
-      return (
-        <div className="mb-6 flex items-center rounded-lg border border-gray-200 bg-gray-50 p-4 text-gray-800">
-          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
-          <span>This seminar has already taken place. Registration is closed.</span>
-        </div>
-      );
-    } else if (isFullyBooked) {
-      return (
-        <div className="mb-6 flex items-center rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
-          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
-          <span>
-            Registration quota has been filled. No more registrations are possible at this time.
-          </span>
-        </div>
-      );
-    } else if (hasLimitedSpots) {
-      return (
-        <div className="mb-6 flex items-center rounded-lg border border-amber-200 bg-amber-50 p-4 text-amber-800">
-          <FiAlertTriangle className="mr-2 h-5 w-5 flex-shrink-0" />
-          <span>
-            Only <span className="font-bold">{remainingQuota} spots</span> remaining! Register soon
-            to secure your place.
-          </span>
-        </div>
-      );
-    }
-    return null;
-  };
-
   return (
     <div className="relative min-h-screen w-full bg-gradient-to-b from-[#002A30] to-[#61CCC2] py-16">
       <div className="fixed left-4 top-4 z-30">
@@ -424,16 +598,6 @@ export default function SeminarPage() {
                   <p className="text-base text-gray-800">{seminar?.moderator || 'TBA'}</p>
                 </div>
               </div>
-
-              {/* <div className="flex items-start gap-3">
-                <div className="bg-blue/10 mt-0.5 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full text-blue">
-                  <FiFileText className="h-4 w-4" />
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Capacity</p>
-                  <p className="text-base text-gray-800">{totalQuota} participants</p>
-                </div>
-              </div> */}
             </div>
 
             <div className="space-y-3">
@@ -567,6 +731,9 @@ export default function SeminarPage() {
               </div>
 
               <div className="px-6 pb-6">
+                {/* Show registration deadline information */}
+                {renderDeadlineInfo()}
+
                 {/* Show quota warnings */}
                 {renderQuotaInfo()}
 
@@ -721,6 +888,8 @@ export default function SeminarPage() {
                           </svg>
                           {checkingQuota ? 'Checking availability...' : 'Registering...'}
                         </div>
+                      ) : isRegistrationClosed ? (
+                        'Registration Period Has Ended'
                       ) : isSeminarPassed() ? (
                         'Seminar Has Ended'
                       ) : isFullyBooked ? (
@@ -732,9 +901,11 @@ export default function SeminarPage() {
 
                     {registrationDisabled && (
                       <p className="mt-3 text-center text-sm text-gray-600">
-                        {isSeminarPassed()
-                          ? 'This seminar has already taken place. Registration is no longer available.'
-                          : 'Registration is no longer available as all spots have been filled.'}
+                        {isRegistrationClosed
+                          ? 'The registration period has ended. No more registrations are being accepted.'
+                          : isSeminarPassed()
+                            ? 'This seminar has already taken place. Registration is no longer available.'
+                            : 'Registration is no longer available as all spots have been filled.'}
                       </p>
                     )}
                   </div>
